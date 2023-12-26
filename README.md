@@ -4,7 +4,7 @@
 <p align=center><image src="https://raw.githubusercontent.com/sosauce/CuteCalc/main/app/src/main/res/images/screen1.jpg" height="512" /></p>
 
 ---
-<h1>👀 Overview (Version 1)</h1>
+<h1 align=center>👀 Overview (Version 1)</h1>
 
 - Lightweight (~2.7 Mb APK size)
 - No permissions needed (Might change in the future)
@@ -12,12 +12,12 @@
 - Very fast (~1.5 Mb RAM usage)
 
 ---
-<h1>🤔 Why ?</h1>
+<h1 align=center>🤔 Why ?</h1>
 
 <p>I am 15 y/o and have been into computers ever since I was ~10, growing up, I always thought about how software could do anything someone could dream of, so I started learning multiple languages until stepping upon Kotlin. Since then, I've learnt and started to build Android apps, and CuteCalc is my first project upon, I hope, alot more. </p>
 
 ---
-<h1>🏃‍♂️ 2024 Roadmap for CuteCalc</h1>
+<h1 align=center>🏃‍♂️ 2024 Roadmap for CuteCalc</h1>
 
 - Add scientific mode (Not sure about that one) ❌
 - Add themes ❌
@@ -28,17 +28,17 @@
 - And most importantly, learn more about it ! ✅
 
 ---
-<h1>💬 Contact Me</h1>
+<h1 align=center>💬 Contact Me</h1>
 <p>Discord server in progress...</p>
 <p>Email = sosauce_dev@protonmail.com</p>
 
 ---
-<h1>🤑 Donation</h1>
+<h1 align=center>🤑 Donation</h1>
 
 <p>Welp, sorry folks but I don't take donations for now! I feel like CuteCalc isn't a big enough project to get money out of it. But you can still star this project and give me feedback if you want to contribute!</p>
 
 ---
-<h1>⚠️ Copyright</h1>
+<h1 align=center>⚠️ Copyright</h1>
 
 <p>Copyright (c)2023 sosauce
 
