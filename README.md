@@ -1,7 +1,7 @@
 <p align=center><image src="https://raw.githubusercontent.com/sosauce/CuteCalc/main/app/src/main/res/mipmap-xhdpi/icon.png" height="256" /></p>
 <h1 align="center">CuteCalc</h1>
 <p align="center">CuteCalc is a lightweight, fast and open-source Android calculator app written in Kotlin & Jetpack Compose</p>
-<p align=center><image src="https://raw.githubusercontent.com/sosauce/CuteCalc/main/app/src/main/res/images/screen1.jpg" height="512" /></p>
+<p align=center><image src="https://i.ibb.co/yBL3sLJ/screen1.jpg" height="512" /></p>
 
 ---
 <h1 align=center>👀 Overview (Version 1)</h1>
