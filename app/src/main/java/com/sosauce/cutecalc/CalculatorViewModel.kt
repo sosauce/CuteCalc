@@ -91,23 +91,13 @@ class CalculatorViewModel: ViewModel() {
 
     private fun enterNumber(number: Int) {
         if(state.operation == null) {
-            if(state.number1.length >= MAX_NUM_LENGTH) {
-                return
-            }
             state = state.copy(
                 number1 = state.number1 + number
             )
             return
         }
-        if(state.number2.length >= MAX_NUM_LENGTH) {
-            return
-        }
         state = state.copy(
             number2 = state.number2 + number
         )
-    }
-
-    companion object {
-        private const val MAX_NUM_LENGTH = 8
     }
 }

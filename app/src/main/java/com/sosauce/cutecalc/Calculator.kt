@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,12 +30,20 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 import com.sosauce.cutecalc.ui.theme.MediumGray
 
+
 @Composable
 fun CalculatorUI () {
     val scaffoldState = rememberScaffoldState()
     val viewModel = viewModel<CalculatorViewModel>()
     val state = viewModel.state
     val buttonSpacing = 9.dp
+    val displayText = state.number1 + (state.operation?.symbol ?: "") + state.number2
+    val fontSizeDisplay = when {
+        displayText.length >= 15 -> 30.sp
+        displayText.length >= 11 -> 40.sp
+        else -> 60.sp // Default font size
+    }
+
 
     androidx.compose.material.Scaffold(
         scaffoldState = scaffoldState,
@@ -45,7 +55,7 @@ fun CalculatorUI () {
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Black)
-                .padding(16.dp)
+                .padding(15.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -53,17 +63,19 @@ fun CalculatorUI () {
                     .align(Alignment.BottomCenter),
                 verticalArrangement = Arrangement.spacedBy(buttonSpacing),
             ) {
+                Column {
                     Text(
-                        text = state.number1 + (state.operation?.symbol ?: "") + state.number2,
+                        text = displayText,
                         textAlign = TextAlign.End,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp),
                         fontWeight = FontWeight.Light,
-                        fontSize = 80.sp,
+                        fontSize = fontSizeDisplay,
                         color = Color.White,
                         fontFamily = GlobalFont
                     )
+                }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
