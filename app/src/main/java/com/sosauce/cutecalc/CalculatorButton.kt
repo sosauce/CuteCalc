@@ -23,7 +23,7 @@ import com.sosauce.cutecalc.ui.theme.GlobalFont
 fun CalculatorButton(
     symbol: String,
     modifier: Modifier = Modifier,
-    color: Color = Color.White,
+    color: Color,
     textStyle: TextStyle = TextStyle(),
     onClick: () -> Unit
 ) {

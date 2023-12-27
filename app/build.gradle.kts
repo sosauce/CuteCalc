@@ -12,7 +12,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0 (Beta 2)"
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -42,7 +42,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.4.4"
     }
     packaging {
         resources {
@@ -83,6 +83,7 @@ dependencies {
     implementation ("com.google.android.material:material:1.11.0")
     implementation ("androidx.compose.ui:ui-text-google-fonts:1.5.4")
     implementation("androidx.navigation:navigation-compose:2.7.6")
+
 
 
 

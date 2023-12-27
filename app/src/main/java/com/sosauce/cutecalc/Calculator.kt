@@ -1,38 +1,39 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@file:OptIn(ExperimentalComposeUiApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalComposeUiApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalComposeUiApi::class
+)
 
 package com.sosauce.cutecalc
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.sosauce.cutecalc.ui.theme.GlobalFont
-import com.sosauce.cutecalc.ui.theme.MediumGray
 
-
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun CalculatorUI () {
+fun CalculatorUI (navController:  NavController) {
     val scaffoldState = rememberScaffoldState()
     val viewModel = viewModel<CalculatorViewModel>()
     val state = viewModel.state
@@ -40,21 +41,22 @@ fun CalculatorUI () {
     val displayText = state.number1 + (state.operation?.symbol ?: "") + state.number2
     val fontSizeDisplay = when {
         displayText.length >= 15 -> 30.sp
-        displayText.length >= 11 -> 40.sp
+        displayText.length >= 10 -> 40.sp
         else -> 60.sp // Default font size
     }
-
+    val dynamicButtons = if (isSystemInDarkTheme()) {MaterialTheme.colorScheme.onSecondary} else {MaterialTheme.colorScheme.secondary}
+    val dynamicBackground = if (isSystemInDarkTheme()) {MaterialTheme.colorScheme.background} else {MaterialTheme.colorScheme.primaryContainer}
 
     androidx.compose.material.Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            AppBar()
+            AppBar(title = "", showBackArrow = false, navController = navController)
         },
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black)
+                .background(dynamicBackground)
                 .padding(15.dp)
         ) {
             Column(
@@ -72,7 +74,7 @@ fun CalculatorUI () {
                             .padding(vertical = 16.dp),
                         fontWeight = FontWeight.Light,
                         fontSize = fontSizeDisplay,
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontFamily = GlobalFont
                     )
                 }
@@ -83,7 +85,7 @@ fun CalculatorUI () {
                 ) {
                     CalculatorButton(
                         symbol = "AC",
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.tertiaryContainer,
                         modifier = Modifier
                             .aspectRatio(2f)
                             .weight(2f)
@@ -92,7 +94,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = "⌫",
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -101,7 +103,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = "÷",
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -116,7 +118,7 @@ fun CalculatorUI () {
                 ) {
                     CalculatorButton(
                         symbol = "7",
-                        color = MediumGray,
+                        color = dynamicButtons,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -125,7 +127,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = "8",
-                        color = MediumGray,
+                        color = dynamicButtons,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -134,7 +136,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = "9",
-                        color = MediumGray,
+                        color = dynamicButtons,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -143,7 +145,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = "×",
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -158,7 +160,7 @@ fun CalculatorUI () {
                 ) {
                     CalculatorButton(
                         symbol = "4",
-                        color = MediumGray,
+                        color = dynamicButtons,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -167,7 +169,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = "5",
-                        color = MediumGray,
+                        color = dynamicButtons,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -176,7 +178,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = "6",
-                        color = MediumGray,
+                        color = dynamicButtons,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -185,7 +187,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = "−",
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -200,7 +202,7 @@ fun CalculatorUI () {
                 ) {
                     CalculatorButton(
                         symbol = "1",
-                        color = MediumGray,
+                        color = dynamicButtons,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -209,7 +211,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = "2",
-                        color = MediumGray,
+                        color = dynamicButtons,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -218,7 +220,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = "3",
-                        color = MediumGray,
+                        color = dynamicButtons,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -227,7 +229,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = "+",
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -242,7 +244,7 @@ fun CalculatorUI () {
                 ) {
                     CalculatorButton(
                         symbol = "0",
-                        color = MediumGray,
+                        color = dynamicButtons,
                         modifier = Modifier
                             .aspectRatio(2f)
                             .weight(2f)
@@ -251,7 +253,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = ".",
-                        color = MediumGray,
+                        color = dynamicButtons,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
@@ -260,7 +262,7 @@ fun CalculatorUI () {
                     }
                     CalculatorButton(
                         symbol = "=",
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.tertiaryContainer,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f)
