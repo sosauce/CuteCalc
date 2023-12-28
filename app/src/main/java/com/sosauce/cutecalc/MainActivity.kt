@@ -1,13 +1,9 @@
-@file:OptIn(ExperimentalComposeUiApi::class)
-
 package com.sosauce.cutecalc
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.graphics.toArgb
+import androidx.navigation.NavController
 import com.sosauce.cutecalc.ui.theme.CuteCalcTheme
 
 class MainActivity : ComponentActivity() {

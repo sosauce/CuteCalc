@@ -24,7 +24,7 @@ fun AboutScreen(navController: NavController) {
     androidx.compose.material.Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            AppBar(title = "About", showBackArrow = true, navController = navController)
+            AppBar(title = "About", showBackArrow = true, navController = navController, showMenuIcon = false)
         },
     ) {
         Box(
@@ -32,9 +32,9 @@ fun AboutScreen(navController: NavController) {
                 .background(color = MaterialTheme.colorScheme.background)
                 .fillMaxSize()
         ) {
-            Text(text = "CuteCalc v1.1.0", fontFamily = GlobalFont, fontSize = 25.sp, color = Color.White, modifier = Modifier.align(
+            Text(text = "CuteCalc v1.2.0", fontFamily = GlobalFont, fontSize = 25.sp, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.align(
                 Alignment.TopCenter))
-            Text(text = "Made with ❤️ by sosauce", fontFamily = GlobalFont, fontSize = 25.sp, color = Color.White, modifier = Modifier.align(
+            Text(text = "Made with ❤️ by sosauce", fontFamily = GlobalFont, fontSize = 25.sp, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.align(
                 Alignment.BottomCenter))
         }
     }

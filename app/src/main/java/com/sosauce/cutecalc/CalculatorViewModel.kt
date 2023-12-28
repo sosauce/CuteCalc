@@ -1,6 +1,5 @@
 package com.sosauce.cutecalc
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -38,19 +37,24 @@ class CalculatorViewModel: ViewModel() {
     private fun calculate() {
         val number1 = state.number1.toDoubleOrNull()
         val number2 = state.number2.toDoubleOrNull()
-        if(number1 != null && number2 != null) {
-            val result = when(state.operation) {
-                is CalculatorOperation.Add -> number1 + number2
-                is CalculatorOperation.Subtract -> number1 - number2
-                is CalculatorOperation.Multiply -> number1 * number2
-                is CalculatorOperation.Divide -> number1 / number2
-                null -> return
-            }
 
-            val formattedResult = if (result == result.toInt().toDouble()) {
-                result.toInt().toString() // If the result is a whole number, display as an integer
+        val result = when (state.operation) {
+            is CalculatorOperation.Add -> number1?.plus(number2 ?: 0.0)
+            is CalculatorOperation.Subtract -> number1?.minus(number2 ?: 0.0)
+            is CalculatorOperation.Multiply -> number1?.times(number2 ?: 1.0)
+            is CalculatorOperation.Divide -> number1?.div(number2 ?: 1.0)
+            is CalculatorOperation.Percentage -> {
+                // Percentage operation for a single number
+                number1?.div(100)
+            }
+            else -> null
+        }
+
+        result?.let { calculatedResult ->
+            val formattedResult = if (calculatedResult == calculatedResult.toInt().toDouble()) {
+                calculatedResult.toInt().toString()
             } else {
-                result.toString() // If it's not a whole number, display as is
+                calculatedResult.toString()
             }
 
             state = state.copy(

@@ -1,14 +1,11 @@
 package com.sosauce.cutecalc
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -28,28 +25,27 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun AppBar(title: String, navController: NavController, showBackArrow: Boolean) {
+fun AppBar(title: String, navController: NavController, showBackArrow: Boolean, showMenuIcon: Boolean) {
     var expanded by remember { mutableStateOf(false) }
-    val dynamicBackground = if (isSystemInDarkTheme()) {androidx.compose.material3.MaterialTheme.colorScheme.background} else { androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer}
-
-
 
     TopAppBar(
         title = { Text(text = title) },
-        backgroundColor = dynamicBackground,
-        contentColor = MaterialTheme.colors.onPrimary,
+        backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.background,
+        contentColor = if (isSystemInDarkTheme()) MaterialTheme.colors.background else MaterialTheme.colors.onBackground,
         elevation = 0.dp,
         navigationIcon = {
                          if (showBackArrow) {
                              IconButton(onClick = { navController.navigate("CalculatorScreen") }) {
                                  Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back Arrow")
                              }
-                         } else {null}
+                         } else null
         },
         actions = {
-            IconButton(onClick = { expanded = true }) {
-                Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Theme changer")
-            }
+            if (showMenuIcon) {
+                IconButton(onClick = { expanded = true }) {
+                    Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Theme changer")
+                }
+            } else null
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
