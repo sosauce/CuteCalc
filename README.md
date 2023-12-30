@@ -1,4 +1,4 @@
-<p align=center><image src="https://i.ibb.co/n8YkmBm/pink-icon.png" height="256" /></p>
+<p align=center><image src="https://i.ibb.co/n8YkmBm/pink-icon.png" height="200" /></p>
 <h1 align="center">CuteCalc</h1>
 <p align="center">CuteCalc is a lightweight, fast and open-source Android calculator app written in Kotlin & Jetpack Compose</p>
 <p align=center><image src="https://i.ibb.co/B6TkXyw/1.jpg" height="512" /></p>
