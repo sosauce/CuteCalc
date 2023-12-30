@@ -12,8 +12,13 @@ android {
         applicationId = "com.sosauce.cutecalc"
         minSdk = 24
         targetSdk = 34
+<<<<<<< HEAD
         versionCode = 6
         versionName = "1.3.0"
+=======
+        versionCode = 2
+        versionName = "1.2.0"
+>>>>>>> 1253c3c2225ee55f18197888cb212e7b139deb09
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
