@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -11,8 +12,8 @@ android {
         applicationId = "com.sosauce.cutecalc"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.2.0"
+        versionCode = 6
+        versionName = "1.3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -71,7 +72,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation ("androidx.core:core-ktx:1.12.0")
     implementation ("androidx.compose.ui:ui:1.5.4")
-    implementation ("androidx.compose.material:material:1.5.4")
     implementation ("androidx.compose.ui:ui-tooling-preview:1.5.4")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation ("androidx.activity:activity-compose:1.8.2")
@@ -80,13 +80,11 @@ dependencies {
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation ("androidx.compose.ui:ui-test-junit4:1.5.4")
     debugImplementation ("androidx.compose.ui:ui-tooling:1.5.4")
-    implementation ("com.google.android.material:material:1.11.0")
     implementation ("androidx.compose.ui:ui-text-google-fonts:1.5.4")
     implementation("androidx.navigation:navigation-compose:2.7.6")
-
-
-
-
-    // Compose dependencies
+    implementation ("androidx.compose.material:material-icons-extended:1.5.4")
+    implementation ("androidx.datastore:datastore:1.0.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 }

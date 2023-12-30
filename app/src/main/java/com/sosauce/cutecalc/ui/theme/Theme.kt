@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.core.view.WindowCompat
 import com.sosauce.cutecalc.R
 
 
@@ -104,10 +105,10 @@ fun CuteCalcTheme(
     }
     val view = LocalView.current
     val window = (view.context as Activity).window
-    val primaryColor = MaterialTheme.colorScheme.secondary
 
-        window.statusBarColor = colorScheme.background.toArgb()
-        window.navigationBarColor = colorScheme.background.toArgb()
+    window.statusBarColor = colorScheme.background.toArgb()
+    window.navigationBarColor = colorScheme.background.toArgb()
+    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
 
     MaterialTheme(
         colorScheme = colorScheme,
@@ -117,6 +118,3 @@ fun CuteCalcTheme(
 }
 
 val GlobalFont = FontFamily(Font(R.font.rubik))
-
-
-
