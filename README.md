@@ -4,9 +4,9 @@
 <p align=center><image src="https://i.ibb.co/B6TkXyw/1.jpg" height="512" /></p>
 
 ---
-<h1 align=center>👀 Overview (Version 1.2.1)</h1>
+<h1 align=center>👀 Overview (Version 1.3.0)</h1>
 
-- Lightweight (~2.7 Mb APK size)
+- Lightweight (~1 Mb APK size)
 - No permissions needed !
 - Material 3 Design
 - Very fast (~1.5 Mb RAM usage)
@@ -22,7 +22,7 @@
 - Add scientific mode (Not sure about that one) ❌
 - Add themes ❌
 - Add landscape mode ❌
-- Make the app smaller ❌
+- Make the app smaller ✅
 - Add translations ❌
 - Upload it to Google Play Store ❌
 - And most importantly, learn more about it ! ✅
