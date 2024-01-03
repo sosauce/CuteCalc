@@ -33,7 +33,7 @@
 <p>Email = sosauce_dev@protonmail.com</p>
 
 ---
-<h1 align=center>🤑 Donation</h1>
+<h1 align=center>🤑 Support</h1>
 
 <p>Welp, sorry folks but I don't take donations for now! I feel like CuteCalc isn't a big enough project to get money out of it. But you can still star this project and give me feedback if you want to contribute!</p>
 
