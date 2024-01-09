@@ -4,12 +4,12 @@
 <p align=center><image src="https://i.ibb.co/B6TkXyw/1.jpg" height="512" /></p>
 
 ---
-<h1 align=center>👀 Overview (Version 1.3.0)</h1>
+<h1 align=center>👀 Overview (Version 1.4.0)</h1>
 
-- Lightweight (~1 Mb APK size)
+- Lightweight (~1.2 Mb APK size)
 - No permissions needed !
 - Material 3 Design
-- Very fast (~1.5 Mb RAM usage)
+- Very fast (~1 Mb RAM usage)
 
 ---
 <h1 align=center>🤔 Why ?</h1>
@@ -21,7 +21,7 @@
 
 - Add scientific mode (Not sure about that one) ❌
 - Add themes ❌
-- Add landscape mode ❌
+- Add landscape mode ✅
 - Make the app smaller ✅
 - Add translations ❌
 - Upload it to Google Play Store ❌
@@ -40,7 +40,7 @@
 ---
 <h1 align=center>⚠️ Copyright</h1>
 
-<p>Copyright (c)2023 sosauce
+<p>Copyright (c)2024 sosauce
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
