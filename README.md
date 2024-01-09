@@ -1,12 +1,12 @@
-<p align=center><image src="https://raw.githubusercontent.com/sosauce/CuteCalc/main/app/src/main/res/mipmap-xhdpi/icon.png" height="256" /></p>
+<p align=center><image src="https://i.ibb.co/n8YkmBm/pink-icon.png" height="200" /></p>
 <h1 align="center">CuteCalc</h1>
 <p align="center">CuteCalc is a lightweight, fast and open-source Android calculator app written in Kotlin & Jetpack Compose</p>
 <p align=center><image src="https://i.ibb.co/B6TkXyw/1.jpg" height="512" /></p>
 
 ---
-<h1 align=center>👀 Overview (Version 1.2.1)</h1>
+<h1 align=center>👀 Overview (Version 1.3.0)</h1>
 
-- Lightweight (~2.7 Mb APK size)
+- Lightweight (~1 Mb APK size)
 - No permissions needed !
 - Material 3 Design
 - Very fast (~1.5 Mb RAM usage)
@@ -22,7 +22,7 @@
 - Add scientific mode (Not sure about that one) ❌
 - Add themes ❌
 - Add landscape mode ❌
-- Make the app smaller ❌
+- Make the app smaller ✅
 - Add translations ❌
 - Upload it to Google Play Store ❌
 - And most importantly, learn more about it ! ✅
@@ -33,7 +33,7 @@
 <p>Email = sosauce_dev@protonmail.com</p>
 
 ---
-<h1 align=center>🤑 Donation</h1>
+<h1 align=center>🤑 Support</h1>
 
 <p>Welp, sorry folks but I don't take donations for now! I feel like CuteCalc isn't a big enough project to get money out of it. But you can still star this project and give me feedback if you want to contribute!</p>
 
