@@ -1,5 +1,5 @@
 package com.sosauce.cutecalc
-
+/*
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -15,24 +15,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.ui.unit.sp
-import com.sosauce.cutecalc.ui.theme.GlobalFont
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SettingsScreen(navController: NavController, updateTheme: (UserTheme) -> Unit){
+fun SettingsScreen(navController: NavController){
 
     Scaffold(
         topBar = {
@@ -50,7 +44,7 @@ fun SettingsScreen(navController: NavController, updateTheme: (UserTheme) -> Uni
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Spacer(modifier = Modifier.height(75.dp))
+                /* Spacer(modifier = Modifier.height(75.dp))
 
                 Row(horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
@@ -58,9 +52,9 @@ fun SettingsScreen(navController: NavController, updateTheme: (UserTheme) -> Uni
                         .fillMaxWidth()
                 ) {
                     ThemeSwitch(updateTheme)
-                }
-                Spacer(modifier = Modifier.height(300.dp))
-                Text(text = "More to come! 🥳", fontSize = 30.sp, color = MaterialTheme.colorScheme.onBackground)
+                } */
+                Spacer(modifier = Modifier.height(400.dp))
+                Text(text = "This screen might get deleted ☹️", fontSize = 23.sp, color = MaterialTheme.colorScheme.onBackground)
             }
         }
     }
@@ -85,3 +79,5 @@ fun ThemeSwitch(updateTheme: (UserTheme) -> Unit) {
         )
     }
 }
+
+*/

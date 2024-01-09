@@ -62,6 +62,17 @@
                                 <PersistentState>
                                   <option name="children">
                                     <map>
+                                      <entry key="backgroundImage">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="imagePath" value="$USER_HOME$/Downloads/cuteAppsBackground.jpg" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                       <entry key="foregroundClipArt">
                                         <value>
                                           <PersistentState>
@@ -79,8 +90,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="$USER_HOME$/Downloads/test.png" />
-                                                <entry key="scalingPercent" value="72" />
+                                                <entry key="imagePath" value="$USER_HOME$/Downloads/cutecalc_foreground.png" />
+                                                <entry key="scalingPercent" value="69" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -299,17 +310,17 @@
                             </entry>
                           </map>
                         </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
-                          </map>
-                        </option>
                       </PersistentState>
                     </value>
                   </entry>
                 </map>
               </option>
             </PersistentState>
+          </value>
+        </entry>
+        <entry key="vectorWizard">
+          <value>
+            <PersistentState />
           </value>
         </entry>
       </map>

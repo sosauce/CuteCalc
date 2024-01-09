@@ -3,26 +3,26 @@
 package com.sosauce.cutecalc
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.BugReport
-import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,98 +31,135 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.AndroidViewModel
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.remember
+import androidx.compose.ui.res.painterResource
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AboutScreen(navController: NavController, viewModel: AppVersion) {
+fun AboutScreen(navController: NavController) {
 
     val iconsTint = MaterialTheme.colorScheme.onBackground
-    val urlList = listOf("https://github.com/sosauce/CuteCalc/issues", "https://github.com/sosauce/CuteCalc/", "https://github.com/sosauce/CuteCalc/releases")
+    val urlList = listOf(
+        "https://github.com/sosauce/CuteCalc/issues",
+        "https://github.com/sosauce?tab=repositories",
+        "https://github.com/sosauce/CuteCalc/releases",
+        "https://sosauce.github.io/"
+    )
     val context = LocalContext.current
 
     Scaffold(
         topBar = {
-            AppBar(title = "About", showBackArrow = true, navController = navController, showMenuIcon = false)
+            AppBar(
+                title = "About",
+                showBackArrow = true,
+                navController = navController,
+                showMenuIcon = false
+            )
         },
     ) {
-            Column(modifier = Modifier
-                .fillMaxWidth()
+        Column(Modifier.verticalScroll(rememberScrollState())) {
+            Spacer(modifier = Modifier.height(70.dp))
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(350.dp)
+                    .padding(16.dp),
+                shape = RoundedCornerShape(16.dp),
             ) {
-                Spacer(modifier = Modifier.height(60.dp))
-
-                Row(horizontalArrangement = Arrangement.Center,
+                Image(
+                    painterResource(
+                        id = R.drawable.icon
+                    ),
+                    contentDescription = null,
                     modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                ) { Text(text = "Github", fontSize = 20.sp, fontFamily = GlobalFont, color = iconsTint) }
-
-                Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.secondary)
-
-                Row(verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                        .clickable() {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[2]))
-
-                            context.startActivity(intent)
-
-                        }
-                ) {
-                    Icon(Icons.Default.Update, contentDescription = null, modifier = Modifier.size(30.dp), tint = iconsTint)
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(text = "Check for updates", fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Row(verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                        .clickable {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[1]))
-                            context.startActivity(intent)
-                        }
-                ) {
-                    Icon(Icons.Outlined.StarOutline, contentDescription = null, modifier = Modifier.size(30.dp), tint = iconsTint)
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(text = "Star the project", fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Row(verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                        .clickable {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[0]))
-                            context.startActivity(intent)
-                        }
-                ) {
-                    Icon(Icons.Outlined.BugReport, contentDescription = null, modifier = Modifier.size(30.dp), tint = iconsTint)
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(text = "Report a bug", fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
+                        .size(150.dp)
+                        .offset(x = 120.dp, y = 15.dp)
+                )
+                Text(
+                    text = "CuteCalc",
+                    fontFamily = GlobalFont,
+                    modifier = Modifier.offset(x = 100.dp, y = 25.dp),
+                    fontSize = 40.sp
+                )
+                Text(
+                    text = "Version 1.4.0",
+                    fontFamily = GlobalFont,
+                    modifier = Modifier.offset(x = 130.dp, y = 7.dp),
+                    fontSize = 20.sp
+                )
+                Button(
+                    onClick = {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[2]))
+                                context.startActivity(intent)
+                              },
+                    modifier = Modifier.offset(x = 113.dp, y = 10.dp),
+                    ) {
+                    Text(text = "Check for updates", fontFamily = GlobalFont)
                 }
             }
-            Text(text = "Made with ❤️ by sosauce", fontFamily = GlobalFont, fontSize = 20.sp, color = MaterialTheme.colorScheme.onBackground)
+
+
+
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Row(horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            ) { Text(text = "Made with ❤️ by sosauce", fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint) }
+
+            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.secondary)
+            Spacer(modifier = Modifier.height(15.dp))
+            val interactionSource = remember { MutableInteractionSource() }
+
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .clickable(interactionSource = interactionSource, indication = null) {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[1]))
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(painterResource(id = R.drawable.star_outline), contentDescription = null, modifier = Modifier.size(30.dp), tint = iconsTint)
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(text = "All my projects", fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .clickable(interactionSource = interactionSource, indication = null) {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[3]))
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(painterResource(id = R.drawable.web), contentDescription = null, modifier = Modifier.size(30.dp), tint = iconsTint)
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(text = "Me, I guess", fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
+            }
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .clickable(interactionSource = interactionSource, indication = null) {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[0]))
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(painterResource(id = R.drawable.bug_outline), contentDescription = null, modifier = Modifier.size(30.dp), tint = iconsTint)
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(text = "Report a bug", fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
+            }
+
         }
-    }
-
-
-class AppVersion(application: Application) : AndroidViewModel(application) {
-    val versionName: String by lazy {
-        val packageInfo = application.packageManager.getPackageInfo(application.packageName, 0)
-        packageInfo.versionName
     }
 }

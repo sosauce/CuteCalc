@@ -12,13 +12,8 @@ android {
         applicationId = "com.sosauce.cutecalc"
         minSdk = 24
         targetSdk = 34
-<<<<<<< HEAD
-        versionCode = 6
-        versionName = "1.3.0"
-=======
-        versionCode = 2
-        versionName = "1.2.0"
->>>>>>> 1253c3c2225ee55f18197888cb212e7b139deb09
+        versionCode = 7
+        versionName = "1.4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -87,9 +82,5 @@ dependencies {
     debugImplementation ("androidx.compose.ui:ui-tooling:1.5.4")
     implementation ("androidx.compose.ui:ui-text-google-fonts:1.5.4")
     implementation("androidx.navigation:navigation-compose:2.7.6")
-    implementation ("androidx.compose.material:material-icons-extended:1.5.4")
-    implementation ("androidx.datastore:datastore:1.0.0")
-    implementation ("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
-    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 }
