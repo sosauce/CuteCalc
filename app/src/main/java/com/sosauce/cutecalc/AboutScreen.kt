@@ -89,7 +89,7 @@ fun AboutScreen(navController: NavController) {
                     fontSize = 40.sp
                 )
                 Text(
-                    text = "Version 1.4.0",
+                    text = "Version 1.4.1",
                     fontFamily = GlobalFont,
                     modifier = Modifier.offset(x = 130.dp, y = 7.dp),
                     fontSize = 20.sp
