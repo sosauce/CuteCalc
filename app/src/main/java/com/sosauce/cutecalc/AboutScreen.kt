@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -73,35 +74,38 @@ fun AboutScreen(navController: NavController) {
                     .padding(16.dp),
                 shape = RoundedCornerShape(16.dp),
             ) {
-                Image(
-                    painterResource(
-                        id = R.drawable.icon
-                    ),
-                    contentDescription = null,
+                Column(
                     modifier = Modifier
-                        .size(150.dp)
-                        .offset(x = 120.dp, y = 15.dp)
-                )
-                Text(
-                    text = "CuteCalc",
-                    fontFamily = GlobalFont,
-                    modifier = Modifier.offset(x = 100.dp, y = 25.dp),
-                    fontSize = 40.sp
-                )
-                Text(
-                    text = "Version 1.4.1",
-                    fontFamily = GlobalFont,
-                    modifier = Modifier.offset(x = 130.dp, y = 7.dp),
-                    fontSize = 20.sp
-                )
-                Button(
-                    onClick = {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[2]))
-                                context.startActivity(intent)
-                              },
-                    modifier = Modifier.offset(x = 113.dp, y = 10.dp),
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.icon),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(150.dp)
+                    )
+                    Text(
+                        text = "CuteCalc",
+                        fontFamily = GlobalFont,
+                        fontSize = 40.sp
+                    )
+                    Text(
+                        text = "Version 1.5.0",
+                        fontFamily = GlobalFont,
+                        fontSize = 20.sp,
+                        modifier = Modifier.offset(y = (-8).dp),
+                    )
+                    Button(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[2]))
+                            context.startActivity(intent)
+                        }
                     ) {
-                    Text(text = "Check for updates", fontFamily = GlobalFont)
+                        Text(text = "Check for updates", fontFamily = GlobalFont)
+                    }
                 }
             }
 

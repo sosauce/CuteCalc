@@ -3,7 +3,6 @@
 package com.sosauce.cutecalc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

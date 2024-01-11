@@ -1,7 +1,5 @@
 package com.sosauce.cutecalc
 
-// this file defines the below class' and shouldn't be modified
-
 sealed class CalculatorAction {
     data class Number(val number: Int): CalculatorAction()
     object Clear: CalculatorAction()
@@ -10,4 +8,13 @@ sealed class CalculatorAction {
     object Calculate: CalculatorAction()
     object Decimal: CalculatorAction()
 }
+
+sealed class CalculatorOperation(val symbol: String) {
+    object Add: CalculatorOperation("+")
+    object Subtract: CalculatorOperation("-")
+    object Multiply: CalculatorOperation("×")
+    object Divide: CalculatorOperation("/")
+    object Percentage: CalculatorOperation("%")
+}
+
 

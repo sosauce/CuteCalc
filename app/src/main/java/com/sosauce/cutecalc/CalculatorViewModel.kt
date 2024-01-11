@@ -2,15 +2,12 @@ package com.sosauce.cutecalc
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
 class CalculatorViewModel: ViewModel() {
 
     var state by mutableStateOf(CalculatorState())
-
-
     fun onAction(action: CalculatorAction) {
         when(action) {
             is CalculatorAction.Number -> enterNumber(action.number)
@@ -23,15 +20,17 @@ class CalculatorViewModel: ViewModel() {
     }
 
     private fun enterOperation(operation: CalculatorOperation) {
+        if (state.number1.isBlank()) {return} // if there isn't any number, the user can't enter an operator
+
         if (state.number1.isNotBlank() && state.number2.isNotBlank()) {
             calculate()
-            state = state.copy(operation = operation, number2 = "") // Clear number2 for the next input
+            state = state.copy(operation = operation, number2 = "")
         } else if (state.number1.isNotBlank() && state.operation != null && state.number2.isBlank()) {
-            state = state.copy(operation = operation) // Update the operation if a number and an operation exist
+            state = state.copy(operation = operation)
         } else if (state.number1.isBlank() && state.operation == null) {
-            state = state.copy(operation = operation) // If no number is entered yet, simply update the operation
+            state = state.copy(operation = operation)
         } else if (state.number1.isNotBlank()) {
-            state = state.copy(operation = operation) // If number1 is not blank, update the operation
+            state = state.copy(operation = operation)
         }
     }
 
@@ -46,7 +45,6 @@ class CalculatorViewModel: ViewModel() {
             is CalculatorOperation.Multiply -> number1?.times(number2 ?: 1.0)
             is CalculatorOperation.Divide -> number1?.div(number2 ?: 1.0)
             is CalculatorOperation.Percentage -> {
-                // Percentage operation for a single number
                 number1?.div(100)
             }
             else -> null

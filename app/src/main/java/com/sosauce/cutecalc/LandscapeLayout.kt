@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,6 +43,7 @@ fun LandscapeLayout(navController: NavController) {
     val viewModel = viewModel<CalculatorViewModel>()
     val state = viewModel.state
     val displayText = state.number1 + (state.operation?.symbol ?: "") + state.number2
+
 
     Scaffold(
         topBar = {
@@ -88,6 +88,100 @@ fun LandscapeLayout(navController: NavController) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Clear) },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
+                        modifier = Modifier
+                            .height(65.dp)
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "C",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Delete) },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.15f)
+                            .height(65.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.backspace_outline),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.size(40.dp)
+                        )
+                    }
+
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Operation(CalculatorOperation.Percentage)) },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        modifier = Modifier
+                            .weight(0.15f)
+                            .height(65.dp)
+                    ) {
+                        Text(
+                            text = "%",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Operation(CalculatorOperation.Divide)) },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        modifier = Modifier
+                            .weight(0.15f)
+                            .height(65.dp)
+                    ) {
+                        Text(
+                            text = "/",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Operation(CalculatorOperation.Multiply)) },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        modifier = Modifier
+                            .weight(0.15f)
+                            .height(65.dp)
+                    ) {
+                        Text(
+                            text = "×",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+                    Button(
+                        onClick = { viewModel.onAction(CalculatorAction.Operation(CalculatorOperation.Subtract)) },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        modifier = Modifier
+                            .weight(0.15f)
+                            .height(65.dp)
+                    ) {
+                        Text(
+                            text = "-",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     FilledTonalButton(
                         onClick = { viewModel.onAction(CalculatorAction.Number(1)) },
                         modifier = Modifier
@@ -101,6 +195,7 @@ fun LandscapeLayout(navController: NavController) {
                             fontFamily = GlobalFont
                         )
                     }
+
                     FilledTonalButton(
                         onClick = { viewModel.onAction(CalculatorAction.Number(2)) },
                         modifier = Modifier
@@ -142,41 +237,6 @@ fun LandscapeLayout(navController: NavController) {
                             fontFamily = GlobalFont
                         )
                     }
-
-                    Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Operation(CalculatorOperation.Multiply)) },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        modifier = Modifier
-                            .weight(0.15f)
-                            .height(65.dp)
-                    ) {
-                        Text(
-                            text = "×",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont
-                        )
-                    }
-                    Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Operation(CalculatorOperation.Divide)) },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        modifier = Modifier
-                            .weight(0.15f)
-                            .height(65.dp)
-                    ) {
-                        Text(
-                            text = "/",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
                     FilledTonalButton(
                         onClick = { viewModel.onAction(CalculatorAction.Number(5)) },
                         modifier = Modifier
@@ -185,62 +245,6 @@ fun LandscapeLayout(navController: NavController) {
                     ) {
                         Text(
                             text = "5",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont
-                        )
-                    }
-
-                    FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(6)) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                            .height(65.dp)
-                    ) {
-                        Text(
-                            text = "6",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont
-                        )
-                    }
-
-                    FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(7)) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                            .height(65.dp)
-                    ) {
-                        Text(
-                            text = "7",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont
-                        )
-                    }
-
-                    FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(8)) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                            .height(65.dp)
-                    ) {
-                        Text(
-                            text = "8",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont
-                        )
-                    }
-                    Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Operation(CalculatorOperation.Subtract)) },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        modifier = Modifier
-                            .weight(0.15f)
-                            .height(65.dp)
-                    ) {
-                        Text(
-                            text = "-",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
                             fontFamily = GlobalFont
@@ -268,13 +272,13 @@ fun LandscapeLayout(navController: NavController) {
                     verticalAlignment = Alignment.Bottom
                 ) {
                     FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(9)) },
+                        onClick = { viewModel.onAction(CalculatorAction.Number(6)) },
                         modifier = Modifier
-                            .weight(0.20f)
+                            .weight(0.15f)
                             .height(65.dp)
                     ) {
                         Text(
-                            text = "9",
+                            text = "6",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
                             fontFamily = GlobalFont
@@ -282,13 +286,44 @@ fun LandscapeLayout(navController: NavController) {
                     }
 
                     FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(0)) },
+                        onClick = { viewModel.onAction(CalculatorAction.Number(7)) },
                         modifier = Modifier
-                            .weight(0.20f)
+                            .weight(0.15f)
                             .height(65.dp)
                     ) {
                         Text(
-                            text = "0",
+                            text = "7",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    FilledTonalButton(
+                        onClick = { viewModel.onAction(CalculatorAction.Number(8)) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                            .height(65.dp)
+                    ) {
+                        Text(
+                            text = "8",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+
+                    FilledTonalButton(
+                        onClick = { viewModel.onAction(CalculatorAction.Number(9)) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                            .height(65.dp)
+                    ) {
+                        Text(
+                            text = "9",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
                             fontFamily = GlobalFont,
@@ -299,7 +334,7 @@ fun LandscapeLayout(navController: NavController) {
                     FilledTonalButton(
                         onClick = { viewModel.onAction(CalculatorAction.Decimal) },
                         modifier = Modifier
-                            .weight(0.20f)
+                            .weight(0.15f)
                             .height(65.dp)
                     ) {
                         Icon(
@@ -310,44 +345,12 @@ fun LandscapeLayout(navController: NavController) {
                         )
                     }
 
-
-                    Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Delete) },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(0.20f)
-                            .height(65.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.backspace_outline),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(40.dp)
-                        )
-                    }
-
-                    Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Clear) },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
-                        modifier = Modifier
-                            .height(65.dp)
-                            .weight(0.20f)
-                    ) {
-                        Text(
-                            text = "C",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont
-                        )
-                    }
-
                     Button(
                         onClick = { viewModel.onAction(CalculatorAction.Calculate) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(0.20f)
+                            .weight(0.15f)
                             .height(65.dp)
                     ) {
                         Icon(

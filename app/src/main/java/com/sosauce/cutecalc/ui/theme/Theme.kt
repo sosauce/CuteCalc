@@ -117,4 +117,4 @@ fun CuteCalcTheme(
     )
 }
 
-val GlobalFont = FontFamily(Font(R.font.rubik))
+val GlobalFont = FontFamily(Font(R.font.rocko))
