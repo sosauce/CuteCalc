@@ -4,7 +4,7 @@
 <p align=center><image src="https://i.ibb.co/B6TkXyw/1.jpg" height="512" /></p>
 
 ---
-<h1 align=center>👀 Overview (Version 1.4.0)</h1>
+<h1 align=center>👀 Overview</h1>
 
 - Lightweight (~1.2 Mb APK size)
 - No permissions needed !
@@ -19,7 +19,7 @@
 ---
 <h1 align=center>🏃‍♂️ 2024 Roadmap for CuteCalc</h1>
 
-- Add scientific mode (Not sure about that one) ❌
+- Add scientific mode (Update: No)
 - Add themes ❌
 - Add landscape mode ✅
 - Make the app smaller ✅
