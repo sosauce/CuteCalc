@@ -54,7 +54,5 @@ GNU General Public License for more details.
 
 The above copyright notice, this permission notice, and its license shall be included in all copies or substantial portions of the Software.
 
-You can find a copy of the GNU General Public License v3 [here](https://www.gnu.org/licenses/)
-
-(Above copyright notice was taken from [Swiftcord](https://github.com/SwiftcordApp/Swiftcord/blob/main/README.md))</p>
+You can find a copy of the GNU General Public License v3 [here](https://www.gnu.org/licenses/)</p>
 
