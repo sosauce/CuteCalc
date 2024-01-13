@@ -1,6 +1,7 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
 )
 @file:Suppress("UNUSED_EXPRESSION")
 
@@ -95,12 +96,6 @@ fun AppBar(title: String, navController: NavController, showBackArrow: Boolean, 
                         text = { Text(text = "Theme", fontFamily = GlobalFont) },
                         onClick = { showDialog = true },
                         leadingIcon = { Icon(painterResource(id = R.drawable.palette_outline), contentDescription = "theme selector")})
-
-                    /*DropdownMenuItem(
-                        text = { Text(text = "Settings", fontFamily = GlobalFont) },
-                        onClick = { navController.navigate("SettingsScreen"); expanded = false },
-                        leadingIcon = { Icon(imageVector = Icons.Outlined.Settings, contentDescription = "settings")})
-                    */
                     DropdownMenuItem(
                         text = { Text(text = "About", fontFamily = GlobalFont) },
                         onClick = { navController.navigate("AboutScreen"); expanded = false },
@@ -156,14 +151,10 @@ fun ThemeRadioButtons() {
                 )
                 Text(
                     text = option,
-                    modifier = Modifier.padding(start = 16.dp)
+                    modifier = Modifier.padding(start = 16.dp),
+                    fontFamily = GlobalFont
                 )
             }
         }
     }
-}
-
-@Composable
-fun ThemeTest() {
-
 }

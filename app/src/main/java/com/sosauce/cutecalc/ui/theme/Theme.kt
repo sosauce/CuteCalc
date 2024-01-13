@@ -1,3 +1,5 @@
+@file:Suppress("PrivatePropertyName")
+
 package com.sosauce.cutecalc.ui.theme
 
 import android.app.Activity
@@ -10,7 +12,6 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -117,4 +118,4 @@ fun CuteCalcTheme(
     )
 }
 
-val GlobalFont = FontFamily(Font(R.font.rubik))
+val GlobalFont = FontFamily(Font(R.font.nunito))

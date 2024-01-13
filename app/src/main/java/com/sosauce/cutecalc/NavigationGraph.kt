@@ -20,9 +20,6 @@ fun Nav() {
         composable(route = "AboutScreen") {
             AboutScreen(navController)
         }
-        /* composable(route = "SettingsScreen") {
-            SettingsScreen(navController)
-        } */
     }
     
 }
