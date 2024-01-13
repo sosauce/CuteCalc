@@ -2,6 +2,7 @@
 
 package com.sosauce.cutecalc
 
+
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -38,11 +39,10 @@ import com.sosauce.cutecalc.ui.theme.GlobalFont
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LandscapeLayout(navController: NavController) {
+fun LandscapeLayout(navController: NavController, state: CalcState) {
 
-    val viewModel = viewModel<CalculatorViewModel>()
-    val state = viewModel.state
-    val displayText = state.number1 + (state.operation?.symbol ?: "") + state.number2
+    val viewModel = viewModel<CalcViewModel>()
+    val appState = viewModel.state
 
 
     Scaffold(
@@ -72,7 +72,7 @@ fun LandscapeLayout(navController: NavController) {
                         .align(Alignment.End)
                 ) {
                     Text(
-                        text = displayText,
+                        state.field,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -89,7 +89,7 @@ fun LandscapeLayout(navController: NavController) {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Clear) },
+                        onClick = { viewModel.handleAction(CalcAction.ResetField) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                         modifier = Modifier
                             .height(65.dp)
@@ -103,7 +103,7 @@ fun LandscapeLayout(navController: NavController) {
                         )
                     }
                     Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Delete) },
+                        onClick = { viewModel.handleAction(CalcAction.RemoveLast) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -119,7 +119,7 @@ fun LandscapeLayout(navController: NavController) {
                     }
 
                     Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Operation(CalculatorOperation.Percentage)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("%")) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .weight(0.15f)
@@ -134,7 +134,7 @@ fun LandscapeLayout(navController: NavController) {
                     }
 
                     Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Operation(CalculatorOperation.Divide)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("/")) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .weight(0.15f)
@@ -149,7 +149,7 @@ fun LandscapeLayout(navController: NavController) {
                     }
 
                     Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Operation(CalculatorOperation.Multiply)) },
+                        onClick = {viewModel.handleAction(CalcAction.AddToField("*")) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .weight(0.15f)
@@ -163,7 +163,7 @@ fun LandscapeLayout(navController: NavController) {
                         )
                     }
                     Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Operation(CalculatorOperation.Subtract)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("-")) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .weight(0.15f)
@@ -183,7 +183,7 @@ fun LandscapeLayout(navController: NavController) {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(1)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("1")) },
                         modifier = Modifier
                             .weight(0.15f)
                             .height(65.dp)
@@ -197,7 +197,7 @@ fun LandscapeLayout(navController: NavController) {
                     }
 
                     FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(2)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("2")) },
                         modifier = Modifier
                             .weight(0.15f)
                             .height(65.dp)
@@ -211,7 +211,7 @@ fun LandscapeLayout(navController: NavController) {
                     }
 
                     FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(3)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("3")) },
                         modifier = Modifier
                             .weight(0.15f)
                             .height(65.dp)
@@ -225,7 +225,7 @@ fun LandscapeLayout(navController: NavController) {
                     }
 
                     FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(4)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("4")) },
                         modifier = Modifier
                             .weight(0.15f)
                             .height(65.dp)
@@ -238,7 +238,7 @@ fun LandscapeLayout(navController: NavController) {
                         )
                     }
                     FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(5)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("5")) },
                         modifier = Modifier
                             .weight(0.15f)
                             .height(65.dp)
@@ -251,7 +251,7 @@ fun LandscapeLayout(navController: NavController) {
                         )
                     }
                     Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Operation(CalculatorOperation.Add)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("+")) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .weight(0.15f)
@@ -272,7 +272,7 @@ fun LandscapeLayout(navController: NavController) {
                     verticalAlignment = Alignment.Bottom
                 ) {
                     FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(6)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("6")) },
                         modifier = Modifier
                             .weight(0.15f)
                             .height(65.dp)
@@ -286,7 +286,7 @@ fun LandscapeLayout(navController: NavController) {
                     }
 
                     FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(7)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("7")) },
                         modifier = Modifier
                             .weight(0.15f)
                             .height(65.dp)
@@ -301,7 +301,7 @@ fun LandscapeLayout(navController: NavController) {
                     }
 
                     FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(8)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("8")) },
                         modifier = Modifier
                             .weight(0.15f)
                             .height(65.dp)
@@ -317,7 +317,7 @@ fun LandscapeLayout(navController: NavController) {
 
 
                     FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Number(9)) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("9")) },
                         modifier = Modifier
                             .weight(0.15f)
                             .height(65.dp)
@@ -332,7 +332,7 @@ fun LandscapeLayout(navController: NavController) {
                     }
 
                     FilledTonalButton(
-                        onClick = { viewModel.onAction(CalculatorAction.Decimal) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField(".")) },
                         modifier = Modifier
                             .weight(0.15f)
                             .height(65.dp)
@@ -346,7 +346,7 @@ fun LandscapeLayout(navController: NavController) {
                     }
 
                     Button(
-                        onClick = { viewModel.onAction(CalculatorAction.Calculate) },
+                        onClick = { viewModel.handleAction(CalcAction.GetResult) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                         modifier = Modifier
                             .fillMaxWidth()

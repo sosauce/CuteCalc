@@ -1,5 +1,5 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
 )
 
 package com.sosauce.cutecalc
@@ -41,13 +41,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter",
+    "AutoboxingStateCreation"
+)
 @Composable
-fun CalculatorUI (navController:  NavController) {
-    val viewModel = viewModel<CalculatorViewModel>()
-    val state = viewModel.state
-    val buttonSpacing = 9.dp
-    val displayText = state.number1 + (state.operation?.symbol ?: "") + state.number2
+fun CalculatorUI (navController: NavController, state: CalcState, handleAction: (CalcAction) -> Unit) {
+    val viewModel = viewModel<CalcViewModel>()
+    val appState = viewModel.state
     val config = LocalConfiguration.current
     val portraitMode = remember { mutableStateOf(config.orientation) }
 
@@ -72,7 +72,7 @@ fun CalculatorUI (navController:  NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter),
-                    verticalArrangement = Arrangement.spacedBy(buttonSpacing),
+                    verticalArrangement = Arrangement.spacedBy(9.dp),
                 ) {
                     Row(
                         modifier = Modifier
@@ -80,7 +80,7 @@ fun CalculatorUI (navController:  NavController) {
                             .align(Alignment.End)
                     ) {
                         Text(
-                            text = displayText,
+                            text = state.field,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -94,10 +94,10 @@ fun CalculatorUI (navController:  NavController) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(buttonSpacing)
+                        horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
                         Button(
-                            onClick = { viewModel.onAction(CalculatorAction.Clear) },
+                            onClick = { viewModel.handleAction(CalcAction.ResetField) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -112,7 +112,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         Button(
-                            onClick = { viewModel.onAction(CalculatorAction.Delete) },
+                            onClick = { viewModel.handleAction(CalcAction.RemoveLast) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -127,13 +127,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         Button(
-                            onClick = {
-                                viewModel.onAction(
-                                    CalculatorAction.Operation(
-                                        CalculatorOperation.Percentage
-                                    )
-                                )
-                            },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("%")) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -149,13 +143,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         Button(
-                            onClick = {
-                                viewModel.onAction(
-                                    CalculatorAction.Operation(
-                                        CalculatorOperation.Divide
-                                    )
-                                )
-                            },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("/")) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -172,10 +160,10 @@ fun CalculatorUI (navController:  NavController) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(buttonSpacing)
+                        horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
                         FilledTonalButton(
-                            onClick = { viewModel.onAction(CalculatorAction.Number(7)) },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("7")) },
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -189,7 +177,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         FilledTonalButton(
-                            onClick = { viewModel.onAction(CalculatorAction.Number(8)) },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("8")) },
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -203,7 +191,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         FilledTonalButton(
-                            onClick = { viewModel.onAction(CalculatorAction.Number(9)) },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("9")) },
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -217,13 +205,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         Button(
-                            onClick = {
-                                viewModel.onAction(
-                                    CalculatorAction.Operation(
-                                        CalculatorOperation.Multiply
-                                    )
-                                )
-                            },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("*")) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -240,10 +222,10 @@ fun CalculatorUI (navController:  NavController) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(buttonSpacing)
+                        horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
                         FilledTonalButton(
-                            onClick = { viewModel.onAction(CalculatorAction.Number(4)) },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("4")) },
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -257,7 +239,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         FilledTonalButton(
-                            onClick = { viewModel.onAction(CalculatorAction.Number(5)) },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("5")) },
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -271,7 +253,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         FilledTonalButton(
-                            onClick = { viewModel.onAction(CalculatorAction.Number(6)) },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("6")) },
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -285,13 +267,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         Button(
-                            onClick = {
-                                viewModel.onAction(
-                                    CalculatorAction.Operation(
-                                        CalculatorOperation.Subtract
-                                    )
-                                )
-                            },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("-")) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -308,10 +284,10 @@ fun CalculatorUI (navController:  NavController) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(buttonSpacing)
+                        horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
                         FilledTonalButton(
-                            onClick = { viewModel.onAction(CalculatorAction.Number(1)) },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("1")) },
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -325,7 +301,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         FilledTonalButton(
-                            onClick = { viewModel.onAction(CalculatorAction.Number(2)) },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("2")) },
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -339,7 +315,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         FilledTonalButton(
-                            onClick = { viewModel.onAction(CalculatorAction.Number(3)) },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("3")) },
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -353,13 +329,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         Button(
-                            onClick = {
-                                viewModel.onAction(
-                                    CalculatorAction.Operation(
-                                        CalculatorOperation.Add
-                                    )
-                                )
-                            },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("+")) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -376,10 +346,10 @@ fun CalculatorUI (navController:  NavController) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(buttonSpacing)
+                        horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
                         FilledTonalButton(
-                            onClick = { viewModel.onAction(CalculatorAction.Number(0)) },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField("0")) },
                             modifier = Modifier
                                 .aspectRatio(2f)
                                 .weight(2f)
@@ -393,7 +363,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         FilledTonalButton(
-                            onClick = { viewModel.onAction(CalculatorAction.Decimal) },
+                            onClick = { viewModel.handleAction(CalcAction.AddToField(".")) },
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -407,7 +377,7 @@ fun CalculatorUI (navController:  NavController) {
                         }
 
                         Button(
-                            onClick = { viewModel.onAction(CalculatorAction.Calculate) },
+                            onClick = { viewModel.handleAction(CalcAction.GetResult) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -425,6 +395,6 @@ fun CalculatorUI (navController:  NavController) {
             }
         }
     } else {
-        LandscapeLayout(navController = navController)
+       LandscapeLayout(navController = navController, state = state)
     }
 }

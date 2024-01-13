@@ -11,8 +11,8 @@ android {
         applicationId = "com.sosauce.cutecalc"
         minSdk = 24
         targetSdk = 34
-        versionCode = 9
-        versionName = "1.5.0"
+        versionCode = 10
+        versionName = "2.0.0"
     }
 
     buildTypes {
@@ -46,7 +46,6 @@ android {
     }
 }
 
-
 dependencies {
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.core:core-ktx:1.12.0")
@@ -56,4 +55,6 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.6")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose")
+    implementation("com.notkamui.libs:keval:0.9.0")
 }
