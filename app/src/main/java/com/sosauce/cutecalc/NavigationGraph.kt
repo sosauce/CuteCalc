@@ -15,11 +15,11 @@ fun Nav() {
         composable(route = "CalculatorScreen") {
             val viewModel = viewModel<CalcViewModel>()
             val state by viewModel.state.collectAsStateWithLifecycle()
-            CalculatorUI(navController, state, viewModel::handleAction)
+            CalculatorUI(navController, state)
         }
         composable(route = "AboutScreen") {
             AboutScreen(navController)
         }
     }
-    
+
 }

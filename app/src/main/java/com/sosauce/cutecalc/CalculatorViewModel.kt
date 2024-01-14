@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class CalcViewModel: ViewModel() {
+class CalcViewModel : ViewModel() {
 
     private val getFormulaResult: GetFormulaResultUseCase = GetFormulaResultUseCase()
 
@@ -22,9 +22,11 @@ class CalcViewModel: ViewModel() {
             CalcAction.GetResult -> {
                 setState { copy(field = getFormulaResult(field)) }
             }
+
             CalcAction.ResetField -> {
                 setState { copy(field = "") }
             }
+
             CalcAction.RemoveLast -> {
                 setState { copy(field = field.dropLast(1)) }
             }

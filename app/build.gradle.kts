@@ -12,13 +12,14 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 11
-        versionName = "2.0.1"
+        versionName = "2.0.2"
     }
 
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            isCrunchPngs = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -38,11 +39,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.4"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 }
 

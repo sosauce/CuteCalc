@@ -8,4 +8,5 @@
     </style>
 
     <style name="Theme.CuteCalc" parent="android:Theme.Material.Light.NoActionBar" />
+    <color name="pink_tone">#201A1A</color>
 </resources>

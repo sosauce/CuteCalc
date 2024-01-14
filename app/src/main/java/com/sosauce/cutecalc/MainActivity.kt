@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                     contentColor = MaterialTheme.colorScheme.background
-                ) { _ -> Nav()}
+                ) { Nav() }
             }
         }
     }

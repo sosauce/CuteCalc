@@ -1,4 +1,5 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+@file:OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
 )
 
@@ -41,13 +42,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter",
+@SuppressLint(
+    "UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter",
     "AutoboxingStateCreation"
 )
 @Composable
-fun CalculatorUI (navController: NavController, state: CalcState, handleAction: (CalcAction) -> Unit) {
+fun CalculatorUI(
+    navController: NavController,
+    state: CalcState
+) {
     val viewModel = viewModel<CalcViewModel>()
-    val appState = viewModel.state
     val config = LocalConfiguration.current
     val portraitMode = remember { mutableStateOf(config.orientation) }
 
@@ -395,6 +399,6 @@ fun CalculatorUI (navController: NavController, state: CalcState, handleAction: 
             }
         }
     } else {
-       LandscapeLayout(navController = navController, state = state)
+        LandscapeLayout(navController = navController, state = state)
     }
 }

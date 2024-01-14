@@ -42,7 +42,6 @@ import com.sosauce.cutecalc.ui.theme.GlobalFont
 fun LandscapeLayout(navController: NavController, state: CalcState) {
 
     val viewModel = viewModel<CalcViewModel>()
-    val appState = viewModel.state
 
 
     Scaffold(
@@ -149,7 +148,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     }
 
                     Button(
-                        onClick = {viewModel.handleAction(CalcAction.AddToField("*")) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("*")) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .weight(0.15f)
