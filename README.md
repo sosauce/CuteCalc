@@ -35,7 +35,7 @@
 ---
 <h1 align=center>🤑 Support</h1>
 
-<p>You can support me by donating on [my PayPal](https://paypal.me/sosauce?country.x=FR&locale.x=fr_FR). Thank you so much for the support ❤️</p>
+<p>You can support me by donating on [my PayPal](https://bit.ly/sosaucePayPal). Thank you so much for the support ❤️</p>
 
 ---
 <h1 align=center>⚠️ Copyright</h1>
