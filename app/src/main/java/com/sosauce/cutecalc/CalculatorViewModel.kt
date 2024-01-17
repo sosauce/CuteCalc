@@ -17,6 +17,7 @@ class CalcViewModel : ViewModel() {
         _state.value = state.value.reducer()
     }
 
+
     fun handleAction(action: CalcAction) {
         when (action) {
             CalcAction.GetResult -> {

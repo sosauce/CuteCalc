@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
+)
 
 package com.sosauce.cutecalc
 
@@ -93,7 +95,7 @@ fun AboutScreen(navController: NavController) {
                         fontSize = 40.sp
                     )
                     Text(
-                        text = "Version 2.0.2",
+                        text = "Version 2.2.0",
                         fontFamily = GlobalFont,
                         fontSize = 20.sp,
                         modifier = Modifier.offset(y = (-8).dp),

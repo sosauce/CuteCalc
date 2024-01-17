@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -55,6 +56,7 @@ fun CalculatorUI(
     val config = LocalConfiguration.current
     val portraitMode = remember { mutableStateOf(config.orientation) }
 
+
     if (portraitMode.value == Configuration.ORIENTATION_PORTRAIT) {
         Scaffold(
             topBar = {
@@ -66,6 +68,13 @@ fun CalculatorUI(
                 )
             },
         ) {
+
+            val displayText = remember { state.field }
+            val scrollState = rememberScrollState()
+
+            LaunchedEffect(displayText) {
+                scrollState.animateScrollTo(scrollState.maxValue)
+            }
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -80,9 +89,12 @@ fun CalculatorUI(
                 ) {
                     Row(
                         modifier = Modifier
-                            .horizontalScroll(rememberScrollState())
+                            .horizontalScroll(scrollState)
                             .align(Alignment.End)
                     ) {
+                        LaunchedEffect(state.field) {
+                            scrollState.animateScrollTo(scrollState.maxValue)
+                        }
                         Text(
                             text = state.field,
                             textAlign = TextAlign.Center,
