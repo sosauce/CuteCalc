@@ -8,8 +8,8 @@
 
 - Lightweight (~1.2 Mb APK size)
 - No permissions needed !
-- Material 3 Design
-- Very fast (~1 Mb RAM usage)
+- Material 3 & You Design
+- Very fast !
 
 ---
 <h1 align=center>🤔 Why ?</h1>
@@ -35,7 +35,7 @@
 ---
 <h1 align=center>🤑 Support</h1>
 
-<p>You can support me by donating on my PayPal(https://bit.ly/sosaucePayPal). Thank you so much for the support ❤️</p>
+<p>You can support me by donating on my [PayPal](https://bit.ly/sosaucePayPal). Thank you so much for the support ❤️</p>
 
 ---
 <h1 align=center>⚠️ Copyright</h1>
