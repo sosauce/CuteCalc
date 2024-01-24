@@ -1,5 +1,6 @@
 @file:OptIn(
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
 )
 
@@ -107,6 +108,7 @@ fun CalculatorUI(
                             fontFamily = GlobalFont
                         )
                     }
+
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -128,19 +130,29 @@ fun CalculatorUI(
                         }
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.RemoveLast) },
+                            onClick = {
+                                val openParenCount = state.field.count { it == '(' }
+                                val closeParenCount = state.field.count { it == ')' }
+                                val nextParen = if (openParenCount > closeParenCount) ")" else "("
+
+                                viewModel.handleAction(CalcAction.AddToField(nextParen))
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
                         ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.backspace_outline),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onBackground,
-                                modifier = Modifier.size(40.dp)
+                            val openParenCount = state.field.count { it == '(' }
+                            val closeParenCount = state.field.count { it == ')' }
+                            Text(
+                                text = if  (openParenCount > closeParenCount) ")" else "(",
+                                color = MaterialTheme.colorScheme.onBackground,
+                                fontSize = 40.sp,
+                                fontFamily = GlobalFont,
                             )
                         }
+
+
 
                         Button(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("%")) },
@@ -205,6 +217,8 @@ fun CalculatorUI(
                                 fontFamily = GlobalFont
                             )
                         }
+
+
 
                         FilledTonalButton(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("9")) },
@@ -367,8 +381,8 @@ fun CalculatorUI(
                         FilledTonalButton(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("0")) },
                             modifier = Modifier
-                                .aspectRatio(2f)
-                                .weight(2f)
+                                .aspectRatio(1f)
+                                .weight(1f)
                         ) {
                             Text(
                                 text = "0",
@@ -384,16 +398,30 @@ fun CalculatorUI(
                                 .aspectRatio(1f)
                                 .weight(1f)
                         ) {
-                            Text(
-                                text = ".",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
+                            Icon(
+                                painter = painterResource(id = R.drawable.circle_small),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+
+                        FilledTonalButton(
+                            onClick = { viewModel.handleAction(CalcAction.RemoveLast) },
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .weight(1f)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.backspace_outline),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(40.dp)
                             )
                         }
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.GetResult) },
+                            onClick = { if (state.field.contains("060908")) { viewModel.handleAction(CalcAction.ResetField); viewModel.handleAction(CalcAction.AddToField("🥳🥳🥳")) } else {viewModel.handleAction(CalcAction.GetResult)} },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)

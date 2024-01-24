@@ -1,9 +1,10 @@
 package com.sosauce.cutecalc
 
 import com.notkamui.keval.KevalInvalidExpressionException
+import com.notkamui.keval.KevalZeroDivisionException
 import com.notkamui.keval.keval
 
-data class CalcState(val field: String)
+data class CalcState(var field: String)
 sealed interface CalcAction {
     object GetResult : CalcAction
     object ResetField : CalcAction
@@ -16,7 +17,17 @@ class GetFormulaResultUseCase {
         // Handle back-to-back operators by replacing them with a single operator
         val cleanedFormula = handleBackToBackOperators(formula)
         return try {
-            cleanedFormula.keval().toBigDecimal().stripTrailingZeros().toPlainString()
+            val result = cleanedFormula.keval().toBigDecimal().stripTrailingZeros().toPlainString()
+
+            // Check for division by zero
+            if (result == "Infinity" || result == "-Infinity") {
+                throw KevalZeroDivisionException()
+            }
+
+            result
+        } catch (e: KevalZeroDivisionException) {
+            // Handle zero division, e.g., by returning a specific error message
+            "Can't divide by 0"
         } catch (e: KevalInvalidExpressionException) {
             // Handle invalid expression, e.g., by returning an error message
             "Error"

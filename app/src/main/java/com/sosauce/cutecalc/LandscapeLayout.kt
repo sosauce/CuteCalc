@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.sosauce.cutecalc
 
@@ -26,6 +26,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -60,6 +62,13 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                 .background(MaterialTheme.colorScheme.background)
                 .padding(15.dp)
         ) {
+            val displayText = remember { state.field }
+            val scrollState = rememberScrollState()
+
+            LaunchedEffect(displayText) {
+                scrollState.animateScrollTo(scrollState.maxValue)
+            }
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -91,14 +100,14 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         onClick = { viewModel.handleAction(CalcAction.ResetField) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                         modifier = Modifier
-                            .height(65.dp)
                             .weight(0.15f)
                     ) {
                         Text(
                             text = "C",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
-                            fontFamily = GlobalFont
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
                     Button(
@@ -107,7 +116,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.15f)
-                            .height(65.dp)
+                            .height(70.dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.backspace_outline),
@@ -118,17 +127,40 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     }
 
                     Button(
+                        onClick = {
+                            val openParenCount = state.field.count { it == '(' }
+                            val closeParenCount = state.field.count { it == ')' }
+                            val nextParen = if (openParenCount > closeParenCount) ")" else "("
+
+                            viewModel.handleAction(CalcAction.AddToField(nextParen))
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        val openParenCount = state.field.count { it == '(' }
+                        val closeParenCount = state.field.count { it == ')' }
+                        Text(
+                            text = if  (openParenCount > closeParenCount) ")" else "(",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+
+
+                    Button(
                         onClick = { viewModel.handleAction(CalcAction.AddToField("%")) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "%",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
-                            fontFamily = GlobalFont
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
 
@@ -137,13 +169,13 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "/",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
-                            fontFamily = GlobalFont
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
 
@@ -152,13 +184,13 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "×",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
-                            fontFamily = GlobalFont
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
                     Button(
@@ -166,13 +198,13 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "-",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
-                            fontFamily = GlobalFont
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
                 }
@@ -185,13 +217,13 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         onClick = { viewModel.handleAction(CalcAction.AddToField("1")) },
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "1",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
-                            fontFamily = GlobalFont
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
 
@@ -199,13 +231,13 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         onClick = { viewModel.handleAction(CalcAction.AddToField("2")) },
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "2",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
-                            fontFamily = GlobalFont
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
 
@@ -213,13 +245,13 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         onClick = { viewModel.handleAction(CalcAction.AddToField("3")) },
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "3",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
-                            fontFamily = GlobalFont
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
 
@@ -227,26 +259,26 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         onClick = { viewModel.handleAction(CalcAction.AddToField("4")) },
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "4",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
-                            fontFamily = GlobalFont
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
                     FilledTonalButton(
                         onClick = { viewModel.handleAction(CalcAction.AddToField("5")) },
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "5",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
-                            fontFamily = GlobalFont
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
                     Button(
@@ -254,13 +286,13 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "+",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
-                            fontFamily = GlobalFont
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
                 }
@@ -274,13 +306,13 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         onClick = { viewModel.handleAction(CalcAction.AddToField("6")) },
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "6",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
-                            fontFamily = GlobalFont
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
 
@@ -288,14 +320,14 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         onClick = { viewModel.handleAction(CalcAction.AddToField("7")) },
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "7",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
                             fontFamily = GlobalFont,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
 
@@ -303,14 +335,14 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         onClick = { viewModel.handleAction(CalcAction.AddToField("8")) },
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "8",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 40.sp,
                             fontFamily = GlobalFont,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
 
@@ -319,7 +351,6 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         onClick = { viewModel.handleAction(CalcAction.AddToField("9")) },
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
                         Text(
                             text = "9",
@@ -331,16 +362,30 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     }
 
                     FilledTonalButton(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("0")) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "0",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+
+                    FilledTonalButton(
                         onClick = { viewModel.handleAction(CalcAction.AddToField(".")) },
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.circle_small),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(40.dp)
+                        Text(
+                            text = ".",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
 
@@ -350,13 +395,13 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(0.15f)
-                            .height(65.dp)
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.equal),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(40.dp)
+                        Text(
+                            text = "=",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
                 }
