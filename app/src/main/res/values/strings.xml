@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CuteCalc</string>
+    <string name="made_by">Made with ❤️ by sosauce</string>
+    <string name="me">Me, I guess</string>
+    <string name="about">About</string>
+    <string name="ver">Version 2.4</string>
+    <string name="update_check">Check for updates</string>
+    <string name="projects">All my projects</string>
+    <string name="bug_report">Report a bug</string>
+    <string name="theme">Theme</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_amoled">Amoled</string>
+    <string name="clear">C</string>
+    <string name="percent">%</string>
+    <string name="div_zero_error">Can\'t divide by 0</string>
+    // Content Description Tags
+    <string name="back">Back Arrow</string>
+    <string name="theme_changer">Theme Selector</string>
+</resources>

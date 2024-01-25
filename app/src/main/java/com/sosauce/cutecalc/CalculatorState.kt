@@ -1,5 +1,7 @@
 package com.sosauce.cutecalc
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.notkamui.keval.KevalInvalidExpressionException
 import com.notkamui.keval.KevalZeroDivisionException
 import com.notkamui.keval.keval
@@ -13,6 +15,7 @@ sealed interface CalcAction {
 }
 
 class GetFormulaResultUseCase {
+    @Composable
     operator fun invoke(formula: String): String {
         // Handle back-to-back operators by replacing them with a single operator
         val cleanedFormula = handleBackToBackOperators(formula)
@@ -27,7 +30,7 @@ class GetFormulaResultUseCase {
             result
         } catch (e: KevalZeroDivisionException) {
             // Handle zero division, e.g., by returning a specific error message
-            "Can't divide by 0"
+            stringResource(id = R.string.div_zero_error)
         } catch (e: KevalInvalidExpressionException) {
             // Handle invalid expression, e.g., by returning an error message
             "Error"
