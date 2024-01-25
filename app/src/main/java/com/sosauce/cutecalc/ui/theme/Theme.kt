@@ -12,6 +12,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -86,6 +87,22 @@ private val DarkColors = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
+val DarkAmoledColorPalette = darkColorScheme(
+    primary = Color.White,
+    onPrimary = Color.Black,
+    secondary = Color.Black,
+    onSecondary = Color.White,
+    secondaryContainer = Color.Black,
+    tertiary = Color.Black,
+    tertiaryContainer = Color.Black,
+    background = Color.Black,
+    onBackground = Color.White,
+    surface = Color.Black,
+    onSurface = Color.White,
+    outlineVariant = Color.Black,
+    error = Color(0xFFB00020),
+    onError = Color.White
+)
 
 @Composable
 fun CuteCalcTheme(
@@ -119,3 +136,12 @@ fun CuteCalcTheme(
 }
 
 val GlobalFont = FontFamily(Font(R.font.nunito))
+
+@Composable
+fun DarkAmoledTheme(content: @Composable () -> Unit) {
+    MaterialTheme(
+        colorScheme = DarkAmoledColorPalette,
+        typography = Typography(),
+        content = content
+    )
+}

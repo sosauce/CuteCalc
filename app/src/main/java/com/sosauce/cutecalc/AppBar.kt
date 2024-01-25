@@ -1,13 +1,14 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
 )
-@file:Suppress("UNUSED_EXPRESSION")
+@file:Suppress("UNUSED_EXPRESSION", "unused")
 
 package com.sosauce.cutecalc
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,7 +36,10 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,11 +47,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavController
+import com.sosauce.cutecalc.ui.theme.DarkAmoledColorPalette
 import com.sosauce.cutecalc.ui.theme.GlobalFont
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+
+
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -101,7 +119,7 @@ fun AppBar(title: String, navController: NavController, showBackArrow: Boolean, 
     )
 }
 @Composable
-    fun ThemeSelector(
+fun ThemeSelector(
         onDismissRequest: () -> Unit
     ) {
         Dialog(onDismissRequest = { onDismissRequest() }) {
@@ -118,10 +136,27 @@ fun AppBar(title: String, navController: NavController, showBackArrow: Boolean, 
         }
     }
 
+enum class Theme {
+    Dark, Light, Amoled
+}
+
+object PreferencesKeys {
+    val THEME = stringPreferencesKey("theme")
+}
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
+
 @Composable
 fun ThemeRadioButtons() {
-    val options = listOf("System Default", "Dark", "Light")
-    var selectedOption by remember { mutableStateOf(options[0]) }
+    val options = listOf("Dark", "Light", "Amoled")
+    val context = LocalContext.current
+    val dataStore: DataStore<Preferences> = context.dataStore
+    val themeFlow: Flow<String?> = dataStore.data
+        .map { preferences ->
+            preferences[PreferencesKeys.THEME]
+        }
+    val theme by themeFlow.collectAsState(initial = null)
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -133,14 +168,18 @@ fun ThemeRadioButtons() {
                     .fillMaxWidth()
                     .height(56.dp)
                     .selectable(
-                        selected = selectedOption == option,
-                        onClick = { selectedOption = option }
+                        selected = theme == option,
+                        onClick = {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                saveTheme(dataStore, option)
+                            }
+                        }
                     )
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
-                    selected = selectedOption == option,
+                    selected = theme == option,
                     onClick = null
                 )
                 Text(
@@ -152,3 +191,10 @@ fun ThemeRadioButtons() {
         }
     }
 }
+
+suspend fun saveTheme(dataStore: DataStore<Preferences>, theme: String) {
+    dataStore.edit { settings ->
+        settings[PreferencesKeys.THEME] = theme
+    }
+}
+

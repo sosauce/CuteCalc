@@ -1,7 +1,8 @@
 @file:OptIn(
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
 )
 
 package com.sosauce.cutecalc
@@ -190,8 +191,9 @@ fun CalculatorUI(
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
-                        FilledTonalButton(
+                        Button(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("7")) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -204,8 +206,9 @@ fun CalculatorUI(
                             )
                         }
 
-                        FilledTonalButton(
+                        Button(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("8")) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -220,8 +223,9 @@ fun CalculatorUI(
 
 
 
-                        FilledTonalButton(
+                        Button(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("9")) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -249,13 +253,15 @@ fun CalculatorUI(
                             )
                         }
                     }
+
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
-                        FilledTonalButton(
+                        Button(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("4")) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -268,8 +274,9 @@ fun CalculatorUI(
                             )
                         }
 
-                        FilledTonalButton(
+                        Button(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("5")) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -282,8 +289,9 @@ fun CalculatorUI(
                             )
                         }
 
-                        FilledTonalButton(
+                        Button(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("6")) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -316,8 +324,9 @@ fun CalculatorUI(
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
-                        FilledTonalButton(
+                        Button(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("1")) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -330,8 +339,9 @@ fun CalculatorUI(
                             )
                         }
 
-                        FilledTonalButton(
+                        Button(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("2")) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -343,9 +353,9 @@ fun CalculatorUI(
                                 fontFamily = GlobalFont
                             )
                         }
-
-                        FilledTonalButton(
+                        Button(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("3")) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -378,8 +388,9 @@ fun CalculatorUI(
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
-                        FilledTonalButton(
+                        Button(
                             onClick = { viewModel.handleAction(CalcAction.AddToField("0")) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -392,8 +403,9 @@ fun CalculatorUI(
                             )
                         }
 
-                        FilledTonalButton(
+                        Button(
                             onClick = { viewModel.handleAction(CalcAction.AddToField(".")) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
@@ -406,8 +418,9 @@ fun CalculatorUI(
                             )
                         }
 
-                        FilledTonalButton(
+                        Button(
                             onClick = { viewModel.handleAction(CalcAction.RemoveLast) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)

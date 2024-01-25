@@ -95,7 +95,7 @@ fun AboutScreen(navController: NavController) {
                         fontSize = 40.sp
                     )
                     Text(
-                        text = "Version 2.3.2",
+                        text = "Version 2.4",
                         fontFamily = GlobalFont,
                         fontSize = 20.sp,
                         modifier = Modifier.offset(y = (-8).dp),
@@ -110,9 +110,6 @@ fun AboutScreen(navController: NavController) {
                     }
                 }
             }
-
-
-
 
             Spacer(modifier = Modifier.height(10.dp))
 
