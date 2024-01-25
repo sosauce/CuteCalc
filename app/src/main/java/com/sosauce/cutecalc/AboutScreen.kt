@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -60,7 +61,7 @@ fun AboutScreen(navController: NavController) {
     Scaffold(
         topBar = {
             AppBar(
-                title = "About",
+                title = stringResource(id = R.string.about),
                 showBackArrow = true,
                 navController = navController,
                 showMenuIcon = false
@@ -90,12 +91,12 @@ fun AboutScreen(navController: NavController) {
                             .size(150.dp)
                     )
                     Text(
-                        text = "CuteCalc",
+                        text = stringResource(id = R.string.app_name),
                         fontFamily = GlobalFont,
                         fontSize = 40.sp
                     )
                     Text(
-                        text = "Version 2.4",
+                        text = stringResource(id = R.string.ver),
                         fontFamily = GlobalFont,
                         fontSize = 20.sp,
                         modifier = Modifier.offset(y = (-8).dp),
@@ -106,7 +107,7 @@ fun AboutScreen(navController: NavController) {
                             context.startActivity(intent)
                         }
                     ) {
-                        Text(text = "Check for updates", fontFamily = GlobalFont)
+                        Text(text = stringResource(id = R.string.update_check), fontFamily = GlobalFont)
                     }
                 }
             }
@@ -117,7 +118,7 @@ fun AboutScreen(navController: NavController) {
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth()
-            ) { Text(text = "Made with ❤️ by sosauce", fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint) }
+            ) { Text(text = stringResource(id = R.string.made_by), fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint) }
 
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.secondary)
             Spacer(modifier = Modifier.height(15.dp))
@@ -134,7 +135,7 @@ fun AboutScreen(navController: NavController) {
             ) {
                 Icon(painterResource(id = R.drawable.star_outline), contentDescription = null, modifier = Modifier.size(30.dp), tint = iconsTint)
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = "All my projects", fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
+                Text(text = stringResource(id = R.string.projects), fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
             }
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -147,7 +148,7 @@ fun AboutScreen(navController: NavController) {
             ) {
                 Icon(painterResource(id = R.drawable.web), contentDescription = null, modifier = Modifier.size(30.dp), tint = iconsTint)
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = "Me, I guess", fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
+                Text(text = stringResource(id = R.string.me), fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
             }
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -160,7 +161,7 @@ fun AboutScreen(navController: NavController) {
             ) {
                 Icon(painterResource(id = R.drawable.bug_outline), contentDescription = null, modifier = Modifier.size(30.dp), tint = iconsTint)
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = "Report a bug", fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
+                Text(text = stringResource(id = R.string.bug_report) , fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
             }
 
         }

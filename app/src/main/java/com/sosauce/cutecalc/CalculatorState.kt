@@ -1,5 +1,4 @@
 package com.sosauce.cutecalc
-
 import com.notkamui.keval.KevalInvalidExpressionException
 import com.notkamui.keval.KevalZeroDivisionException
 import com.notkamui.keval.keval
@@ -13,6 +12,7 @@ sealed interface CalcAction {
 }
 
 class GetFormulaResultUseCase {
+
     operator fun invoke(formula: String): String {
         // Handle back-to-back operators by replacing them with a single operator
         val cleanedFormula = handleBackToBackOperators(formula)

@@ -49,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.datastore.core.DataStore
@@ -79,7 +80,9 @@ fun AppBar(title: String, navController: NavController, showBackArrow: Boolean, 
         navigationIcon = {
                          if (showBackArrow) {
                              IconButton(onClick = { navController.navigate("CalculatorScreen") }) {
-                                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back Arrow")
+                                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(
+                                     id = R.string.back
+                                 ))
                              }
                          } else null
         },
@@ -87,7 +90,9 @@ fun AppBar(title: String, navController: NavController, showBackArrow: Boolean, 
         actions = {
             if (showMenuIcon) {
                 IconButton(onClick = { expanded = true }) {
-                    Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Theme changer", tint = iconsColor)
+                    Icon(imageVector = Icons.Default.MoreVert, contentDescription = stringResource(
+                        id = R.string.theme_changer
+                    ), tint = iconsColor)
                 }
             } else null
 
@@ -105,13 +110,17 @@ fun AppBar(title: String, navController: NavController, showBackArrow: Boolean, 
                         .background(color = MaterialTheme.colorScheme.surface)
                 ) {
                     DropdownMenuItem(
-                        text = { Text(text = "Theme", fontFamily = GlobalFont) },
+                        text = { Text(text = stringResource(id = R.string.theme), fontFamily = GlobalFont) },
                         onClick = { showDialog = true },
-                        leadingIcon = { Icon(painterResource(id = R.drawable.palette_outline), contentDescription = "theme selector")})
+                        leadingIcon = { Icon(painterResource(id = R.drawable.palette_outline), contentDescription = stringResource(
+                            id = R.string.theme_changer
+                        ))})
                     DropdownMenuItem(
-                        text = { Text(text = "About", fontFamily = GlobalFont) },
+                        text = { Text(text = stringResource(id = R.string.about), fontFamily = GlobalFont) },
                         onClick = { navController.navigate("AboutScreen"); expanded = false },
-                        leadingIcon = { Icon(imageVector = Icons.Outlined.Info, contentDescription = "about") }
+                        leadingIcon = { Icon(imageVector = Icons.Outlined.Info, contentDescription = stringResource(
+                            id = R.string.about
+                        )) }
                     )
 
                 }
@@ -149,7 +158,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 
 @Composable
 fun ThemeRadioButtons() {
-    val options = listOf("Dark", "Light", "Amoled")
+    val options = listOf(stringResource(id = R.string.theme_dark), stringResource(id = R.string.theme_light), stringResource(id = R.string.theme_amoled))
     val context = LocalContext.current
     val dataStore: DataStore<Preferences> = context.dataStore
     val themeFlow: Flow<String?> = dataStore.data
