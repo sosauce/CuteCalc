@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -25,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -73,6 +75,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .align((Alignment.BottomCenter))
+                    .navigationBarsPadding()
             ) {
                 Row(
                     modifier = Modifier
@@ -86,7 +89,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                             .fillMaxWidth()
                             .padding(vertical = 16.dp),
                         fontWeight = FontWeight.Light,
-                        fontSize = 40.sp,
+                        fontSize = 35.sp,
                         color = MaterialTheme.colorScheme.onBackground,
                         fontFamily = GlobalFont
                     )
@@ -96,33 +99,74 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Button(
+                    TextButton(
                         onClick = { viewModel.handleAction(CalcAction.ResetField) },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                         modifier = Modifier
                             .weight(0.15f)
                     ) {
                         Text(
-                            text = "C",
+                            text = "",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont,
                             modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
+                    FilledTonalButton(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("0")) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "0",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+
+                    FilledTonalButton(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("1")) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "1",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+
+
+                    FilledTonalButton(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("2")) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "2",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+
                     Button(
-                        onClick = { viewModel.handleAction(CalcAction.RemoveLast) },
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("*")) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
-                            .fillMaxWidth()
                             .weight(0.15f)
-                            .height(70.dp)
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.backspace_outline),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(40.dp)
+                        Text(
+                            text = "×",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
 
@@ -143,11 +187,102 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         Text(
                             text = if  (openParenCount > closeParenCount) ")" else "(",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
 
+                    Button(
+                        onClick = { viewModel.handleAction(CalcAction.ResetField) },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "C",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    FilledTonalButton(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("3")) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "3",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+
+                    FilledTonalButton(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("4")) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "4",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+
+
+                    FilledTonalButton(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("5")) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "5",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+
+                    FilledTonalButton(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("6")) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "6",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+
+                    Button(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("+")) },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "+",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
 
                     Button(
                         onClick = { viewModel.handleAction(CalcAction.AddToField("%")) },
@@ -158,7 +293,102 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         Text(
                             text = "%",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+                    Button(
+                        onClick = { viewModel.handleAction(CalcAction.RemoveLast) },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(0.15f)
+                            .height(66.dp)
+                    ) {
+                        Text(
+                            text = "⌫",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 30.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    FilledTonalButton(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("7")) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "7",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+
+                    FilledTonalButton(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("8")) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "8",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+
+                    FilledTonalButton(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("9")) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "9",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+
+
+                    FilledTonalButton(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField(".")) },
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = ".",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    Button(
+                        onClick = { viewModel.handleAction(CalcAction.AddToField("-")) },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        modifier = Modifier
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "-",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont,
                             modifier = Modifier.align(Alignment.CenterVertically)
                         )
@@ -173,217 +403,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         Text(
                             text = "/",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    Button(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("*")) },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "×",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                    Button(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("-")) },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "-",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    FilledTonalButton(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("1")) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "1",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    FilledTonalButton(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("2")) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "2",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    FilledTonalButton(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("3")) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "3",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    FilledTonalButton(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("4")) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "4",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                    FilledTonalButton(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("5")) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "5",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                    Button(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("+")) },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "+",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    FilledTonalButton(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("6")) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "6",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    FilledTonalButton(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("7")) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "7",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    FilledTonalButton(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("8")) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "8",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-
-                    FilledTonalButton(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("9")) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "9",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    FilledTonalButton(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField("0")) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "0",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    FilledTonalButton(
-                        onClick = { viewModel.handleAction(CalcAction.AddToField(".")) },
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = ".",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont,
                             modifier = Modifier.align(Alignment.CenterVertically)
                         )
@@ -399,7 +419,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         Text(
                             text = "=",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont,
                             modifier = Modifier.align(Alignment.CenterVertically)
                         )

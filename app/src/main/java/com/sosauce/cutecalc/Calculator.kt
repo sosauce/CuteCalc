@@ -2,6 +2,7 @@
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class
 )
 
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -82,6 +84,7 @@ fun CalculatorUI(
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
                     .padding(15.dp)
+                    .navigationBarsPadding()
             ) {
                 Column(
                     modifier = Modifier
@@ -125,7 +128,7 @@ fun CalculatorUI(
                             Text(
                                 text = stringResource(id = R.string.clear),
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -148,7 +151,7 @@ fun CalculatorUI(
                             Text(
                                 text = if  (openParenCount > closeParenCount) ")" else "(",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont,
                             )
                         }
@@ -163,10 +166,10 @@ fun CalculatorUI(
                                 .weight(1f)
                         ) {
                             Text(
-                                text = stringResource(id = R.string.percent),
+                                text = "%",
                                 maxLines = 1,
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -181,7 +184,7 @@ fun CalculatorUI(
                             Text(
                                 text = "/",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -201,7 +204,7 @@ fun CalculatorUI(
                             Text(
                                 text = "7",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -216,7 +219,7 @@ fun CalculatorUI(
                             Text(
                                 text = "8",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -233,7 +236,7 @@ fun CalculatorUI(
                             Text(
                                 text = "9",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -248,7 +251,7 @@ fun CalculatorUI(
                             Text(
                                 text = "×",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -269,7 +272,7 @@ fun CalculatorUI(
                             Text(
                                 text = "4",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -284,7 +287,7 @@ fun CalculatorUI(
                             Text(
                                 text = "5",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -299,7 +302,7 @@ fun CalculatorUI(
                             Text(
                                 text = "6",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -314,7 +317,7 @@ fun CalculatorUI(
                             Text(
                                 text = "-",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -334,7 +337,7 @@ fun CalculatorUI(
                             Text(
                                 text = "1",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -349,7 +352,7 @@ fun CalculatorUI(
                             Text(
                                 text = "2",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -363,7 +366,7 @@ fun CalculatorUI(
                             Text(
                                 text = "3",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -378,7 +381,7 @@ fun CalculatorUI(
                             Text(
                                 text = "+",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -398,7 +401,7 @@ fun CalculatorUI(
                             Text(
                                 text = "0",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }
@@ -443,7 +446,7 @@ fun CalculatorUI(
                             Text(
                                 text = "=",
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
+                                fontSize = 35.sp,
                                 fontFamily = GlobalFont
                             )
                         }

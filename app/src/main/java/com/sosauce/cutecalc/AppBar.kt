@@ -36,8 +36,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -58,7 +56,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavController
-import com.sosauce.cutecalc.ui.theme.DarkAmoledColorPalette
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -91,7 +88,7 @@ fun AppBar(title: String, navController: NavController, showBackArrow: Boolean, 
             if (showMenuIcon) {
                 IconButton(onClick = { expanded = true }) {
                     Icon(imageVector = Icons.Default.MoreVert, contentDescription = stringResource(
-                        id = R.string.theme_changer
+                        id = R.string.theme_selector
                     ), tint = iconsColor)
                 }
             } else null
@@ -113,7 +110,7 @@ fun AppBar(title: String, navController: NavController, showBackArrow: Boolean, 
                         text = { Text(text = stringResource(id = R.string.theme), fontFamily = GlobalFont) },
                         onClick = { showDialog = true },
                         leadingIcon = { Icon(painterResource(id = R.drawable.palette_outline), contentDescription = stringResource(
-                            id = R.string.theme_changer
+                            id = R.string.theme_selector
                         ))})
                     DropdownMenuItem(
                         text = { Text(text = stringResource(id = R.string.about), fontFamily = GlobalFont) },

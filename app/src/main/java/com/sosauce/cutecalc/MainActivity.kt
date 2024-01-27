@@ -43,7 +43,6 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { _, insets ->
             WindowInsetsControllerCompat(window, window.decorView).run {
-                hide(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars())
                 show(WindowInsetsCompat.Type.systemBars())
                 insets
             }
