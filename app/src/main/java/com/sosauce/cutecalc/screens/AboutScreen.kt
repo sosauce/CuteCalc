@@ -1,4 +1,5 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+@file:OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class
 )
 
@@ -22,10 +23,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.BugReport
+import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material.icons.outlined.Web
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,7 +41,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -63,7 +65,7 @@ fun AboutScreen(navController: NavController) {
     Scaffold(
         topBar = {
             AppBar(
-                title = stringResource(id = R.string.about),
+                title = "About",
                 showBackArrow = true,
                 navController = navController,
                 showMenuIcon = false
@@ -71,56 +73,56 @@ fun AboutScreen(navController: NavController) {
         },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
-            Spacer(modifier = Modifier.height(70.dp))
-            Card(
+            Spacer(modifier = Modifier.height(90.dp))
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(350.dp)
+                    .fillMaxSize()
                     .padding(16.dp),
-                shape = RoundedCornerShape(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Column(
+                Image(
+                    painter = painterResource(id = R.drawable.icon),
+                    contentDescription = null,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.icon),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(150.dp)
-                    )
-                    Text(
-                        text = stringResource(id = R.string.app_name),
-                        fontFamily = GlobalFont,
-                        fontSize = 40.sp
-                    )
-                    Text(
-                        text = stringResource(id = R.string.ver),
-                        fontFamily = GlobalFont,
-                        fontSize = 20.sp,
-                        modifier = Modifier.offset(y = (-8).dp),
-                    )
-                    Button(
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[2]))
-                            context.startActivity(intent)
-                        }
-                    ) {
-                        Text(text = stringResource(id = R.string.update_check), fontFamily = GlobalFont)
+                        .size(150.dp)
+                )
+                Text(
+                    text = "CuteCalc",
+                    fontFamily = GlobalFont,
+                    fontSize = 40.sp
+                )
+                Text(
+                    text = "Version 2.5.1",
+                    fontFamily = GlobalFont,
+                    fontSize = 20.sp,
+                    modifier = Modifier.offset(y = (-8).dp),
+                )
+                Button(
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[2]))
+                        context.startActivity(intent)
                     }
+                ) {
+                    Text(text = "Check for updates", fontFamily = GlobalFont)
                 }
             }
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Row(horizontalArrangement = Arrangement.Center,
+            Row(
+                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth()
-            ) { Text(text = stringResource(id = R.string.made_by), fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint) }
+            ) {
+                Text(
+                    text = "Made with ❤️ by sosauce",
+                    fontSize = 25.sp,
+                    fontFamily = GlobalFont,
+                    color = iconsTint
+                )
+            }
 
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.secondary)
             Spacer(modifier = Modifier.height(15.dp))
@@ -135,9 +137,19 @@ fun AboutScreen(navController: NavController) {
                         context.startActivity(intent)
                     }
             ) {
-                Icon(painterResource(id = R.drawable.star_outline), contentDescription = null, modifier = Modifier.size(30.dp), tint = iconsTint)
+                Icon(
+                    imageVector = Icons.Outlined.StarOutline,
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp),
+                    tint = iconsTint
+                )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = stringResource(id = R.string.projects), fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
+                Text(
+                    text = "All my projects",
+                    fontSize = 25.sp,
+                    fontFamily = GlobalFont,
+                    color = iconsTint
+                )
             }
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -148,9 +160,19 @@ fun AboutScreen(navController: NavController) {
                         context.startActivity(intent)
                     }
             ) {
-                Icon(painterResource(id = R.drawable.web), contentDescription = null, modifier = Modifier.size(30.dp), tint = iconsTint)
+                Icon(
+                    imageVector = Icons.Outlined.Web,
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp),
+                    tint = iconsTint
+                )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = stringResource(id = R.string.me), fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
+                Text(
+                    text = "Me, I guess",
+                    fontSize = 25.sp,
+                    fontFamily = GlobalFont,
+                    color = iconsTint
+                )
             }
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -161,9 +183,19 @@ fun AboutScreen(navController: NavController) {
                         context.startActivity(intent)
                     }
             ) {
-                Icon(painterResource(id = R.drawable.bug_outline), contentDescription = null, modifier = Modifier.size(30.dp), tint = iconsTint)
+                Icon(
+                    imageVector = Icons.Outlined.BugReport,
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp),
+                    tint = iconsTint
+                )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = stringResource(id = R.string.bug_report) , fontSize = 25.sp, fontFamily = GlobalFont, color = iconsTint)
+                Text(
+                    text = "Report a bug",
+                    fontSize = 25.sp,
+                    fontFamily = GlobalFont,
+                    color = iconsTint
+                )
             }
 
         }

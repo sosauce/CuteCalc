@@ -3,13 +3,18 @@
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class
 )
 
 package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.Configuration
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +28,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Backspace
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,13 +39,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,11 +55,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sosauce.cutecalc.AppBar
+import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.logic.CalcAction
 import com.sosauce.cutecalc.logic.CalcState
 import com.sosauce.cutecalc.logic.CalcViewModel
-import com.sosauce.cutecalc.R
+import com.sosauce.cutecalc.logic.dataStore
+import com.sosauce.cutecalc.logic.getButtonVibrationSetting
 import com.sosauce.cutecalc.ui.theme.GlobalFont
+import kotlinx.coroutines.flow.Flow
 
 @SuppressLint(
     "UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter",
@@ -63,7 +75,28 @@ fun CalculatorUI(
 ) {
     val viewModel = viewModel<CalcViewModel>()
     val config = LocalConfiguration.current
+    val context = LocalContext.current
     val portraitMode = remember { mutableStateOf(config.orientation) }
+    val buttonVibrationEnabledFlow: Flow<Boolean> = getButtonVibrationSetting(context.dataStore)
+    val buttonVibrationEnabledState: State<Boolean> =
+        buttonVibrationEnabledFlow.collectAsState(initial = false)
+
+    fun vibration() {
+        if (buttonVibrationEnabledState.value) {
+            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            val vibrationEffect: VibrationEffect =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE)
+                } else {
+                    TODO("VERSION.SDK_INT < O")
+                }
+            vibrator.vibrate(vibrationEffect)
+        } else {
+        }
+    }
+
+
+
 
 
     if (portraitMode.value == Configuration.ORIENTATION_PORTRAIT) {
@@ -124,14 +157,19 @@ fun CalculatorUI(
                         horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.ResetField) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.ResetField)
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
                         ) {
                             Text(
-                                text = stringResource(id = R.string.clear),
+                                text = "C",
                                 color = MaterialTheme.colorScheme.onBackground,
                                 fontSize = 35.sp,
                                 fontFamily = GlobalFont
@@ -145,6 +183,9 @@ fun CalculatorUI(
                                 val nextParen = if (openParenCount > closeParenCount) ")" else "("
 
                                 viewModel.handleAction(CalcAction.AddToField(nextParen))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
@@ -154,7 +195,7 @@ fun CalculatorUI(
                             val openParenCount = state.field.count { it == '(' }
                             val closeParenCount = state.field.count { it == ')' }
                             Text(
-                                text = if  (openParenCount > closeParenCount) ")" else "(",
+                                text = if (openParenCount > closeParenCount) ")" else "(",
                                 color = MaterialTheme.colorScheme.onBackground,
                                 fontSize = 35.sp,
                                 fontFamily = GlobalFont,
@@ -164,7 +205,12 @@ fun CalculatorUI(
 
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("%")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("%"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -180,7 +226,12 @@ fun CalculatorUI(
                         }
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("/")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("/"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -200,7 +251,12 @@ fun CalculatorUI(
                         horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("7")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("7"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -215,7 +271,12 @@ fun CalculatorUI(
                         }
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("8")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("8"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -232,7 +293,12 @@ fun CalculatorUI(
 
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("9")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("9"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -247,7 +313,12 @@ fun CalculatorUI(
                         }
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("*")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("*"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -268,7 +339,12 @@ fun CalculatorUI(
                         horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("4")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("4"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -283,7 +359,12 @@ fun CalculatorUI(
                         }
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("5")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("5"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -298,7 +379,12 @@ fun CalculatorUI(
                         }
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("6")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("6"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -313,7 +399,12 @@ fun CalculatorUI(
                         }
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("-")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("-"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -333,7 +424,12 @@ fun CalculatorUI(
                         horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("1")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("1"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -348,7 +444,12 @@ fun CalculatorUI(
                         }
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("2")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("2"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -362,7 +463,12 @@ fun CalculatorUI(
                             )
                         }
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("3")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("3"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -377,7 +483,12 @@ fun CalculatorUI(
                         }
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("+")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("+"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -397,7 +508,12 @@ fun CalculatorUI(
                         horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField("0")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("0"))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -412,7 +528,12 @@ fun CalculatorUI(
                         }
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.AddToField(".")) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField("."))
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
@@ -427,26 +548,40 @@ fun CalculatorUI(
                         }
 
                         Button(
-                            onClick = { viewModel.handleAction(CalcAction.RemoveLast) },
+                            onClick = {
+                                viewModel.handleAction(CalcAction.RemoveLast)
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .weight(1f)
                         ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.backspace_outline),
+                                imageVector = Icons.AutoMirrored.Outlined.Backspace,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onBackground,
-                                modifier = Modifier.size(40.dp)
+                                modifier = Modifier.size(35.dp)
                             )
                         }
 
                         Button(
-                            onClick = { if (state.field.contains("060908")) { viewModel.handleAction(
-                                CalcAction.ResetField
-                            ); viewModel.handleAction(CalcAction.AddToField("🥳🥳🥳")) } else {viewModel.handleAction(
-                                CalcAction.GetResult
-                            )} },
+                            onClick = {
+                                if (state.field.contains("060908")) {
+                                    viewModel.handleAction(
+                                        CalcAction.ResetField
+                                    ); viewModel.handleAction(CalcAction.AddToField("🥳🥳🥳"))
+                                } else {
+                                    viewModel.handleAction(
+                                        CalcAction.GetResult
+                                    )
+                                }
+                                if (buttonVibrationEnabledState.value) {
+                                    vibration()
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)

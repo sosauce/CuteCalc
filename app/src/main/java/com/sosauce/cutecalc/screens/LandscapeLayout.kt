@@ -16,11 +16,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Backspace
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -186,7 +190,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         val openParenCount = state.field.count { it == '(' }
                         val closeParenCount = state.field.count { it == ')' }
                         Text(
-                            text = if  (openParenCount > closeParenCount) ")" else "(",
+                            text = if (openParenCount > closeParenCount) ")" else "(",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 35.sp,
                             fontFamily = GlobalFont
@@ -303,15 +307,14 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         onClick = { viewModel.handleAction(CalcAction.RemoveLast) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                         modifier = Modifier
-                            .fillMaxWidth()
                             .weight(0.15f)
-                            .height(66.dp)
+                            .height(64.dp)
                     ) {
-                        Text(
-                            text = "⌫",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 30.sp,
-                            fontFamily = GlobalFont
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.Backspace,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.size(35.dp)
                         )
                     }
                 }
