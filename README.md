@@ -32,9 +32,9 @@
 <p>Email = sosauce_dev@protonmail.com</p>
 
 ---
-<h1>🤑 Support</h1>
+<h1>❤️ Support</h1>
 
-<p>You can support me by donating on my [PayPal](https://bit.ly/sosaucePayPal). Thank you so much for the support ❤️</p>
+<p>You can support me by donating on my PayPal: https://bit.ly/sosaucePayPal. Thank you so much for the support ❤️</p>
 
 ---
 <h1>⚠️ Copyright</h1>
