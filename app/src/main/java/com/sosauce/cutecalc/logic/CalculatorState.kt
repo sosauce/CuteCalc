@@ -1,4 +1,4 @@
-package com.sosauce.cutecalc
+package com.sosauce.cutecalc.logic
 import com.notkamui.keval.KevalInvalidExpressionException
 import com.notkamui.keval.KevalZeroDivisionException
 import com.notkamui.keval.keval

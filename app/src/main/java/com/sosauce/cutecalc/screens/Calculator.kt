@@ -6,7 +6,7 @@
     ExperimentalMaterial3Api::class
 )
 
-package com.sosauce.cutecalc
+package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
@@ -45,6 +45,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.sosauce.cutecalc.AppBar
+import com.sosauce.cutecalc.logic.CalcAction
+import com.sosauce.cutecalc.logic.CalcState
+import com.sosauce.cutecalc.logic.CalcViewModel
+import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
 @SuppressLint(
@@ -437,7 +442,11 @@ fun CalculatorUI(
                         }
 
                         Button(
-                            onClick = { if (state.field.contains("060908")) { viewModel.handleAction(CalcAction.ResetField); viewModel.handleAction(CalcAction.AddToField("🥳🥳🥳")) } else {viewModel.handleAction(CalcAction.GetResult)} },
+                            onClick = { if (state.field.contains("060908")) { viewModel.handleAction(
+                                CalcAction.ResetField
+                            ); viewModel.handleAction(CalcAction.AddToField("🥳🥳🥳")) } else {viewModel.handleAction(
+                                CalcAction.GetResult
+                            )} },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                             modifier = Modifier
                                 .aspectRatio(1f)

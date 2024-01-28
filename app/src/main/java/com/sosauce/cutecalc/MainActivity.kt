@@ -17,7 +17,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -27,6 +26,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.sosauce.cutecalc.logic.Nav
 import com.sosauce.cutecalc.ui.theme.CuteCalcTheme
 import com.sosauce.cutecalc.ui.theme.DarkAmoledColorPalette
 import kotlinx.coroutines.flow.Flow

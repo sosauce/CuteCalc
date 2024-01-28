@@ -56,6 +56,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavController
+import com.sosauce.cutecalc.logic.PreferencesKeys
+import com.sosauce.cutecalc.logic.dataStore
+import com.sosauce.cutecalc.logic.saveTheme
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -142,15 +145,6 @@ fun ThemeSelector(
         }
     }
 
-enum class Theme {
-    Dark, Light, Amoled
-}
-
-object PreferencesKeys {
-    val THEME = stringPreferencesKey("theme")
-}
-
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 
 @Composable
@@ -198,9 +192,4 @@ fun ThemeRadioButtons() {
     }
 }
 
-suspend fun saveTheme(dataStore: DataStore<Preferences>, theme: String) {
-    dataStore.edit { settings ->
-        settings[PreferencesKeys.THEME] = theme
-    }
-}
 

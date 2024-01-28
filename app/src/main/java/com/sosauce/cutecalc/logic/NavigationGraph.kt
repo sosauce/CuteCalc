@@ -1,4 +1,4 @@
-package com.sosauce.cutecalc
+package com.sosauce.cutecalc.logic
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -7,6 +7,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.sosauce.cutecalc.screens.AboutScreen
+import com.sosauce.cutecalc.screens.CalculatorUI
 
 @Composable
 fun Nav() {

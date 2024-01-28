@@ -2,7 +2,7 @@
     ExperimentalMaterial3Api::class
 )
 
-package com.sosauce.cutecalc
+package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -42,6 +42,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.sosauce.cutecalc.AppBar
+import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
 

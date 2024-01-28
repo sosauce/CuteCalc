@@ -1,4 +1,4 @@
-package com.sosauce.cutecalc
+package com.sosauce.cutecalc.logic
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
