@@ -71,7 +71,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
             val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             val vibrationEffect: VibrationEffect =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE)
+                    VibrationEffect.createOneShot(100, 90)
                 } else {
                     TODO("VERSION.SDK_INT < O")
                 }
