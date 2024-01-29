@@ -78,8 +78,7 @@ fun CalculatorUI(
     val context = LocalContext.current
     val portraitMode = remember { mutableStateOf(config.orientation) }
     val buttonVibrationEnabledFlow: Flow<Boolean> = getButtonVibrationSetting(context.dataStore)
-    val buttonVibrationEnabledState: State<Boolean> =
-        buttonVibrationEnabledFlow.collectAsState(initial = false)
+    val buttonVibrationEnabledState: State<Boolean> = buttonVibrationEnabledFlow.collectAsState(initial = false)
 
     fun vibration() {
         if (buttonVibrationEnabledState.value) {
