@@ -9,7 +9,7 @@
 - Lightweight (~1.2 Mb APK size)
 - No permissions needed !
 - Material 3 & You Design
-- Very fast !
+- Very fast and snappy !
 
 ---
 <h1>🤔 Why ?</h1>
