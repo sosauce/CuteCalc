@@ -1,1 +1,1 @@
-a simple, lightweight and open-source calculator
+A simple, lightweight and open-source calculator.

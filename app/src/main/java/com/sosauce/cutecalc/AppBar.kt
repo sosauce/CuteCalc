@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -80,7 +79,7 @@ fun AppBar(
             } else null
 
             if (showDialog) {
-                ThemeSelector(
+                Settings(
                     onDismissRequest = { showDialog = false }
                 )
             }
@@ -98,7 +97,7 @@ fun AppBar(
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Settings,
-                            contentDescription = "Theme Selector"
+                            contentDescription = "Settings"
                         )
                     })
                 DropdownMenuItem(
@@ -117,7 +116,7 @@ fun AppBar(
 }
 
 @Composable
-fun ThemeSelector(
+fun Settings(
     onDismissRequest: () -> Unit
 ) {
     Dialog(onDismissRequest = { onDismissRequest() }) {

@@ -76,8 +76,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     TODO("VERSION.SDK_INT < O")
                 }
             vibrator.vibrate(vibrationEffect)
-        } else {
-        }
+        } else {}
     }
 
 

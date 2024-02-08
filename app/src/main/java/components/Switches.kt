@@ -38,7 +38,7 @@ fun VibrationSwitch() {
             },
             modifier = Modifier.padding(16.dp)
         )
-        Text(text = "Buttons vibration", fontFamily = GlobalFont)
+        Text(text = "Haptic Feedback", fontFamily = GlobalFont)
     }
 
 }
