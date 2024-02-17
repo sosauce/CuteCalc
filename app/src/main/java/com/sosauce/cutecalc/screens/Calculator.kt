@@ -4,7 +4,7 @@
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
 )
 
 package com.sosauce.cutecalc.screens
@@ -137,6 +137,7 @@ fun CalculatorUI(
                         LaunchedEffect(state.field) {
                             scrollState.animateScrollTo(scrollState.maxValue)
                         }
+
                         Text(
                             text = state.field,
                             textAlign = TextAlign.Center,
@@ -148,7 +149,9 @@ fun CalculatorUI(
                             color = MaterialTheme.colorScheme.onBackground,
                             fontFamily = GlobalFont
                         )
+
                     }
+
 
                     Row(
                         modifier = Modifier
@@ -205,7 +208,7 @@ fun CalculatorUI(
 
                         Button(
                             onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("%"))
+                                viewModel.handleAction(CalcAction.AddToField("^"))
                                 if (buttonVibrationEnabledState.value) {
                                     vibration()
                                 }
@@ -216,7 +219,7 @@ fun CalculatorUI(
                                 .weight(1f)
                         ) {
                             Text(
-                                text = "%",
+                                text = "^",
                                 maxLines = 1,
                                 color = MaterialTheme.colorScheme.onBackground,
                                 fontSize = 35.sp,

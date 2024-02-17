@@ -376,7 +376,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
 
                     Button(
                         onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("%"))
+                            viewModel.handleAction(CalcAction.AddToField("^"))
                             if (buttonVibrationEnabledState.value) {
                                 vibration()
                             }
@@ -386,7 +386,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                             .weight(0.15f)
                     ) {
                         Text(
-                            text = "%",
+                            text = "^",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 35.sp,
                             fontFamily = GlobalFont,

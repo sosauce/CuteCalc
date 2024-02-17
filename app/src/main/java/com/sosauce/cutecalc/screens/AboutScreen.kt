@@ -82,7 +82,7 @@ fun AboutScreen(navController: NavController) {
                 verticalArrangement = Arrangement.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.icon),
+                    painter = painterResource(id = R.drawable.icon2),
                     contentDescription = null,
                     modifier = Modifier
                         .size(150.dp)
@@ -93,10 +93,10 @@ fun AboutScreen(navController: NavController) {
                     fontSize = 40.sp
                 )
                 Text(
-                    text = "Version 2.5.2",
+                    text = "Version 2.5.3",
                     fontFamily = GlobalFont,
                     fontSize = 20.sp,
-                    modifier = Modifier.offset(y = (-8).dp),
+                    modifier = Modifier.offset(y = (-7).dp),
                 )
                 Button(
                     onClick = {

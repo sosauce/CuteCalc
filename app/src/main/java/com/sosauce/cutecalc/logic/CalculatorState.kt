@@ -26,10 +26,8 @@ class GetFormulaResultUseCase {
 
             result
         } catch (e: KevalZeroDivisionException) {
-            // Handle zero division, e.g., by returning a specific error message
             "Can't divide by 0"
         } catch (e: KevalInvalidExpressionException) {
-            // Handle invalid expression, e.g., by returning an error message
             "Error"
         }
     }
