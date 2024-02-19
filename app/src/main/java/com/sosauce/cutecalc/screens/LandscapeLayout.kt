@@ -403,13 +403,13 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                         modifier = Modifier
                             .weight(0.15f)
-                            .height(64.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.Backspace,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(35.dp)
+                        Text(
+                            text = "⌫",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
                 }

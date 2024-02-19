@@ -16,6 +16,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 object PreferencesKeys {
     val THEME = stringPreferencesKey("theme")
     val BUTTON_VIBRATION_ENABLED = booleanPreferencesKey("button_vibration_enabled")
+    val CALCULATION_HISTORY = stringPreferencesKey("calculation_history")
 }
 
 // Start of the settings for themes
