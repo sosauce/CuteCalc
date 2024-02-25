@@ -3,7 +3,6 @@
     
     <style name="Theme.CuteSplash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/pink_tone</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
         <item name="postSplashScreenTheme">@style/Theme.CuteCalc</item>
     </style>
 

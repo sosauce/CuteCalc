@@ -30,6 +30,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Backspace
+import androidx.compose.material.icons.filled.Backspace
+import androidx.compose.material.icons.outlined.Backspace
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,6 +47,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -61,7 +64,9 @@ import com.sosauce.cutecalc.logic.CalcState
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.logic.dataStore
 import com.sosauce.cutecalc.logic.getButtonVibrationSetting
+import com.sosauce.cutecalc.logic.getDecimalFormattingSetting
 import com.sosauce.cutecalc.ui.theme.GlobalFont
+import com.sosauce.cutecalc.ui.theme.SegoeFont
 import kotlinx.coroutines.flow.Flow
 
 @SuppressLint(
@@ -79,6 +84,8 @@ fun CalculatorUI(
     val portraitMode = remember { mutableStateOf(config.orientation) }
     val buttonVibrationEnabledFlow: Flow<Boolean> = getButtonVibrationSetting(context.dataStore)
     val buttonVibrationEnabledState: State<Boolean> = buttonVibrationEnabledFlow.collectAsState(initial = false)
+    val decimalFormattingEnabledFlow: Flow<Boolean> = getDecimalFormattingSetting(context.dataStore)
+    val decimalFormattingEnabledState: State<Boolean> = decimalFormattingEnabledFlow.collectAsState(initial = false)
 
     fun vibration() {
         if (buttonVibrationEnabledState.value) {
@@ -90,13 +97,8 @@ fun CalculatorUI(
                     TODO("VERSION.SDK_INT < O")
                 }
             vibrator.vibrate(vibrationEffect)
-        } else {
-        }
+        } else {}
     }
-
-
-
-
 
     if (portraitMode.value == Configuration.ORIENTATION_PORTRAIT) {
         Scaffold(
@@ -136,10 +138,10 @@ fun CalculatorUI(
                     ) {
                         LaunchedEffect(state.field) {
                             scrollState.animateScrollTo(scrollState.maxValue)
-                        }
+                        } // re-add below the Text if needed
 
                         Text(
-                            text = state.field,
+                            text = if (decimalFormattingEnabledState.value) state.formattedField().replace("*", "×") else state.field.replace("*", "×"),
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -161,9 +163,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.ResetField)
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                             modifier = Modifier
@@ -185,9 +185,7 @@ fun CalculatorUI(
                                 val nextParen = if (openParenCount > closeParenCount) ")" else "("
 
                                 viewModel.handleAction(CalcAction.AddToField(nextParen))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
@@ -209,9 +207,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("^"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
@@ -220,7 +216,6 @@ fun CalculatorUI(
                         ) {
                             Text(
                                 text = "^",
-                                maxLines = 1,
                                 color = MaterialTheme.colorScheme.onBackground,
                                 fontSize = 40.sp,
                                 fontFamily = GlobalFont
@@ -230,9 +225,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("/"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
@@ -255,9 +248,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("7"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
@@ -275,9 +266,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("8"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
@@ -297,9 +286,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("9"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
@@ -317,9 +304,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("*"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
@@ -343,9 +328,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("4"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
@@ -363,9 +346,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("5"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
@@ -383,9 +364,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("6"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
@@ -403,9 +382,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("-"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
@@ -428,9 +405,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("1"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
@@ -448,9 +423,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("2"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
@@ -467,9 +440,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("3"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
@@ -487,9 +458,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("+"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
@@ -512,9 +481,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("0"))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
@@ -532,29 +499,7 @@ fun CalculatorUI(
                         Button(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField("."))
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.circle_small),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onBackground,
-                                modifier = Modifier.size(40.dp)
-                            )
-                        }
-
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.RemoveLast)
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                             modifier = Modifier
@@ -562,7 +507,7 @@ fun CalculatorUI(
                                 .weight(1f)
                         ) {
                             Text(
-                                text = "⌫",
+                                text = ".",
                                 color = MaterialTheme.colorScheme.onBackground,
                                 fontSize = 40.sp,
                                 fontFamily = GlobalFont
@@ -571,10 +516,27 @@ fun CalculatorUI(
 
                         Button(
                             onClick = {
+                                viewModel.handleAction(CalcAction.RemoveLast)
+                                if (buttonVibrationEnabledState.value) vibration()
+                            },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .weight(1f)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Outlined.Backspace,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(35.dp)
+                            )
+                        }
+
+
+                        Button(
+                            onClick = {
                                 viewModel.handleAction(CalcAction.GetResult)
-                                if (buttonVibrationEnabledState.value) {
-                                    vibration()
-                                }
+                                if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                             modifier = Modifier

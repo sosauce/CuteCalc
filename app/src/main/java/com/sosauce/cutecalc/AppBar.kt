@@ -1,8 +1,5 @@
 @file:OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class
 )
 @file:Suppress("UNUSED_EXPRESSION", "unused")
 
@@ -10,7 +7,9 @@ package com.sosauce.cutecalc
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.sosauce.cutecalc.ui.theme.GlobalFont
+import components.DecimalFormattingSwitch
 import components.ThemeRadioButtons
 import components.VibrationSwitch
 
@@ -128,8 +128,9 @@ fun Settings(
             shape = RoundedCornerShape(16.dp),
         ) {
             ThemeRadioButtons()
-            Divider(thickness = 0.2.dp)
+            Divider(thickness = 0.5.dp)
             VibrationSwitch()
+            DecimalFormattingSwitch()
         }
     }
 }

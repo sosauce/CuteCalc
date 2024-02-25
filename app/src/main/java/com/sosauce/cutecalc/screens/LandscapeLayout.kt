@@ -53,7 +53,9 @@ import com.sosauce.cutecalc.logic.CalcState
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.logic.dataStore
 import com.sosauce.cutecalc.logic.getButtonVibrationSetting
+import com.sosauce.cutecalc.logic.getDecimalFormattingSetting
 import com.sosauce.cutecalc.ui.theme.GlobalFont
+import com.sosauce.cutecalc.ui.theme.SegoeFont
 import kotlinx.coroutines.flow.Flow
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -63,8 +65,9 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
     val viewModel = viewModel<CalcViewModel>()
     val context = LocalContext.current
     val buttonVibrationEnabledFlow: Flow<Boolean> = getButtonVibrationSetting(context.dataStore)
-    val buttonVibrationEnabledState: State<Boolean> =
-        buttonVibrationEnabledFlow.collectAsState(initial = false)
+    val buttonVibrationEnabledState: State<Boolean> = buttonVibrationEnabledFlow.collectAsState(initial = false)
+    val decimalFormattingEnabledFlow: Flow<Boolean> = getDecimalFormattingSetting(context.dataStore)
+    val decimalFormattingEnabledState: State<Boolean> = decimalFormattingEnabledFlow.collectAsState(initial = false)
 
     fun vibration() {
         if (buttonVibrationEnabledState.value) {
@@ -115,7 +118,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         .align(Alignment.End)
                 ) {
                     Text(
-                        state.field,
+                        text = if (decimalFormattingEnabledState.value) state.formattedField().replace("*", "×") else state.field.replace("*", "×"),
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -134,9 +137,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     TextButton(
                         onClick = {
                             viewModel.handleAction(CalcAction.ResetField)
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         modifier = Modifier
                             .weight(0.15f)
@@ -152,9 +153,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     FilledTonalButton(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("9"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         modifier = Modifier
                             .weight(0.15f)
@@ -171,9 +170,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     FilledTonalButton(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("8"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         modifier = Modifier
                             .weight(0.15f)
@@ -191,9 +188,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     FilledTonalButton(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("7"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         modifier = Modifier
                             .weight(0.15f)
@@ -210,9 +205,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     Button(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("*"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
@@ -255,9 +248,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     Button(
                         onClick = {
                             viewModel.handleAction(CalcAction.ResetField)
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                         modifier = Modifier
@@ -280,9 +271,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     FilledTonalButton(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("3"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         modifier = Modifier
                             .weight(0.15f)
@@ -299,9 +288,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     FilledTonalButton(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("4"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         modifier = Modifier
                             .weight(0.15f)
@@ -319,9 +306,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     FilledTonalButton(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("5"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         modifier = Modifier
                             .weight(0.15f)
@@ -338,9 +323,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     FilledTonalButton(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("6"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         modifier = Modifier
                             .weight(0.15f)
@@ -357,9 +340,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     Button(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("+"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
@@ -377,9 +358,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     Button(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("^"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
@@ -396,9 +375,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     Button(
                         onClick = {
                             viewModel.handleAction(CalcAction.RemoveLast)
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                         modifier = Modifier
@@ -408,7 +385,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                             text = "⌫",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 35.sp,
-                            fontFamily = GlobalFont,
+                            fontFamily = SegoeFont,
                             modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
@@ -422,9 +399,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     FilledTonalButton(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("2"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         modifier = Modifier
                             .weight(0.15f)
@@ -441,9 +416,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     FilledTonalButton(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("1"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         modifier = Modifier
                             .weight(0.15f)
@@ -461,9 +434,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     FilledTonalButton(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("0"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         modifier = Modifier
                             .weight(0.15f)
@@ -482,9 +453,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     FilledTonalButton(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("."))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         modifier = Modifier
                             .weight(0.15f)
@@ -501,9 +470,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     Button(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("-"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
@@ -521,9 +488,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     Button(
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("/"))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
@@ -541,9 +506,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     Button(
                         onClick = {
                             viewModel.handleAction(CalcAction.GetResult)
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
+                            if (buttonVibrationEnabledState.value) vibration()
                         },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                         modifier = Modifier
