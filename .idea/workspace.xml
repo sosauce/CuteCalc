@@ -55,7 +55,8 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "com.android.tools.idea.streaming.zoom.toolbar.visible": "false"
+    "com.android.tools.idea.streaming.zoom.toolbar.visible": "false",
+    "settings.editor.selected.configurable": "memory.settings"
   },
   "keyToStringList": {
     "ExportApk.BuildVariants": [
