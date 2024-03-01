@@ -1,20 +1,15 @@
-@file:OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
-)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.VIBRATOR_SERVICE
 import android.content.res.Configuration
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -30,8 +25,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Backspace
-import androidx.compose.material.icons.filled.Backspace
-import androidx.compose.material.icons.outlined.Backspace
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,10 +40,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -58,7 +49,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sosauce.cutecalc.AppBar
-import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.logic.CalcAction
 import com.sosauce.cutecalc.logic.CalcState
 import com.sosauce.cutecalc.logic.CalcViewModel
@@ -66,11 +56,11 @@ import com.sosauce.cutecalc.logic.dataStore
 import com.sosauce.cutecalc.logic.getButtonVibrationSetting
 import com.sosauce.cutecalc.logic.getDecimalFormattingSetting
 import com.sosauce.cutecalc.ui.theme.GlobalFont
-import com.sosauce.cutecalc.ui.theme.SegoeFont
 import kotlinx.coroutines.flow.Flow
 
 @SuppressLint(
-    "UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter",
+    "UnusedMaterialScaffoldPaddingParameter",
+    "UnusedMaterial3ScaffoldPaddingParameter",
     "AutoboxingStateCreation"
 )
 @Composable
@@ -88,473 +78,473 @@ fun CalculatorUI(
     val decimalFormattingEnabledState: State<Boolean> = decimalFormattingEnabledFlow.collectAsState(initial = false)
 
     fun vibration() {
-        if (buttonVibrationEnabledState.value) {
-            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            val vibrationEffect: VibrationEffect =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    VibrationEffect.createOneShot(100, 90)
-                } else {
-                    TODO("VERSION.SDK_INT < O")
-                }
-            vibrator.vibrate(vibrationEffect)
-        } else {}
+        if (!buttonVibrationEnabledState.value) return
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            (context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+        } else {
+            @Suppress("DEPRECATION") context.getSystemService(VIBRATOR_SERVICE) as Vibrator
+        }
+        val vibrationEffect = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            VibrationEffect.createOneShot(100, 90)
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+        vibrator.vibrate(vibrationEffect)
     }
 
-    if (portraitMode.value == Configuration.ORIENTATION_PORTRAIT) {
-        Scaffold(
-            topBar = {
-                AppBar(
-                    title = "",
-                    showBackArrow = false,
-                    showMenuIcon = true,
-                    navController = navController
-                )
-            },
+    if (portraitMode.value != Configuration.ORIENTATION_PORTRAIT) {
+        return LandscapeLayout(navController = navController, state = state)
+    }
+
+    Scaffold(
+        topBar = {
+            AppBar(
+                title = "",
+                showBackArrow = false,
+                showMenuIcon = true,
+                navController = navController
+            )
+        },
+    ) {
+
+        val displayText = remember { state.field }
+        val scrollState = rememberScrollState()
+
+        LaunchedEffect(displayText) {
+            scrollState.animateScrollTo(scrollState.maxValue)
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(15.dp)
+                .navigationBarsPadding()
         ) {
-
-            val displayText = remember { state.field }
-            val scrollState = rememberScrollState()
-
-            LaunchedEffect(displayText) {
-                scrollState.animateScrollTo(scrollState.maxValue)
-            }
-            Box(
+            Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(15.dp)
-                    .navigationBarsPadding()
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
+                verticalArrangement = Arrangement.spacedBy(9.dp),
             ) {
-                Column(
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter),
-                    verticalArrangement = Arrangement.spacedBy(9.dp),
+                        .horizontalScroll(scrollState)
+                        .align(Alignment.End)
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .horizontalScroll(scrollState)
-                            .align(Alignment.End)
-                    ) {
-                        LaunchedEffect(state.field) {
-                            scrollState.animateScrollTo(scrollState.maxValue)
-                        } // re-add below the Text if needed
+                    LaunchedEffect(state.field) {
+                        scrollState.animateScrollTo(scrollState.maxValue)
+                    } // re-add below the Text if needed
 
+                    Text(
+                        text = if (decimalFormattingEnabledState.value) state.formattedField() else state.field,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        fontWeight = FontWeight.Light,
+                        fontSize = 55.sp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontFamily = GlobalFont
+                    )
+
+                }
+
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(9.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.ResetField)
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
                         Text(
-                            text = if (decimalFormattingEnabledState.value) state.formattedField().replace("*", "×") else state.field.replace("*", "×"),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 16.dp),
-                            fontWeight = FontWeight.Light,
-                            fontSize = 55.sp,
+                            text = "C",
                             color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
                             fontFamily = GlobalFont
                         )
-
                     }
 
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(9.dp)
-                    ) {
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.ResetField)
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "C",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
-
-                        Button(
-                            onClick = {
-                                val openParenCount = state.field.count { it == '(' }
-                                val closeParenCount = state.field.count { it == ')' }
-                                val nextParen = if (openParenCount > closeParenCount) ")" else "("
-
-                                viewModel.handleAction(CalcAction.AddToField(nextParen))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
+                    Button(
+                        onClick = {
                             val openParenCount = state.field.count { it == '(' }
                             val closeParenCount = state.field.count { it == ')' }
-                            Text(
-                                text = if (openParenCount > closeParenCount) ")" else "(",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont,
-                            )
-                        }
+                            val nextParen = if (openParenCount > closeParenCount) ")" else "("
 
-
-
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("^"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "^",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
-
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("/"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "/",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
-                    }
-                    Row(
+                            viewModel.handleAction(CalcAction.AddToField(nextParen))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(9.dp)
+                            .aspectRatio(1f)
+                            .weight(1f)
                     ) {
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("7"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "7",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
-
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("8"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "8",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
-
-
-
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("9"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "9",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
-
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("*"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "×",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
+                        val openParenCount = state.field.count { it == '(' }
+                        val closeParenCount = state.field.count { it == ')' }
+                        Text(
+                            text = if (openParenCount > closeParenCount) ")" else "(",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont,
+                        )
                     }
 
-                    Row(
+
+
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("^"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(9.dp)
+                            .aspectRatio(1f)
+                            .weight(1f)
                     ) {
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("4"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "4",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
-
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("5"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "5",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
-
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("6"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "6",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
-
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("-"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "-",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
+                        Text(
+                            text = "^",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
                     }
-                    Row(
+
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("/"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(9.dp)
+                            .aspectRatio(1f)
+                            .weight(1f)
                     ) {
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("1"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "1",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
-
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("2"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "2",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("3"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "3",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
-
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("+"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "+",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
+                        Text(
+                            text = "/",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
                     }
-                    Row(
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(9.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("7"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(9.dp)
+                            .aspectRatio(1f)
+                            .weight(1f)
                     ) {
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("0"))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "0",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
+                        Text(
+                            text = "7",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
 
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("."))
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = ".",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("8"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "8",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
 
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.RemoveLast)
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Outlined.Backspace,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onBackground,
-                                modifier = Modifier.size(35.dp)
-                            )
-                        }
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("9"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "9",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("×"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "×",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(9.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("4"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "4",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("5"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "5",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("6"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "6",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("-"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "-",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(9.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("1"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "1",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("2"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "2",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("3"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "3",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("+"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "+",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(9.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("0"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "0",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("."))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = ".",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
+                    }
+
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.RemoveLast)
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.Backspace,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.size(35.dp)
+                        )
+                    }
 
 
-                        Button(
-                            onClick = {
-                                viewModel.handleAction(CalcAction.GetResult)
-                                if (buttonVibrationEnabledState.value) vibration()
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "=",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp,
-                                fontFamily = GlobalFont
-                            )
-                        }
+                    Button(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.GetResult)
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "=",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp,
+                            fontFamily = GlobalFont
+                        )
                     }
                 }
             }
         }
-    } else {
-        LandscapeLayout(navController = navController, state = state)
     }
 }

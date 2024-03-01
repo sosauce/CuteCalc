@@ -1,6 +1,4 @@
-@file:OptIn(
-    ExperimentalMaterial3Api::class
-)
+@file:OptIn(ExperimentalMaterial3Api::class)
 @file:Suppress("UNUSED_EXPRESSION", "unused")
 
 package com.sosauce.cutecalc
@@ -62,7 +60,10 @@ fun AppBar(
         navigationIcon = {
             if (showBackArrow) {
                 IconButton(onClick = { navController.navigate("CalculatorScreen") }) {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back arrow")
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back arrow"
+                    )
                 }
             } else null
         },

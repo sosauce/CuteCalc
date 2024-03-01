@@ -33,8 +33,6 @@ import com.sosauce.cutecalc.ui.theme.DarkAmoledColorPalette
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +62,10 @@ class MainActivity : ComponentActivity() {
                     "Dark" -> if (dynamicColorAvailable) dynamicDarkColorScheme(context) else darkColorScheme()
                     "Light" -> if (dynamicColorAvailable) dynamicLightColorScheme(context) else lightColorScheme()
                     "Amoled" -> DarkAmoledColorPalette
-                    else -> if (isSystemInDarkTheme()) {if (dynamicColorAvailable) dynamicDarkColorScheme(context) else darkColorScheme()} else {if (dynamicColorAvailable) dynamicLightColorScheme(context) else lightColorScheme()
+                    else -> if (isSystemInDarkTheme()) {
+                        if (dynamicColorAvailable) dynamicDarkColorScheme(context) else darkColorScheme()
+                    } else {
+                        if (dynamicColorAvailable) dynamicLightColorScheme(context) else lightColorScheme()
                     }
                 }
 
