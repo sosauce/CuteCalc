@@ -10,8 +10,6 @@ import kotlinx.coroutines.launch
 
 class CalcViewModel : ViewModel() {
 
-    private val getFormulaResult: GetFormulaResultUseCase = GetFormulaResultUseCase()
-
     private val _state = MutableStateFlow(CalcState(""))
     val state: StateFlow<CalcState>
         get() = _state.asStateFlow()
@@ -24,7 +22,7 @@ class CalcViewModel : ViewModel() {
     fun handleAction(action: CalcAction) {
         when (action) {
             CalcAction.GetResult -> {
-                setState { copy(field = getFormulaResult(field)) }
+                setState { copy(field = Evaluator.eval(field)) }
             }
 
             CalcAction.ResetField -> {

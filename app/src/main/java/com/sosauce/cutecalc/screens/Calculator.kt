@@ -141,7 +141,7 @@ fun CalculatorUI(
                         } // re-add below the Text if needed
 
                         Text(
-                            text = if (decimalFormattingEnabledState.value) state.formattedField().replace("*", "×") else state.field.replace("*", "×"),
+                            text = if (decimalFormattingEnabledState.value) state.formattedField() else state.field,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -303,7 +303,7 @@ fun CalculatorUI(
 
                         Button(
                             onClick = {
-                                viewModel.handleAction(CalcAction.AddToField("*"))
+                                viewModel.handleAction(CalcAction.AddToField("×"))
                                 if (buttonVibrationEnabledState.value) vibration()
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
