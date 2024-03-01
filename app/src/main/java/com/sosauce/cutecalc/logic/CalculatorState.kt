@@ -32,16 +32,9 @@ class GetFormulaResultUseCase {
         // Handle back-to-back operators by replacing them with a single operator
         val cleanedFormula = handleBackToBackOperators(formula)
         return try {
-            val result = cleanedFormula.keval().toBigDecimal().stripTrailingZeros().toPlainString()
-
-            // Check for division by zero
-            if (result == "Infinity" || result == "-Infinity") {
-                throw KevalZeroDivisionException()
-            }
-
-            result
+            cleanedFormula.keval().toBigDecimal().stripTrailingZeros().toPlainString()
         } catch (e: KevalZeroDivisionException) {
-            "Can't divide by 0"
+            "Undefined"
         } catch (e: KevalInvalidExpressionException) {
             "Error"
         }
