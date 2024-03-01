@@ -1,7 +1,4 @@
-@file:OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
-)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.sosauce.cutecalc.screens
 
@@ -48,11 +45,9 @@ import com.sosauce.cutecalc.AppBar
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
-
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AboutScreen(navController: NavController) {
-
     val iconsTint = MaterialTheme.colorScheme.onBackground
     val urlList = listOf(
         "https://github.com/sosauce/CuteCalc/issues",

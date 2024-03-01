@@ -1,4 +1,5 @@
 package com.sosauce.cutecalc.logic
+
 import java.text.DecimalFormat
 
 data class CalcState(var field: String) {
@@ -16,6 +17,7 @@ data class CalcState(var field: String) {
         return formatter.format(number)
     }
 }
+
 sealed interface CalcAction {
     object GetResult : CalcAction
     object ResetField : CalcAction

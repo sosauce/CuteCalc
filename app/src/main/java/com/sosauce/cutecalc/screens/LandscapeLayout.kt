@@ -1,7 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.sosauce.cutecalc.screens
-
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -20,15 +19,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Backspace
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -70,18 +65,15 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
     val decimalFormattingEnabledState: State<Boolean> = decimalFormattingEnabledFlow.collectAsState(initial = false)
 
     fun vibration() {
-        if (buttonVibrationEnabledState.value) {
-            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            val vibrationEffect: VibrationEffect =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    VibrationEffect.createOneShot(100, 90)
-                } else {
-                    TODO("VERSION.SDK_INT < O")
-                }
-            vibrator.vibrate(vibrationEffect)
-        } else {}
+        if (!buttonVibrationEnabledState.value) return
+        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val vibrationEffect: VibrationEffect = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            VibrationEffect.createOneShot(100, 90)
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+        vibrator.vibrate(vibrationEffect)
     }
-
 
     Scaffold(
         topBar = {
@@ -118,7 +110,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         .align(Alignment.End)
                 ) {
                     Text(
-                        text = if (decimalFormattingEnabledState.value) state.formattedField().replace("*", "×") else state.field.replace("*", "×"),
+                        text = if (decimalFormattingEnabledState.value) state.formattedField() else state.field,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
