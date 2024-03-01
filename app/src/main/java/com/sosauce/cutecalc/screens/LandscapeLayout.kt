@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -66,7 +67,11 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
 
     fun vibration() {
         if (!buttonVibrationEnabledState.value) return
-        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            (context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+        } else {
+            @Suppress("DEPRECATION") context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
         val vibrationEffect: VibrationEffect = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             VibrationEffect.createOneShot(100, 90)
         } else {

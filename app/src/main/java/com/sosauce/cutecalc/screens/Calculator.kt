@@ -4,10 +4,12 @@ package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.VIBRATOR_SERVICE
 import android.content.res.Configuration
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -77,7 +79,11 @@ fun CalculatorUI(
 
     fun vibration() {
         if (!buttonVibrationEnabledState.value) return
-        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            (context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+        } else {
+            @Suppress("DEPRECATION") context.getSystemService(VIBRATOR_SERVICE) as Vibrator
+        }
         val vibrationEffect = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             VibrationEffect.createOneShot(100, 90)
         } else {
