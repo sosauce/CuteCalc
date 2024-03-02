@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
@@ -11,6 +9,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,10 +18,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Backspace
 import androidx.compose.material3.Button
@@ -133,7 +134,7 @@ fun CalculatorUI(
                 ) {
                     LaunchedEffect(state.field) {
                         scrollState.animateScrollTo(scrollState.maxValue)
-                    } // re-add below the Text if needed
+                    }
 
                     Text(
                         text = if (decimalFormattingEnabledState.value) state.formattedField() else state.field,
@@ -146,6 +147,25 @@ fun CalculatorUI(
                         color = MaterialTheme.colorScheme.onBackground,
                         fontFamily = GlobalFont
                     )
+
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                        Text(
+                            text = " ! ",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier
+                                .clickable {
+                                    viewModel.handleAction(CalcAction.AddToField("!"))
+                                }
+                                .padding(start = 10.dp, end = 10.dp)
+                        )
+
 
                 }
 
