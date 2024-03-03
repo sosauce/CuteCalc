@@ -18,17 +18,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Backspace
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -55,7 +52,6 @@ import com.sosauce.cutecalc.logic.CalcState
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.logic.dataStore
 import com.sosauce.cutecalc.logic.getButtonVibrationSetting
-import com.sosauce.cutecalc.logic.getDecimalFormattingSetting
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 import kotlinx.coroutines.flow.Flow
 
@@ -74,9 +70,8 @@ fun CalculatorUI(
     val context = LocalContext.current
     val portraitMode = remember { mutableStateOf(config.orientation) }
     val buttonVibrationEnabledFlow: Flow<Boolean> = getButtonVibrationSetting(context.dataStore)
-    val buttonVibrationEnabledState: State<Boolean> = buttonVibrationEnabledFlow.collectAsState(initial = false)
-    val decimalFormattingEnabledFlow: Flow<Boolean> = getDecimalFormattingSetting(context.dataStore)
-    val decimalFormattingEnabledState: State<Boolean> = decimalFormattingEnabledFlow.collectAsState(initial = false)
+    val buttonVibrationEnabledState: State<Boolean> =
+        buttonVibrationEnabledFlow.collectAsState(initial = false)
 
     fun vibration() {
         if (!buttonVibrationEnabledState.value) return
@@ -137,7 +132,7 @@ fun CalculatorUI(
                     }
 
                     Text(
-                        text = if (decimalFormattingEnabledState.value) state.formattedField() else state.field,
+                        text = state.formattedField(),
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -147,24 +142,53 @@ fun CalculatorUI(
                         color = MaterialTheme.colorScheme.onBackground,
                         fontFamily = GlobalFont
                     )
-
                 }
 
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                        Text(
-                            text = " ! ",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier
-                                .clickable {
-                                    viewModel.handleAction(CalcAction.AddToField("!"))
-                                }
-                                .padding(start = 10.dp, end = 10.dp)
-                        )
+                    Text(
+                        text = " ! ",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 30.sp,
+                        fontFamily = GlobalFont,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.handleAction(CalcAction.AddToField("!"))
+                            }
+                    )
+                    Text(
+                        text = " % ",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 30.sp,
+                        fontFamily = GlobalFont,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.handleAction(CalcAction.AddToField("%"))
+                            }
+                    )
+                    Text(
+                        text = " √ ",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 30.sp,
+                        fontFamily = GlobalFont,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.handleAction(CalcAction.AddToField("√"))
+                            }
+                    )
+                    Text(
+                        text = " π ",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 30.sp,
+                        fontFamily = GlobalFont,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.handleAction(CalcAction.AddToField("PI"))
+                            }
+                    )
 
 
                 }
@@ -532,6 +556,7 @@ fun CalculatorUI(
                             viewModel.handleAction(CalcAction.RemoveLast)
                             if (buttonVibrationEnabledState.value) vibration()
                         },
+
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                         modifier = Modifier
                             .aspectRatio(1f)

@@ -17,14 +17,9 @@ object PreferencesKeys {
     val THEME = stringPreferencesKey("theme")
     val BUTTON_VIBRATION_ENABLED = booleanPreferencesKey("button_vibration_enabled")
     val CALCULATION_HISTORY = stringPreferencesKey("calculation_history")
-    val DECIMAL_FORMATTING = booleanPreferencesKey("decimal_formatting")
 }
 
 // Start of the settings for themes
-enum class Theme {
-    Dark, Light, Amoled
-}
-
 suspend fun saveTheme(dataStore: DataStore<Preferences>, theme: String) {
     dataStore.edit { settings ->
         settings[PreferencesKeys.THEME] = theme
@@ -48,14 +43,3 @@ fun getButtonVibrationSetting(dataStore: DataStore<Preferences>): Flow<Boolean> 
 
 // End of settings for button vibration
 
-suspend fun saveDecimalFormattingSetting(dataStore: DataStore<Preferences>, enabled: Boolean) {
-    dataStore.edit { settings ->
-        settings[PreferencesKeys.DECIMAL_FORMATTING] = enabled
-    }
-}
-
-fun getDecimalFormattingSetting(dataStore: DataStore<Preferences>): Flow<Boolean> {
-    return dataStore.data.map { preferences ->
-        preferences[PreferencesKeys.DECIMAL_FORMATTING] ?: false
-    }
-}

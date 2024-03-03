@@ -13,10 +13,13 @@ data class CalcState(var field: String) {
         } catch (e: NumberFormatException) {
             return numberString // Return as is if parsing to double fails
         }
+
         val formatter = DecimalFormat("#,###.##")
+
         return formatter.format(number)
     }
 }
+
 
 sealed interface CalcAction {
     object GetResult : CalcAction

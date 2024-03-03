@@ -16,9 +16,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.sosauce.cutecalc.logic.dataStore
 import com.sosauce.cutecalc.logic.getButtonVibrationSetting
-import com.sosauce.cutecalc.logic.getDecimalFormattingSetting
 import com.sosauce.cutecalc.logic.saveButtonVibrationSetting
-import com.sosauce.cutecalc.logic.saveDecimalFormattingSetting
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 import kotlinx.coroutines.launch
 
@@ -45,28 +43,6 @@ fun VibrationSwitch() {
 
 }
 
-@Composable
-fun DecimalFormattingSwitch() {
-    val context = LocalContext.current
-    val dataStore: DataStore<Preferences> = context.dataStore
-    val decimalFormattingSetting by getDecimalFormattingSetting(dataStore).collectAsState(initial = false)
-    val coroutineScope = rememberCoroutineScope()
-
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Switch(
-            checked = decimalFormattingSetting,
-            onCheckedChange = { isChecked ->
-                // Update the button vibration setting when Switch state changes
-                coroutineScope.launch {
-                    saveDecimalFormattingSetting(dataStore, isChecked)
-                }
-            },
-            modifier = Modifier.padding(10.dp)
-        )
-        Text(text = "Decimal Formatting", fontFamily = GlobalFont)
-    }
-
-}
 
 
 

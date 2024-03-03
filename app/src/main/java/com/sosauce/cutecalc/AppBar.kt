@@ -5,9 +5,7 @@ package com.sosauce.cutecalc
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,10 +16,10 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.sosauce.cutecalc.ui.theme.GlobalFont
-import components.DecimalFormattingSwitch
 import components.ThemeRadioButtons
 import components.VibrationSwitch
 
@@ -129,9 +126,8 @@ fun Settings(
             shape = RoundedCornerShape(16.dp),
         ) {
             ThemeRadioButtons()
-            Divider(thickness = 0.5.dp)
+            HorizontalDivider(thickness = 0.5.dp)
             VibrationSwitch()
-            DecimalFormattingSwitch()
         }
     }
 }

@@ -5,7 +5,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class CalcViewModel : ViewModel() {
+class CalcViewModel() : ViewModel() {
+
 
     private val _state = MutableStateFlow(CalcState(""))
     val state: StateFlow<CalcState> get() = _state.asStateFlow()

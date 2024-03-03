@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
@@ -9,6 +7,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -49,7 +47,6 @@ import com.sosauce.cutecalc.logic.CalcState
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.logic.dataStore
 import com.sosauce.cutecalc.logic.getButtonVibrationSetting
-import com.sosauce.cutecalc.logic.getDecimalFormattingSetting
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 import com.sosauce.cutecalc.ui.theme.SegoeFont
 import kotlinx.coroutines.flow.Flow
@@ -61,9 +58,8 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
     val viewModel = viewModel<CalcViewModel>()
     val context = LocalContext.current
     val buttonVibrationEnabledFlow: Flow<Boolean> = getButtonVibrationSetting(context.dataStore)
-    val buttonVibrationEnabledState: State<Boolean> = buttonVibrationEnabledFlow.collectAsState(initial = false)
-    val decimalFormattingEnabledFlow: Flow<Boolean> = getDecimalFormattingSetting(context.dataStore)
-    val decimalFormattingEnabledState: State<Boolean> = decimalFormattingEnabledFlow.collectAsState(initial = false)
+    val buttonVibrationEnabledState: State<Boolean> =
+        buttonVibrationEnabledFlow.collectAsState(initial = false)
 
     fun vibration() {
         if (!buttonVibrationEnabledState.value) return
@@ -85,7 +81,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
             AppBar(
                 title = "",
                 showBackArrow = false,
-                showMenuIcon = true,
+                showMenuIcon = false,
                 navController = navController
             )
         }
@@ -115,7 +111,7 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         .align(Alignment.End)
                 ) {
                     Text(
-                        text = if (decimalFormattingEnabledState.value) state.formattedField() else state.field,
+                        text = state.formattedField(),
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -124,6 +120,53 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         fontSize = 35.sp,
                         color = MaterialTheme.colorScheme.onBackground,
                         fontFamily = GlobalFont
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = " ! ",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 30.sp,
+                        fontFamily = GlobalFont,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.handleAction(CalcAction.AddToField("!"))
+                            }
+                    )
+                    Text(
+                        text = " % ",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 30.sp,
+                        fontFamily = GlobalFont,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.handleAction(CalcAction.AddToField("%"))
+                            }
+                    )
+                    Text(
+                        text = " √ ",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 30.sp,
+                        fontFamily = GlobalFont,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.handleAction(CalcAction.AddToField("√"))
+                            }
+                    )
+                    Text(
+                        text = " π ",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 30.sp,
+                        fontFamily = GlobalFont,
+                        modifier = Modifier
+                            .clickable {
+                                viewModel.handleAction(CalcAction.AddToField("PI"))
+                            }
                     )
                 }
 

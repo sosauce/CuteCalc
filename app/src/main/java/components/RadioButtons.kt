@@ -33,7 +33,8 @@ fun ThemeRadioButtons() {
     val options = listOf("Dark", "Light", "Amoled")
     val context = LocalContext.current
     val dataStore: DataStore<Preferences> = context.dataStore
-    val themeFlow: Flow<String?> = dataStore.data.map { preferences -> preferences[PreferencesKeys.THEME] }
+    val themeFlow: Flow<String?> =
+        dataStore.data.map { preferences -> preferences[PreferencesKeys.THEME] }
     val theme by themeFlow.collectAsState(initial = null)
 
     Column(
@@ -68,5 +69,7 @@ fun ThemeRadioButtons() {
         }
     }
 }
+
+
 
 

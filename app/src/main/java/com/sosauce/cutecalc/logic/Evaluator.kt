@@ -6,6 +6,7 @@ import com.notkamui.keval.KevalInvalidArgumentException
 import com.notkamui.keval.KevalZeroDivisionException
 import kotlin.math.floor
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 object Evaluator {
 
@@ -66,6 +67,24 @@ object Evaluator {
                 if (floor(it) != it) throw KevalInvalidArgumentException("factorial of a non-integer")
                 (1..it.toInt()).fold(1.0) { acc, i -> acc * i }
             }
+        }
+
+        unaryOperator {
+            symbol = '√'
+            isPrefix = true
+            implementation = { arg -> sqrt(arg) }
+        }
+
+        unaryOperator {
+            symbol = '%'
+            isPrefix = false
+            implementation = { arg -> arg / 100 }
+        }
+
+
+        constant {
+            name = "PI"
+            value = Math.PI
         }
     }
 
