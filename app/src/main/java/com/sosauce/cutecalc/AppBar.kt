@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.sosauce.cutecalc.ui.theme.GlobalFont
+import components.DecimalSwitch
 import components.ThemeRadioButtons
 import components.VibrationSwitch
 
@@ -126,8 +127,9 @@ fun Settings(
             shape = RoundedCornerShape(16.dp),
         ) {
             ThemeRadioButtons()
-            HorizontalDivider(thickness = 0.5.dp)
+            HorizontalDivider(thickness = 1.dp)
             VibrationSwitch()
+            DecimalSwitch()
         }
     }
 }

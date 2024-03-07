@@ -9,11 +9,11 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -52,6 +53,7 @@ import com.sosauce.cutecalc.logic.CalcState
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.logic.dataStore
 import com.sosauce.cutecalc.logic.getButtonVibrationSetting
+import com.sosauce.cutecalc.logic.getDecimalFormattingSetting
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 import kotlinx.coroutines.flow.Flow
 
@@ -70,8 +72,9 @@ fun CalculatorUI(
     val context = LocalContext.current
     val portraitMode = remember { mutableStateOf(config.orientation) }
     val buttonVibrationEnabledFlow: Flow<Boolean> = getButtonVibrationSetting(context.dataStore)
-    val buttonVibrationEnabledState: State<Boolean> =
-        buttonVibrationEnabledFlow.collectAsState(initial = false)
+    val buttonVibrationEnabledState: State<Boolean> = buttonVibrationEnabledFlow.collectAsState(initial = false)
+    val buttonDecimalEnabledFlow: Flow<Boolean> = getDecimalFormattingSetting(context.dataStore)
+    val buttonDecimalEnabledState: State<Boolean> = buttonDecimalEnabledFlow.collectAsState(initial = false)
 
     fun vibration() {
         if (!buttonVibrationEnabledState.value) return
@@ -132,7 +135,7 @@ fun CalculatorUI(
                     }
 
                     Text(
-                        text = state.formattedField(),
+                        text = if (buttonDecimalEnabledState.value) state.formattedField() else state.field,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -149,46 +152,70 @@ fun CalculatorUI(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = " ! ",
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontSize = 30.sp,
-                        fontFamily = GlobalFont,
+                    TextButton(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("!"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
                         modifier = Modifier
-                            .clickable {
-                                viewModel.handleAction(CalcAction.AddToField("!"))
-                            }
-                    )
-                    Text(
-                        text = " % ",
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontSize = 30.sp,
-                        fontFamily = GlobalFont,
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "!",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+                    TextButton(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("%"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
                         modifier = Modifier
-                            .clickable {
-                                viewModel.handleAction(CalcAction.AddToField("%"))
-                            }
-                    )
-                    Text(
-                        text = " √ ",
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontSize = 30.sp,
-                        fontFamily = GlobalFont,
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "%",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+                    TextButton(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("√"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
                         modifier = Modifier
-                            .clickable {
-                                viewModel.handleAction(CalcAction.AddToField("√"))
-                            }
-                    )
-                    Text(
-                        text = " π ",
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontSize = 30.sp,
-                        fontFamily = GlobalFont,
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "√",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+                    TextButton(
+                        onClick = {
+                            viewModel.handleAction(CalcAction.AddToField("PI"))
+                            if (buttonVibrationEnabledState.value) vibration()
+                        },
                         modifier = Modifier
-                            .clickable {
-                                viewModel.handleAction(CalcAction.AddToField("PI"))
-                            }
-                    )
+                            .weight(0.15f)
+                    ) {
+                        Text(
+                            text = "π",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 35.sp,
+                            fontFamily = GlobalFont,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
 
 
                 }
@@ -212,7 +239,7 @@ fun CalculatorUI(
                         Text(
                             text = "C",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -236,7 +263,7 @@ fun CalculatorUI(
                         Text(
                             text = if (openParenCount > closeParenCount) ")" else "(",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont,
                         )
                     }
@@ -256,7 +283,7 @@ fun CalculatorUI(
                         Text(
                             text = "^",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -274,7 +301,7 @@ fun CalculatorUI(
                         Text(
                             text = "/",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -297,7 +324,7 @@ fun CalculatorUI(
                         Text(
                             text = "7",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -315,7 +342,7 @@ fun CalculatorUI(
                         Text(
                             text = "8",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -333,7 +360,7 @@ fun CalculatorUI(
                         Text(
                             text = "9",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -351,7 +378,7 @@ fun CalculatorUI(
                         Text(
                             text = "×",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -375,7 +402,7 @@ fun CalculatorUI(
                         Text(
                             text = "4",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -393,7 +420,7 @@ fun CalculatorUI(
                         Text(
                             text = "5",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -411,7 +438,7 @@ fun CalculatorUI(
                         Text(
                             text = "6",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -429,7 +456,7 @@ fun CalculatorUI(
                         Text(
                             text = "-",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -452,7 +479,7 @@ fun CalculatorUI(
                         Text(
                             text = "1",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -470,7 +497,7 @@ fun CalculatorUI(
                         Text(
                             text = "2",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -487,7 +514,7 @@ fun CalculatorUI(
                         Text(
                             text = "3",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -505,7 +532,7 @@ fun CalculatorUI(
                         Text(
                             text = "+",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -528,7 +555,7 @@ fun CalculatorUI(
                         Text(
                             text = "0",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -541,12 +568,13 @@ fun CalculatorUI(
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                         modifier = Modifier
                             .aspectRatio(1f)
-                            .weight(1f)
+                            .weight(1f),
+                        contentPadding = PaddingValues(0.dp)
                     ) {
                         Text(
                             text = ".",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }
@@ -584,7 +612,7 @@ fun CalculatorUI(
                         Text(
                             text = "=",
                             color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 40.sp,
+                            fontSize = 35.sp,
                             fontFamily = GlobalFont
                         )
                     }

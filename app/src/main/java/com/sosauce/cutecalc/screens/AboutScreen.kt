@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
@@ -88,7 +86,7 @@ fun AboutScreen(navController: NavController) {
                     fontSize = 40.sp
                 )
                 Text(
-                    text = "Version 2.6",
+                    text = "Version 2.7.1",
                     fontFamily = GlobalFont,
                     fontSize = 20.sp,
                     modifier = Modifier.offset(y = (-7).dp),

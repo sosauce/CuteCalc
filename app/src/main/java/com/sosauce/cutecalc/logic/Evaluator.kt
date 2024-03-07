@@ -8,9 +8,13 @@ import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+class NegativeSquareRootException : RuntimeException("negative square root")
+class ValueTooLargeException : RuntimeException("value too large")
+
 object Evaluator {
 
     private val KEVAL = Keval.create {
+
         binaryOperator {
             symbol = '+'
             precedence = 2
@@ -72,7 +76,7 @@ object Evaluator {
         unaryOperator {
             symbol = '√'
             isPrefix = true
-            implementation = { arg -> sqrt(arg) }
+            implementation = { arg -> if (arg < 0) throw NegativeSquareRootException() else sqrt(arg) }
         }
 
         unaryOperator {
@@ -80,7 +84,6 @@ object Evaluator {
             isPrefix = false
             implementation = { arg -> arg / 100 }
         }
-
 
         constant {
             name = "PI"
@@ -90,10 +93,20 @@ object Evaluator {
 
     @JvmStatic
     fun eval(formula: String): String = try {
-        KEVAL.eval(formula).toBigDecimal().stripTrailingZeros().toPlainString()
+        val result = KEVAL.eval(formula)
+        if (result > Double.MAX_VALUE) {
+            throw ValueTooLargeException()
+        } else {
+            result.toBigDecimal().stripTrailingZeros().toPlainString()
+        }
     } catch (e: KevalZeroDivisionException) {
-        "Undefined (zero division)"
+        "Can't divide by 0"
+    } catch (e: NegativeSquareRootException) {
+        "Undefined in Reals (negative sqrt)"
+    } catch (e: ValueTooLargeException) {
+        "Value too large!"
     } catch (e: KevalException) {
         "Error"
     }
+
 }

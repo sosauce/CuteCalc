@@ -16,6 +16,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 object PreferencesKeys {
     val THEME = stringPreferencesKey("theme")
     val BUTTON_VIBRATION_ENABLED = booleanPreferencesKey("button_vibration_enabled")
+    val DECIMAL_FORMATTING = booleanPreferencesKey("decimal_formatting")
     val CALCULATION_HISTORY = stringPreferencesKey("calculation_history")
 }
 
@@ -40,6 +41,17 @@ fun getButtonVibrationSetting(dataStore: DataStore<Preferences>): Flow<Boolean> 
         preferences[PreferencesKeys.BUTTON_VIBRATION_ENABLED] ?: false
     }
 }
-
 // End of settings for button vibration
+
+suspend fun saveDecimalFormattingSetting(dataStore: DataStore<Preferences>, enabled: Boolean) {
+    dataStore.edit { settings ->
+        settings[PreferencesKeys.DECIMAL_FORMATTING] = enabled
+    }
+}
+
+fun getDecimalFormattingSetting(dataStore: DataStore<Preferences>): Flow<Boolean> {
+    return dataStore.data.map { preferences ->
+        preferences[PreferencesKeys.DECIMAL_FORMATTING] ?: false
+    }
+}
 
