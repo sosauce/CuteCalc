@@ -21,11 +21,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BugReport
+import androidx.compose.material.icons.outlined.PersonAddAlt
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Web
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -43,7 +43,7 @@ import com.sosauce.cutecalc.AppBar
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AboutScreen(navController: NavController) {
     val iconsTint = MaterialTheme.colorScheme.onBackground
@@ -51,7 +51,9 @@ fun AboutScreen(navController: NavController) {
         "https://github.com/sosauce/CuteCalc/issues",
         "https://github.com/sosauce?tab=repositories",
         "https://github.com/sosauce/CuteCalc/releases",
-        "https://sosauce.github.io/"
+        "https://sosauce.github.io/",
+        "https://github.com/sosauce/CuteCalc/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=",
+        "https://discord.gg/npvpaFUAHH"
     )
     val context = LocalContext.current
 
@@ -86,7 +88,7 @@ fun AboutScreen(navController: NavController) {
                     fontSize = 40.sp
                 )
                 Text(
-                    text = "Version 2.7.1",
+                    text = "Version 2.7.2",
                     fontFamily = GlobalFont,
                     fontSize = 20.sp,
                     modifier = Modifier.offset(y = (-7).dp),
@@ -117,7 +119,7 @@ fun AboutScreen(navController: NavController) {
                 )
             }
 
-            Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.secondary)
+            HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.secondary)
             Spacer(modifier = Modifier.height(15.dp))
             val interactionSource = remember { MutableInteractionSource() }
 
@@ -132,7 +134,7 @@ fun AboutScreen(navController: NavController) {
             ) {
                 Icon(
                     imageVector = Icons.Outlined.StarOutline,
-                    contentDescription = null,
+                    contentDescription = "all my projects",
                     modifier = Modifier.size(30.dp),
                     tint = iconsTint
                 )
@@ -155,7 +157,7 @@ fun AboutScreen(navController: NavController) {
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Web,
-                    contentDescription = null,
+                    contentDescription = "my website",
                     modifier = Modifier.size(30.dp),
                     tint = iconsTint
                 )
@@ -178,7 +180,7 @@ fun AboutScreen(navController: NavController) {
             ) {
                 Icon(
                     imageVector = Icons.Outlined.BugReport,
-                    contentDescription = null,
+                    contentDescription = "report a bug",
                     modifier = Modifier.size(30.dp),
                     tint = iconsTint
                 )
@@ -188,6 +190,48 @@ fun AboutScreen(navController: NavController) {
                     fontSize = 25.sp,
                     fontFamily = GlobalFont,
                     color = iconsTint
+                )
+            }
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .clickable(interactionSource = interactionSource, indication = null) {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[4]))
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.PersonAddAlt,
+                    contentDescription = "request a feature",
+                    modifier = Modifier.size(30.dp),
+                    tint = iconsTint
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = "Request a feature",
+                    fontSize = 25.sp,
+                    fontFamily = GlobalFont,
+                    color = iconsTint
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .clickable(interactionSource = interactionSource, indication = null) {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlList[5]))
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.discord),
+                    contentDescription = "discord logo",
+                    modifier = Modifier.size(30.dp),
+                    tint = iconsTint
                 )
             }
 

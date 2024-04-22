@@ -76,7 +76,8 @@ object Evaluator {
         unaryOperator {
             symbol = '√'
             isPrefix = true
-            implementation = { arg -> if (arg < 0) throw NegativeSquareRootException() else sqrt(arg) }
+            implementation =
+                { arg -> if (arg < 0) throw NegativeSquareRootException() else sqrt(arg) }
         }
 
         unaryOperator {

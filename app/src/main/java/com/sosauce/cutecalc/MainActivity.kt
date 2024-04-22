@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,10 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.sosauce.cutecalc.logic.Nav
 import com.sosauce.cutecalc.logic.PreferencesKeys
 import com.sosauce.cutecalc.logic.dataStore
@@ -38,13 +35,7 @@ class MainActivity : ComponentActivity() {
 
         installSplashScreen()
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { _, insets ->
-            WindowInsetsControllerCompat(window, window.decorView).run {
-                show(WindowInsetsCompat.Type.systemBars())
-                insets
-            }
-        }
+        enableEdgeToEdge()
 
         setContent {
             CuteCalcTheme {
@@ -56,16 +47,25 @@ class MainActivity : ComponentActivity() {
                         preferences[PreferencesKeys.THEME]
                     }
                 val theme by themeFlow.collectAsState(initial = null)
-                val dynamicColorAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
                 val colors = when (theme) {
-                    "Dark" -> if (dynamicColorAvailable) dynamicDarkColorScheme(context) else darkColorScheme()
-                    "Light" -> if (dynamicColorAvailable) dynamicLightColorScheme(context) else lightColorScheme()
+                    "Dark" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) dynamicDarkColorScheme(
+                        context
+                    ) else darkColorScheme()
+
+                    "Light" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) dynamicLightColorScheme(
+                        context
+                    ) else lightColorScheme()
+
                     "Amoled" -> DarkAmoledColorPalette
                     else -> if (isSystemInDarkTheme()) {
-                        if (dynamicColorAvailable) dynamicDarkColorScheme(context) else darkColorScheme()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) dynamicDarkColorScheme(
+                            context
+                        ) else darkColorScheme()
                     } else {
-                        if (dynamicColorAvailable) dynamicLightColorScheme(context) else lightColorScheme()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) dynamicLightColorScheme(
+                            context
+                        ) else lightColorScheme()
                     }
                 }
 

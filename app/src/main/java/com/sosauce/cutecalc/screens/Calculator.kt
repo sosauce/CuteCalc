@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
-import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -72,9 +71,11 @@ fun CalculatorUI(
     val context = LocalContext.current
     val portraitMode = remember { mutableStateOf(config.orientation) }
     val buttonVibrationEnabledFlow: Flow<Boolean> = getButtonVibrationSetting(context.dataStore)
-    val buttonVibrationEnabledState: State<Boolean> = buttonVibrationEnabledFlow.collectAsState(initial = false)
+    val buttonVibrationEnabledState: State<Boolean> =
+        buttonVibrationEnabledFlow.collectAsState(initial = false)
     val buttonDecimalEnabledFlow: Flow<Boolean> = getDecimalFormattingSetting(context.dataStore)
-    val buttonDecimalEnabledState: State<Boolean> = buttonDecimalEnabledFlow.collectAsState(initial = false)
+    val buttonDecimalEnabledState: State<Boolean> =
+        buttonDecimalEnabledFlow.collectAsState(initial = false)
 
     fun vibration() {
         if (!buttonVibrationEnabledState.value) return
@@ -115,7 +116,6 @@ fun CalculatorUI(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
                 .padding(15.dp)
                 .navigationBarsPadding()
         ) {
@@ -142,7 +142,6 @@ fun CalculatorUI(
                             .padding(vertical = 16.dp),
                         fontWeight = FontWeight.Light,
                         fontSize = 55.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
                         fontFamily = GlobalFont
                     )
                 }
@@ -216,10 +215,7 @@ fun CalculatorUI(
                             modifier = Modifier.align(Alignment.CenterVertically)
                         )
                     }
-
-
                 }
-
 
                 Row(
                     modifier = Modifier
@@ -246,11 +242,9 @@ fun CalculatorUI(
 
                     Button(
                         onClick = {
-                            val openParenCount = state.field.count { it == '(' }
-                            val closeParenCount = state.field.count { it == ')' }
-                            val nextParen = if (openParenCount > closeParenCount) ")" else "("
+                            val parenthesis = if (state.field.count { it == '(' } > state.field.count { it == ')' }) ")" else "("
 
-                            viewModel.handleAction(CalcAction.AddToField(nextParen))
+                            viewModel.handleAction(CalcAction.AddToField(parenthesis))
                             if (buttonVibrationEnabledState.value) vibration()
                         },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
@@ -258,10 +252,8 @@ fun CalculatorUI(
                             .aspectRatio(1f)
                             .weight(1f)
                     ) {
-                        val openParenCount = state.field.count { it == '(' }
-                        val closeParenCount = state.field.count { it == ')' }
                         Text(
-                            text = if (openParenCount > closeParenCount) ")" else "(",
+                            text = if (state.field.count { it == '(' } > state.field.count { it == ')' }) ")" else "(",
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 35.sp,
                             fontFamily = GlobalFont,
