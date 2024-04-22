@@ -42,7 +42,7 @@
 - Add themes ✅
 - Add landscape mode ✅
 - Make the app smaller ✅
-- Upload it to Google Play Store ❌
+- Upload it to Google Play Store ❌ (Not hapenning until im 18, I'm sorry.)
 - And most importantly, learn more about it ! ✅
 
 ---
