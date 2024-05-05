@@ -22,9 +22,9 @@ data class CalcState(var field: String) {
 
 
 sealed interface CalcAction {
-    object GetResult : CalcAction
-    object ResetField : CalcAction
-    object RemoveLast : CalcAction
+    data object GetResult : CalcAction
+    data object ResetField : CalcAction
+    data object RemoveLast : CalcAction
     data class AddToField(val value: String) : CalcAction
 }
 

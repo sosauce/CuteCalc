@@ -11,11 +11,16 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import com.sosauce.cutecalc.R
+import com.sosauce.cutecalc.logic.PreferencesKeys
+import com.sosauce.cutecalc.logic.dataStore
+import kotlinx.coroutines.flow.map
 
 
 private val LightColors = lightColorScheme(
@@ -107,14 +112,28 @@ fun CuteCalcTheme(
     content: @Composable () -> Unit
 ) {
 
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    val context = LocalContext.current
+    val dataStore = context.dataStore
+    val useDarkMode by dataStore.data.map { preferences ->
+        preferences[PreferencesKeys.USE_DARK_MODE] ?: darkTheme
+    }.collectAsState(initial = false)
 
-        darkTheme -> DarkColors
-        else -> LightColors
+    val useAmoledMode by dataStore.data.map { preferences ->
+        preferences[PreferencesKeys.USE_AMOLED_MODE] ?: false
+    }.collectAsState(initial = false)
+
+    val colorScheme = if (useAmoledMode) {
+        DarkAmoledColorPalette
+    } else {
+        when {
+            dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                if (useDarkMode) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            }
+            !dynamicColor && Build.VERSION.SDK_INT < Build.VERSION_CODES.S -> {
+                if (useDarkMode) DarkColors else LightColors
+            }
+            else -> DarkColors
+        }
     }
 
 

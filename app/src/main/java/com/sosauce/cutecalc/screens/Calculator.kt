@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
@@ -8,6 +10,8 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,7 +48,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sosauce.cutecalc.AppBar
 import com.sosauce.cutecalc.logic.CalcAction
@@ -64,9 +67,9 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun CalculatorUI(
     navController: NavController,
-    state: CalcState
+    state: CalcState,
+    viewModel: CalcViewModel
 ) {
-    val viewModel = viewModel<CalcViewModel>()
     val config = LocalConfiguration.current
     val context = LocalContext.current
     val portraitMode = remember { mutableStateOf(config.orientation) }
@@ -106,7 +109,6 @@ fun CalculatorUI(
             )
         },
     ) {
-
         val displayText = remember { state.field }
         val scrollState = rememberScrollState()
 
@@ -576,7 +578,6 @@ fun CalculatorUI(
                             viewModel.handleAction(CalcAction.RemoveLast)
                             if (buttonVibrationEnabledState.value) vibration()
                         },
-
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
                         modifier = Modifier
                             .aspectRatio(1f)

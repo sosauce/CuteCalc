@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sosauce.cutecalc.screens.AboutScreen
 import com.sosauce.cutecalc.screens.CalculatorUI
+import com.sosauce.cutecalc.screens.SettingsScreen
 
 @Composable
 fun Nav() {
@@ -17,10 +18,13 @@ fun Nav() {
         composable(route = "CalculatorScreen") {
             val viewModel = viewModel<CalcViewModel>()
             val state by viewModel.state.collectAsStateWithLifecycle()
-            CalculatorUI(navController, state)
+            CalculatorUI(navController, state, viewModel)
         }
         composable(route = "AboutScreen") {
             AboutScreen(navController)
+        }
+        composable(route = "SettingsScreen") {
+            SettingsScreen(navController)
         }
     }
 
