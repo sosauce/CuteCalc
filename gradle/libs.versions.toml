@@ -1,12 +1,20 @@
 [versions]
-agp = "8.4.0"
-activityCompose = "1.9.0"
-composeBom = "2024.05.00"
+agp = "8.5.2"
+activityCompose = "1.9.1"
+composeBom = "2024.06.00"
 coreSplashscreen = "1.0.1"
 datastorePreferences = "1.1.1"
-keval = "1.0.1"
-navigationCompose = "2.7.7"
-kotlin = "1.9.23"
+keval = "1.1.1"
+navigationCompose = "2.8.0-beta07"
+kotlin = "2.0.0"
+ksp = "2.0.0-1.0.22"
+roomCompiler = "2.6.1"
+roomKtx = "2.6.1"
+koinAndroid = "3.5.6"
+koinAndroidxCompose = "3.5.6"
+serialization = "2.0.0"
+kotlinxSerializationJson = "1.7.1"
+
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -20,7 +28,15 @@ androidx-material3 = { module = "androidx.compose.material3:material3" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-ui = { module = "androidx.compose.ui:ui" }
 keval = { module = "com.notkamui.libs:keval", version.ref = "keval" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization"}

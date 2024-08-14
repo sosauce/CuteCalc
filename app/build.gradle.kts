@@ -1,18 +1,21 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlin)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.serialization)
 }
 
 android {
     namespace = "com.sosauce.cutecalc"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.sosauce.cutecalc"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 29
-        versionName = "2.7.3"
+        minSdk = 21
+        targetSdk = 35
+        versionCode = 30
+        versionName = "3.0.0"
     }
 
     buildTypes {
@@ -28,17 +31,16 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
+
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.13"
     }
 }
 
@@ -54,4 +56,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.keval)
     implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.kotlinx.serialization.json)
+    ksp(libs.androidx.room.compiler)
 }

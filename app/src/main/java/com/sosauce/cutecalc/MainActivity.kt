@@ -10,7 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.sosauce.cutecalc.logic.Nav
+import com.sosauce.cutecalc.logic.navigation.Nav
 import com.sosauce.cutecalc.ui.theme.CuteCalcTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -21,9 +21,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CuteCalcTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()
+                Scaffold(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    MaterialTheme(content = { Nav() })
+                    MaterialTheme(
+                        content = {
+                            Nav()
+                        }
+                    )
                 }
             }
         }

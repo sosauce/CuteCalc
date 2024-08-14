@@ -1,4 +1,4 @@
-package components
+package com.sosauce.cutecalc.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -63,7 +63,12 @@ fun AboutCard() {
             Row {
                 Button(
                     onClick = { uriHandler.openUri("https://github.com/sosauce/CuteCalc/releases") },
-                    shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp, topEnd = 4.dp, bottomEnd = 4.dp),
+                    shape = RoundedCornerShape(
+                        topStart = 24.dp,
+                        bottomStart = 24.dp,
+                        topEnd = 4.dp,
+                        bottomEnd = 4.dp
+                    ),
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(text = "Check Updates", fontFamily = GlobalFont)
@@ -71,7 +76,12 @@ fun AboutCard() {
                 Spacer(modifier = Modifier.width(2.dp))
                 Button(
                     onClick = { uriHandler.openUri("https://bit.ly/sosaucePayPal") },
-                    shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp, topEnd = 24.dp, bottomEnd = 24.dp),
+                    shape = RoundedCornerShape(
+                        topStart = 4.dp,
+                        bottomStart = 4.dp,
+                        topEnd = 24.dp,
+                        bottomEnd = 24.dp
+                    ),
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(text = "Support", fontFamily = GlobalFont)

@@ -1,11 +1,6 @@
 package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -19,86 +14,65 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.sosauce.cutecalc.AppBar
+import com.sosauce.cutecalc.components.CuteButton
+import com.sosauce.cutecalc.history.HistoryEvents
+import com.sosauce.cutecalc.history.HistoryState
+import com.sosauce.cutecalc.history.HistoryViewModel
 import com.sosauce.cutecalc.logic.CalcAction
-import com.sosauce.cutecalc.logic.CalcState
 import com.sosauce.cutecalc.logic.CalcViewModel
-import com.sosauce.cutecalc.logic.dataStore
-import com.sosauce.cutecalc.logic.getButtonVibrationSetting
-import com.sosauce.cutecalc.logic.getDecimalFormattingSetting
+import com.sosauce.cutecalc.logic.Evaluator
+import com.sosauce.cutecalc.logic.formatNumber
+import com.sosauce.cutecalc.logic.rememberDecimal
+import com.sosauce.cutecalc.logic.rememberUseHistory
+import com.sosauce.cutecalc.logic.rememberVibration
 import com.sosauce.cutecalc.ui.theme.GlobalFont
-import com.sosauce.cutecalc.ui.theme.SegoeFont
-import kotlinx.coroutines.flow.Flow
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LandscapeLayout(navController: NavController, state: CalcState) {
+fun LandscapeLayout(
+    viewModel: CalcViewModel,
+    historyViewModel: HistoryViewModel,
+    historyState: HistoryState
+) {
 
-    val viewModel = viewModel<CalcViewModel>()
-    val context = LocalContext.current
-    val buttonVibrationEnabledFlow: Flow<Boolean> = getButtonVibrationSetting(context.dataStore)
-    val buttonVibrationEnabledState: State<Boolean> =
-        buttonVibrationEnabledFlow.collectAsState(initial = false)
-    val buttonDecimalEnabledFlow: Flow<Boolean> = getDecimalFormattingSetting(context.dataStore)
-    val buttonDecimalEnabledState: State<Boolean> =
-        buttonDecimalEnabledFlow.collectAsState(initial = false)
-
-    fun vibration() {
-        if (!buttonVibrationEnabledState.value) return
-        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            (context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
-        } else {
-            @Suppress("DEPRECATION") context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        }
-        val vibrationEffect: VibrationEffect = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            VibrationEffect.createOneShot(100, 90)
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
-        vibrator.vibrate(vibrationEffect)
+    val vibration by rememberVibration()
+    val decimal by rememberDecimal()
+    val preview = remember(viewModel.displayText) {
+        Evaluator.eval(viewModel.displayText)
     }
-
-    Scaffold(
-        topBar = {
-            AppBar(
-                title = "",
-                showBackArrow = false,
-                showMenuIcon = false,
-                navController = navController
-            )
+    val formatedDisplayText by remember {
+        derivedStateOf {
+            formatNumber(viewModel.displayText)
         }
-    ) {
+    }
+    val parenthesis =
+        if (viewModel.displayText.count { it == '(' } > viewModel.displayText.count { it == ')' }) ")" else "("
+    val saveToHistory by rememberUseHistory()
+
+    Scaffold {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
                 .padding(15.dp)
         ) {
-            val displayText = remember { state.field }
             val scrollState = rememberScrollState()
 
-            LaunchedEffect(displayText) {
+            LaunchedEffect(viewModel.displayText) {
                 scrollState.animateScrollTo(scrollState.maxValue)
             }
 
@@ -114,16 +88,29 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         .align(Alignment.End)
                 ) {
                     Text(
-                        text = if (buttonDecimalEnabledState.value) state.formattedField() else state.field,
+                        text = if (decimal) formatedDisplayText else viewModel.displayText,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp),
-                        fontWeight = FontWeight.Light,
                         fontSize = 35.sp,
                         color = MaterialTheme.colorScheme.onBackground,
                         fontFamily = GlobalFont
                     )
+//                    CompositionLocalProvider(LocalTextInputService provides null) {
+//                        BasicTextField(
+//                            value = viewModel.displayText,
+//                            onValueChange = { viewModel.displayText = it },
+//                            singleLine = true,
+//                            textStyle = TextStyle(
+//                                textAlign = TextAlign.End,
+//                                color = MaterialTheme.colorScheme.onBackground,
+//                                fontSize = 35.sp
+//                            ),
+//                            cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
+//                            enabled = false
+//                        )
+//                    }
                 }
 
                 Row(
@@ -131,327 +118,196 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    TextButton(
+                    CuteButton(
+                        text = "!",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.background),
+                        shouldVibrate = vibration,
+                        modifier = Modifier
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("!"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "%",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.background),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "!",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                    TextButton(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("%"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "√",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.background),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "%",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                    TextButton(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("√"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "π",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.background),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "√",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                    TextButton(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("PI"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "π",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
+                        }
+                    )
                 }
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    TextButton(
-                        onClick = {
-                            viewModel.handleAction(CalcAction.ResetField)
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                    CuteButton(
+                        text = "",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.background),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                    FilledTonalButton(
+                            .weight(0.15f),
+                        onClick = {}
+                    )
+                    CuteButton(
+                        text = "9",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        shouldVibrate = vibration,
+                        modifier = Modifier
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("9"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "8",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "9",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    FilledTonalButton(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("8"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "7",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "8",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-
-                    FilledTonalButton(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("7"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "×",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "7",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    Button(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("×"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        }
+                    )
+                    CuteButton(
+                        text = parenthesis,
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "×",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    Button(
+                            .weight(0.15f),
                         onClick = {
-                            val parenthesis = if (state.field.count { it == '(' } > state.field.count { it == ')' }) ")" else "("
-
                             viewModel.handleAction(CalcAction.AddToField(parenthesis))
-                            if (buttonVibrationEnabledState.value) {
-                                vibration()
-                            }
-                        },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        }
+                    )
+                    CuteButton(
+                        text = "C",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = if (state.field.count { it == '(' } > state.field.count { it == ')' }) ")" else "(",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont
-                        )
-                    }
-
-                    Button(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.ResetField)
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "C",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
+                        }
+                    )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    FilledTonalButton(
+                    CuteButton(
+                        text = "3",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        shouldVibrate = vibration,
+                        modifier = Modifier
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("3"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "4",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "3",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    FilledTonalButton(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("4"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "5",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "4",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-
-                    FilledTonalButton(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("5"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "6",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "5",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    FilledTonalButton(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("6"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "+",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "6",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    Button(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("+"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        }
+                    )
+                    CuteButton(
+                        text = "^",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "+",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    Button(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("^"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        }
+                    )
+                    CuteButton(
+                        text = "⌫",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "^",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-                    Button(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.RemoveLast)
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
-                        modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "⌫",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = SegoeFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
+                        }
+                    )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(
@@ -459,131 +315,89 @@ fun LandscapeLayout(navController: NavController, state: CalcState) {
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    FilledTonalButton(
+                    CuteButton(
+                        text = "2",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        shouldVibrate = vibration,
+                        modifier = Modifier
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("2"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "1",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "2",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    FilledTonalButton(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("1"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "0",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "1",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    FilledTonalButton(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("0"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = ".",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "0",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-
-                    FilledTonalButton(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("."))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
+                        }
+                    )
+                    CuteButton(
+                        text = "-",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = ".",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    Button(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("-"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        }
+                    )
+                    CuteButton(
+                        text = "/",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "-",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    Button(
+                            .weight(0.15f),
                         onClick = {
                             viewModel.handleAction(CalcAction.AddToField("/"))
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        }
+                    )
+                    CuteButton(
+                        text = "=",
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        shouldVibrate = vibration,
                         modifier = Modifier
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "/",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
-
-                    Button(
+                            .weight(0.15f),
                         onClick = {
+                            if (saveToHistory) {
+                                historyState.operation.value =
+                                    viewModel.displayText
+                                historyState.result.value =
+                                    Evaluator.eval(viewModel.displayText)
+
+                                historyViewModel.onEvent(
+                                    HistoryEvents.AddCalculation(
+                                        operation = historyState.operation.value,
+                                        result = historyState.result.value
+                                    )
+                                )
+                            }
                             viewModel.handleAction(CalcAction.GetResult)
-                            if (buttonVibrationEnabledState.value) vibration()
-                        },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(0.15f)
-                    ) {
-                        Text(
-                            text = "=",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 35.sp,
-                            fontFamily = GlobalFont,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                    }
+                        }
+                    )
                 }
             }
         }

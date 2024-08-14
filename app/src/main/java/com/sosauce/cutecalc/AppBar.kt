@@ -5,6 +5,7 @@ package com.sosauce.cutecalc
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -16,21 +17,28 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
+import com.sosauce.cutecalc.logic.navigation.Screens
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun AppBar(
-    title: String,
+    title: String? = null,
     navController: NavController,
     showBackArrow: Boolean,
-    showMenuIcon: Boolean
 ) {
     TopAppBar(
-        title = { Text(text = title, fontFamily = GlobalFont) },
+        title = {
+            title?.let {
+                Text(
+                    text = it,
+                    fontFamily = GlobalFont
+                )
+            }
+        },
         navigationIcon = {
             if (showBackArrow) {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back arrow"
@@ -40,8 +48,15 @@ fun AppBar(
         },
         colors = TopAppBarDefaults.largeTopAppBarColors(Color.Transparent),
         actions = {
-            if (showMenuIcon) {
-                IconButton(onClick = { navController.navigate("SettingsScreen") }) {
+            if (!showBackArrow) {
+                IconButton(onClick = { navController.navigate(Screens.History) }) {
+                    Icon(
+                        imageVector = Icons.Outlined.History,
+                        contentDescription = "History",
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+                IconButton(onClick = { navController.navigate(Screens.Settings) }) {
                     Icon(
                         imageVector = Icons.Outlined.Settings,
                         contentDescription = "More",
@@ -49,7 +64,6 @@ fun AppBar(
                     )
                 }
             }
-
         }
     )
 }

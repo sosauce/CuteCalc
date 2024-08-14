@@ -9,9 +9,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.sosauce.cutecalc.AppBar
-import components.AboutCard
-import components.Switches
-import components.ThemeManagement
+import com.sosauce.cutecalc.components.AboutCard
+import com.sosauce.cutecalc.components.History
+import com.sosauce.cutecalc.components.Misc
+import com.sosauce.cutecalc.components.ThemeManagement
 
 @Composable
 fun SettingsScreen(navController: NavController) {
@@ -22,7 +23,6 @@ fun SettingsScreen(navController: NavController) {
                 title = "Settings",
                 showBackArrow = true,
                 navController = navController,
-                showMenuIcon = false
             )
         },
     ) { values ->
@@ -31,10 +31,11 @@ fun SettingsScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(values),
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             AboutCard()
             ThemeManagement()
-            Switches()
+            History()
+            Misc()
         }
     }
 
