@@ -41,6 +41,9 @@ class HistoryViewModel(
             is HistoryEvents.DeleteCalculation -> {
                 viewModelScope.launch { dao.deleteCalculation(event.calculation) }
             }
+            is HistoryEvents.DeleteAllCalculation -> {
+                viewModelScope.launch { dao.deleteAllCalculations(event.calculations) }
+            }
         }
     }
 }

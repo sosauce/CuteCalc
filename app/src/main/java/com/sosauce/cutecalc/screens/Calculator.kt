@@ -63,9 +63,14 @@ fun CalculatorUI(
     val parenthesis =
         if (viewModel.displayText.count { it == '(' } > viewModel.displayText.count { it == ')' }) ")" else "("
     val scrollState = rememberScrollState()
-    val formatedDisplayText by remember {
+    val displayText by remember(viewModel.displayText) {
         derivedStateOf {
-            formatNumber(viewModel.displayText)
+            viewModel.displayText.replace("PI", "π")
+        }
+    }
+    val formatedDisplayText by remember(displayText) {
+        derivedStateOf {
+            formatNumber(displayText)
         }
     }
 
@@ -85,8 +90,8 @@ fun CalculatorUI(
                 navController = navController,
             )
         },
-    ) { value ->
-        LaunchedEffect(viewModel.displayText) {
+    ) { _ ->
+        LaunchedEffect(displayText) {
             scrollState.animateScrollTo(scrollState.maxValue)
         }
 
@@ -113,7 +118,8 @@ fun CalculatorUI(
                             text = "= $preview",
                             textAlign = TextAlign.End,
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-                            fontSize = 32.sp
+                            fontSize = 32.sp,
+                            fontFamily = GlobalFont
                         )
                     }
                 }
@@ -137,7 +143,7 @@ fun CalculatorUI(
                         .align(Alignment.End)
                 ) {
                     Text(
-                        text = if (decimal) formatedDisplayText else viewModel.displayText,
+                        text = if (decimal) formatedDisplayText else displayText,
                         textAlign = TextAlign.End,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -437,7 +443,7 @@ fun CalculatorUI(
                     )
                     CuteButton(
                         text = "=",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
                         shouldVibrate = vibration,
                         modifier = Modifier
                             .aspectRatio(1f)

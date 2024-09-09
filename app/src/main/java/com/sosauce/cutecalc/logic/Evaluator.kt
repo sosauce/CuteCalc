@@ -14,7 +14,6 @@ class ValueTooLargeException : RuntimeException("value too large")
 object Evaluator {
 
     private val KEVAL = Keval.create {
-
         binaryOperator {
             symbol = '+'
             precedence = 2
@@ -90,6 +89,7 @@ object Evaluator {
             name = "PI"
             value = Math.PI
         }
+
     }
 
     @JvmStatic

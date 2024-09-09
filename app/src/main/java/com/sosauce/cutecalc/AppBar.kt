@@ -4,9 +4,9 @@ package com.sosauce.cutecalc
 
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,7 +40,7 @@ fun AppBar(
             if (showBackArrow) {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = "Back arrow"
                     )
                 }
@@ -51,14 +51,14 @@ fun AppBar(
             if (!showBackArrow) {
                 IconButton(onClick = { navController.navigate(Screens.History) }) {
                     Icon(
-                        imageVector = Icons.Outlined.History,
+                        imageVector = Icons.Rounded.History,
                         contentDescription = "History",
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
                 IconButton(onClick = { navController.navigate(Screens.Settings) }) {
                     Icon(
-                        imageVector = Icons.Outlined.Settings,
+                        imageVector = Icons.Rounded.Settings,
                         contentDescription = "More",
                         tint = MaterialTheme.colorScheme.onBackground
                     )

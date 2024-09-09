@@ -51,17 +51,23 @@ fun LandscapeLayout(
 
     val vibration by rememberVibration()
     val decimal by rememberDecimal()
-    val preview = remember(viewModel.displayText) {
-        Evaluator.eval(viewModel.displayText)
-    }
-    val formatedDisplayText by remember {
-        derivedStateOf {
-            formatNumber(viewModel.displayText)
-        }
-    }
+//    val preview = remember(viewModel.displayText) {
+//        Evaluator.eval(viewModel.displayText)
+//    }
+
     val parenthesis =
         if (viewModel.displayText.count { it == '(' } > viewModel.displayText.count { it == ')' }) ")" else "("
     val saveToHistory by rememberUseHistory()
+    val displayText by remember(viewModel.displayText) {
+        derivedStateOf {
+            viewModel.displayText.replace("PI", "π")
+        }
+    }
+    val formatedDisplayText by remember(displayText) {
+        derivedStateOf {
+            formatNumber(displayText)
+        }
+    }
 
     Scaffold {
         Box(
@@ -72,7 +78,7 @@ fun LandscapeLayout(
         ) {
             val scrollState = rememberScrollState()
 
-            LaunchedEffect(viewModel.displayText) {
+            LaunchedEffect(displayText) {
                 scrollState.animateScrollTo(scrollState.maxValue)
             }
 
@@ -88,7 +94,7 @@ fun LandscapeLayout(
                         .align(Alignment.End)
                 ) {
                     Text(
-                        text = if (decimal) formatedDisplayText else viewModel.displayText,
+                        text = if (decimal) formatedDisplayText else displayText,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()

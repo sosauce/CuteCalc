@@ -1,11 +1,5 @@
 package com.sosauce.cutecalc.components
 
-import android.content.Context
-import android.content.Context.VIBRATOR_SERVICE
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Backspace
@@ -17,7 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sosauce.cutecalc.ui.theme.GlobalFont
@@ -31,14 +26,12 @@ fun CuteButton(
     onClick: () -> Unit
 ) {
 
-    val context = LocalContext.current
+    val haptic = LocalHapticFeedback.current
 
     Button(
         onClick = {
             onClick()
-            if (shouldVibrate) {
-                vibration(context)
-            }
+            if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
         },
         colors = color,
         modifier = modifier,
@@ -59,12 +52,12 @@ fun CuteIconButton(
     onClick: () -> Unit
 ) {
 
-    val context = LocalContext.current
+    val haptic = LocalHapticFeedback.current
 
     Button(
         onClick = {
             onClick()
-            if (shouldVibrate) vibration(context)
+            if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
         },
         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
         modifier = modifier
@@ -76,20 +69,4 @@ fun CuteIconButton(
             modifier = Modifier.size(35.dp)
         )
     }
-}
-
-private fun vibration(
-    context: Context
-) {
-    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        (context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
-    } else {
-        @Suppress("DEPRECATION") context.getSystemService(VIBRATOR_SERVICE) as Vibrator
-    }
-    val vibrationEffect = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        VibrationEffect.createOneShot(100, 90)
-    } else {
-        TODO("VERSION.SDK_INT < O")
-    }
-    vibrator.vibrate(vibrationEffect)
 }
