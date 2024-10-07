@@ -147,7 +147,8 @@ fun CalculatorUI(
                             textStyle = TextStyle(
                                 textAlign = TextAlign.End,
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 53.sp
+                                fontSize = 53.sp,
+                                fontFamily = GlobalFont
                             ),
                             cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
                         )

@@ -71,17 +71,17 @@ fun Misc() {
             modifier = Modifier.padding(horizontal = 34.dp, vertical = 8.dp)
         )
 
-        SettingsCards(
-            checked = decimalSetting,
-            onCheckedChange = { decimalSetting = !decimalSetting },
-            topDp = 24.dp,
-            bottomDp = 4.dp,
-            text = "Decimal Formatting"
-        )
+//        SettingsCards(
+//            checked = decimalSetting,
+//            onCheckedChange = { decimalSetting = !decimalSetting },
+//            topDp = 24.dp,
+//            bottomDp = 4.dp,
+//            text = "Decimal Formatting"
+//        )
         SettingsCards(
             checked = buttonVibrationSetting,
             onCheckedChange = { buttonVibrationSetting = !buttonVibrationSetting },
-            topDp = 4.dp,
+            topDp = 24.dp,
             bottomDp = 24.dp,
             text = "Haptic Feedback"
         )
