@@ -7,22 +7,26 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import com.sosauce.cutecalc.AppBar
 import com.sosauce.cutecalc.components.AboutCard
 import com.sosauce.cutecalc.components.History
 import com.sosauce.cutecalc.components.Misc
 import com.sosauce.cutecalc.components.ThemeManagement
+import com.sosauce.cutecalc.logic.navigation.Screens
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(
+    onNavigateUp: () -> Unit,
+    onNavigate: (Screens) -> Unit
+) {
 
     Scaffold(
         topBar = {
             AppBar(
                 title = "Settings",
                 showBackArrow = true,
-                navController = navController,
+                onNavigateUp = onNavigateUp,
+                onNavigate = onNavigate
             )
         },
     ) { values ->

@@ -1,6 +1,7 @@
 package com.sosauce.cutecalc.screens
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,19 +13,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,43 +44,37 @@ import com.sosauce.cutecalc.logic.CalcAction
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.logic.Evaluator
 import com.sosauce.cutecalc.logic.formatNumber
+import com.sosauce.cutecalc.logic.navigation.Screens
 import com.sosauce.cutecalc.logic.rememberDecimal
 import com.sosauce.cutecalc.logic.rememberUseHistory
 import com.sosauce.cutecalc.logic.rememberVibration
 import com.sosauce.cutecalc.ui.theme.GlobalFont
+import kotlinx.coroutines.awaitCancellation
 
 
 @Composable
 fun CalculatorUI(
-    navController: NavController,
     viewModel: CalcViewModel,
     historyViewModel: HistoryViewModel,
-    historyState: HistoryState
+    historyState: HistoryState,
+    onNavigateUp: () -> Unit,
+    onNavigate: (Screens) -> Unit
 ) {
     val config = LocalConfiguration.current
-    val portraitMode = remember { mutableIntStateOf(config.orientation) }
-    val vibration by rememberVibration()
+    val portraitMode by remember { mutableIntStateOf(config.orientation) }
     val decimal by rememberDecimal()
     val saveToHistory by rememberUseHistory()
-    val preview = remember(viewModel.displayText) {
-        Evaluator.eval(viewModel.displayText)
-    }
-    val parenthesis =
-        if (viewModel.displayText.count { it == '(' } > viewModel.displayText.count { it == ')' }) ")" else "("
-    val scrollState = rememberScrollState()
-    val displayText by remember(viewModel.displayText) {
-        derivedStateOf {
-            viewModel.displayText.replace("PI", "π")
-        }
-    }
-    val formatedDisplayText by remember(displayText) {
-        derivedStateOf {
-            formatNumber(displayText)
-        }
-    }
+    val scrollState = rememberScrollState(0)
+    val previewScrollState = rememberScrollState(0)
+    val firstRow = listOf("!", "%", "√", "π")
+    val secondRow = listOf("C", viewModel.parenthesis, "^", "/")
+    val thirdRow = listOf("7", "8", "9", "×")
+    val fourthRow = listOf("4", "5", "6", "-")
+    val fifthRow = listOf("1", "2", "3", "+")
+    val sixthRow = listOf("0", ".")
 
 
-    if (portraitMode.intValue != Configuration.ORIENTATION_PORTRAIT) {
+    if (portraitMode != Configuration.ORIENTATION_PORTRAIT) {
         return LandscapeLayout(
             historyState = historyState,
             historyViewModel = historyViewModel,
@@ -83,16 +82,21 @@ fun CalculatorUI(
         )
     }
 
+
     Scaffold(
         topBar = {
             AppBar(
                 showBackArrow = false,
-                navController = navController,
+                onNavigate = onNavigate,
+                onNavigateUp = onNavigateUp
             )
         },
     ) { _ ->
-        LaunchedEffect(displayText) {
+        LaunchedEffect(viewModel.displayText) {
             scrollState.animateScrollTo(scrollState.maxValue)
+        }
+        LaunchedEffect(viewModel.preview) {
+            previewScrollState.animateScrollTo(previewScrollState.maxValue)
         }
 
         Box(
@@ -109,48 +113,45 @@ fun CalculatorUI(
             ) {
                 Row(
                     modifier = Modifier
-                        .horizontalScroll(scrollState)
+                        .horizontalScroll(previewScrollState)
                         .align(Alignment.End)
                 ) {
 
-                    if (preview != "Error") {
-                        Text(
-                            text = "= $preview",
-                            textAlign = TextAlign.End,
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-                            fontSize = 32.sp,
-                            fontFamily = GlobalFont
-                        )
-                    }
+                    Text(
+                        text = viewModel.preview,
+                        textAlign = TextAlign.End,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+                        fontSize = 32.sp,
+                        fontFamily = GlobalFont,
+                        maxLines = 1
+                    )
                 }
-//                CompositionLocalProvider(LocalTextInputService provides null) {
-//                    BasicTextField(
-//                        value = viewModel.displayText,
-//                        onValueChange = { viewModel.displayText = it },
-//                        singleLine = true,
-//                        textStyle = TextStyle(
-//                            textAlign = TextAlign.End,
-//                            color = MaterialTheme.colorScheme.onBackground,
-//                            fontSize = 53.sp
-//                        ),
-//                        cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
-//                        enabled = false
-//                    )
-//                }
                 Row(
                     modifier = Modifier
                         .horizontalScroll(scrollState)
                         .align(Alignment.End)
                 ) {
-                    Text(
-                        text = if (decimal) formatedDisplayText else displayText,
-                        textAlign = TextAlign.End,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp),
-                        fontSize = 55.sp,
-                        fontFamily = GlobalFont
-                    )
+//                    Text(
+//                        text = if (decimal) formatNumber(viewModel.displayText) else viewModel.displayText,
+//                        textAlign = TextAlign.End,
+//                        modifier = Modifier
+//                            .fillMaxWidth(),
+//                        fontSize = 55.sp,
+//                        fontFamily = GlobalFont
+//                    )
+                    DisableSoftKeyboard {
+                        BasicTextField(
+                            value = viewModel.displayText,
+                            onValueChange = { viewModel.displayText = it },
+                            singleLine = true,
+                            textStyle = TextStyle(
+                                textAlign = TextAlign.End,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                fontSize = 53.sp
+                            ),
+                            cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
+                        )
+                    }
                 }
 
 
@@ -159,46 +160,17 @@ fun CalculatorUI(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    CuteButton(
-                        text = "!",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.background),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .weight(0.15f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("!"))
-                        }
-                    )
-                    CuteButton(
-                        text = "%",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.background),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .weight(0.15f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("%"))
-                        }
-                    )
-                    CuteButton(
-                        text = "√",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.background),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .weight(0.15f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("√"))
-                        }
-                    )
-                    CuteButton(
-                        text = "π",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.background),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .weight(0.15f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("PI"))
-                        }
-                    )
+                    firstRow.forEach {
+                        CuteButton(
+                            text = it,
+                            color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.background),
+                            modifier = Modifier
+                                .weight(0.15f),
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField(it))
+                            }
+                        )
+                    }
                 }
 
                 Row(
@@ -206,50 +178,20 @@ fun CalculatorUI(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(9.dp)
                 ) {
-                    CuteButton(
-                        text = "C",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.ResetField)
-                        }
-                    )
-                    CuteButton(
-                        text = parenthesis,
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField(parenthesis))
-                        }
-                    )
-                    CuteButton(
-                        text = "^",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("^"))
-                        }
-                    )
-                    CuteButton(
-                        text = "/",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("/"))
-                        }
-                    )
+                    secondRow.forEach {
+                        CuteButton(
+                            text = it,
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .weight(1f),
+                            onClick = {
+                                if (it == "C") viewModel.handleAction(CalcAction.ResetField)
+                                else viewModel.handleAction(CalcAction.AddToField(it))
+                            },
+                            color = if (it == "C") ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer)
+                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant)
+                        )
+                    }
                 }
 
                 Row(
@@ -257,50 +199,20 @@ fun CalculatorUI(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(9.dp)
                 ) {
-                    CuteButton(
-                        text = "7",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("7"))
-                        }
-                    )
-                    CuteButton(
-                        text = "8",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("8"))
-                        }
-                    )
-                    CuteButton(
-                        text = "9",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("9"))
-                        }
-                    )
-                    CuteButton(
-                        text = "×",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("×"))
-                        }
-                    )
+                    thirdRow.forEach {
+                        CuteButton(
+                            text = it,
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .weight(1f),
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField(it))
+                            },
+                            color =
+                            if (it == "×") ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant)
+                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        )
+                    }
                 }
 
                 Row(
@@ -308,50 +220,20 @@ fun CalculatorUI(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(9.dp)
                 ) {
-                    CuteButton(
-                        text = "4",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("4"))
-                        }
-                    )
-                    CuteButton(
-                        text = "5",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("5"))
-                        }
-                    )
-                    CuteButton(
-                        text = "6",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("6"))
-                        }
-                    )
-                    CuteButton(
-                        text = "-",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("-"))
-                        }
-                    )
+                    fourthRow.forEach {
+                        CuteButton(
+                            text = it,
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .weight(1f),
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField(it))
+                            },
+                            color =
+                            if (it == "-") ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant)
+                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        )
+                    }
                 }
 
                 Row(
@@ -359,50 +241,20 @@ fun CalculatorUI(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(9.dp)
                 ) {
-                    CuteButton(
-                        text = "1",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("1"))
-                        }
-                    )
-                    CuteButton(
-                        text = "2",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("2"))
-                        }
-                    )
-                    CuteButton(
-                        text = "3",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("3"))
-                        }
-                    )
-                    CuteButton(
-                        text = "+",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("+"))
-                        }
-                    )
+                    fifthRow.forEach {
+                        CuteButton(
+                            text = it,
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .weight(1f),
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField(it))
+                            },
+                            color =
+                            if (it == "+") ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant)
+                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                        )
+                    }
                 }
 
                 Row(
@@ -410,30 +262,18 @@ fun CalculatorUI(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(9.dp)
                 ) {
-                    CuteButton(
-                        text = "0",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("0"))
-                        }
-                    )
-                    CuteButton(
-                        text = ".",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-                        shouldVibrate = vibration,
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .weight(1f),
-                        onClick = {
-                            viewModel.handleAction(CalcAction.AddToField("."))
-                        }
-                    )
+                    sixthRow.forEach {
+                        CuteButton(
+                            text = it,
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .weight(1f),
+                            onClick = {
+                                viewModel.handleAction(CalcAction.AddToField(it))
+                            }
+                        )
+                    }
                     CuteIconButton(
-                        shouldVibrate = vibration,
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f),
@@ -444,16 +284,16 @@ fun CalculatorUI(
                     CuteButton(
                         text = "=",
                         color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
-                        shouldVibrate = vibration,
+
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f),
                         onClick = {
                             if (saveToHistory) {
                                 historyState.operation.value =
-                                    viewModel.displayText
+                                    viewModel.displayText.text
                                 historyState.result.value =
-                                    Evaluator.eval(viewModel.displayText)
+                                    Evaluator.eval(viewModel.displayText.text)
 
                                 historyViewModel.onEvent(
                                     HistoryEvents.AddCalculation(
@@ -469,4 +309,24 @@ fun CalculatorUI(
             }
         }
     }
+}
+
+// https://stackoverflow.com/a/78720287
+// Goated stackoverflow moment
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable fun DisableSoftKeyboard(
+    disable: Boolean = true,
+    content: @Composable () -> Unit,
+) {
+    InterceptPlatformTextInput(
+        interceptor = { request, nextHandler ->
+            if (!disable) {
+                nextHandler.startInputMethod(request)
+            } else {
+                awaitCancellation()
+            }
+        },
+        content = content,
+    )
 }

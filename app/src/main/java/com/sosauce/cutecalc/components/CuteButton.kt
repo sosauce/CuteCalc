@@ -10,22 +10,23 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sosauce.cutecalc.logic.rememberVibration
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
 @Composable
-fun CuteButton(
+inline fun CuteButton(
+    modifier: Modifier = Modifier,
     text: String,
-    color: ButtonColors,
-    shouldVibrate: Boolean,
-    modifier: Modifier,
-    onClick: () -> Unit
+    color: ButtonColors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+    crossinline onClick: () -> Unit
 ) {
-
+    val shouldVibrate by rememberVibration()
     val haptic = LocalHapticFeedback.current
 
     Button(
@@ -47,11 +48,10 @@ fun CuteButton(
 
 @Composable
 fun CuteIconButton(
-    shouldVibrate: Boolean,
     modifier: Modifier,
     onClick: () -> Unit
 ) {
-
+    val shouldVibrate by rememberVibration()
     val haptic = LocalHapticFeedback.current
 
     Button(

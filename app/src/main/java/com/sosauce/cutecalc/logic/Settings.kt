@@ -17,6 +17,7 @@ data object PreferencesKeys {
     val DECIMAL_FORMATTING = booleanPreferencesKey("decimal_formatting")
     val FOLLOW_SYS = booleanPreferencesKey("follow_sys")
     val ENABLE_HISTORY = booleanPreferencesKey("enable_history")
+    val SORT_HISTORY_ASC = booleanPreferencesKey("sort_history_asc")
 }
 
 @Composable
@@ -42,4 +43,8 @@ fun rememberFollowSys() =
 @Composable
 fun rememberUseHistory() =
     rememberPreference(key = PreferencesKeys.ENABLE_HISTORY, defaultValue = true)
+
+@Composable
+fun rememberSortHistoryASC() =
+    rememberPreference(key = PreferencesKeys.SORT_HISTORY_ASC, defaultValue = true)
 

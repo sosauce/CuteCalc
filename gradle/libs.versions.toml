@@ -1,20 +1,19 @@
 [versions]
-agp = "8.6.0"
+agp = "8.6.1"
 activityCompose = "1.9.2"
-composeBom = "2024.09.00"
+composeBom = "2024.09.03"
 coreSplashscreen = "1.0.1"
 datastorePreferences = "1.1.1"
 keval = "1.1.1"
-navigationCompose = "2.8.0"
-kotlin = "2.0.0"
-ksp = "2.0.0-1.0.22"
+navigationCompose = "2.8.2"
+kotlin = "2.0.20"
+ksp = "2.0.20-1.0.25"
 roomCompiler = "2.6.1"
 roomKtx = "2.6.1"
-koinAndroid = "3.5.6"
-koinAndroidxCompose = "3.5.6"
+koinAndroid = "4.0.0"
+koinAndroidxCompose = "4.0.0"
 serialization = "2.0.0"
 kotlinxSerializationJson = "1.7.1"
-
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }

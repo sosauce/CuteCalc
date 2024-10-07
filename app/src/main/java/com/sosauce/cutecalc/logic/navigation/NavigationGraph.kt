@@ -27,22 +27,25 @@ fun Nav() {
         composable<Screens.Main> {
             val viewModel = viewModel<CalcViewModel>()
             CalculatorUI(
-                navController = navController,
                 viewModel = viewModel,
                 historyViewModel = historyViewModel,
-                historyState = historyState
+                historyState = historyState,
+                onNavigateUp = navController::navigateUp,
+                onNavigate = { navController.navigate(it) }
             )
         }
         composable<Screens.Settings> {
             SettingsScreen(
-                navController = navController
+                onNavigateUp = navController::navigateUp,
+                onNavigate = { navController.navigate(it) }
             )
         }
         composable<Screens.History> {
             HistoryScreen(
-                navController = navController,
                 state = historyState,
-                onEvents = historyViewModel::onEvent
+                onEvents = historyViewModel::onEvent,
+                onNavigateUp = navController::navigateUp,
+                onNavigate = { navController.navigate(it) }
             )
         }
     }

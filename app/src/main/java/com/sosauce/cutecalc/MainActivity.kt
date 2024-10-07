@@ -15,10 +15,20 @@ import com.sosauce.cutecalc.ui.theme.CuteCalcTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 class MainActivity : ComponentActivity() {
+
+    //private val cm_receiver = CuteMusicReceiver()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         enableEdgeToEdge()
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            registerReceiver(
+//                cm_receiver,
+//                IntentFilter("CM"), RECEIVER_NOT_EXPORTED
+//            )
+//        }
         setContent {
             CuteCalcTheme {
                 Scaffold(
@@ -33,4 +43,9 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        unregisterReceiver(cm_receiver)
+//    }
 }

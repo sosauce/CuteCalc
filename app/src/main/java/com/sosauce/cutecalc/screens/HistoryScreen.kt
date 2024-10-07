@@ -25,7 +25,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,42 +35,42 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.sosauce.cutecalc.AppBar
 import com.sosauce.cutecalc.history.Calculation
 import com.sosauce.cutecalc.history.HistoryEvents
 import com.sosauce.cutecalc.history.HistoryState
+import com.sosauce.cutecalc.logic.navigation.Screens
+import com.sosauce.cutecalc.logic.rememberSortHistoryASC
 import com.sosauce.cutecalc.logic.rememberUseHistory
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
 @Composable
 fun HistoryScreen(
-    navController: NavController,
     state: HistoryState,
-    onEvents: (HistoryEvents) -> Unit
-) {
-    HistoryScreenContent(
-        navController = navController,
-        state = state,
-        onEvents = onEvents
-
-    )
-}
-
-@Composable
-private fun HistoryScreenContent(
-    navController: NavController,
-    state: HistoryState,
-    onEvents: (HistoryEvents) -> Unit
+    onEvents: (HistoryEvents) -> Unit,
+    onNavigateUp: () -> Unit,
+    onNavigate: (Screens) -> Unit
 ) {
     var isHistoryEnable by rememberUseHistory()
+    val sortASC by rememberSortHistoryASC()
+    val sortedCalculations by remember(state.calculation) {
+        derivedStateOf {
+            if (sortASC) {
+                state.calculation.sortedBy { it.id }
+            } else {
+                state.calculation.sortedByDescending { it.id }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
             AppBar(
-                navController = navController,
                 showBackArrow = true,
-                title = "History"
+                title = "History",
+                showSortButton = true,
+                onNavigate = onNavigate,
+                onNavigateUp = onNavigateUp
             )
         },
         floatingActionButton = {
@@ -107,17 +109,20 @@ private fun HistoryScreenContent(
             }
         } else {
             LazyColumn(
-                modifier = Modifier.padding(values)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(values)
             ) {
                 itemsIndexed(
-                    items = state.calculation,
+                    items = sortedCalculations,
                     key = { _, item -> item.id }
                 ) { index, item ->
                     CalculationItem(
                         calculation = item,
                         onEvents = onEvents,
                         topDp = if (index == 0) 24.dp else 4.dp,
-                        bottomDp = if (index == state.calculation.size - 1) 24.dp else 4.dp
+                        bottomDp = if (index == state.calculation.size - 1) 24.dp else 4.dp,
+                        modifier = Modifier.animateItem()
                     )
                 }
             }
@@ -130,10 +135,11 @@ private fun CalculationItem(
     calculation: Calculation,
     onEvents: (HistoryEvents) -> Unit,
     topDp: Dp,
-    bottomDp: Dp
+    bottomDp: Dp,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 10.dp, vertical = 3.dp)
             .clip(
                 RoundedCornerShape(
