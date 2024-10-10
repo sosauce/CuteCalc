@@ -1,7 +1,12 @@
 package com.sosauce.cutecalc.screens
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
+import android.graphics.drawable.Drawable
 import android.util.Log
+import android.view.animation.Animation
+import androidx.appcompat.widget.AppCompatEditText
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,15 +31,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
 import com.sosauce.cutecalc.AppBar
+import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.components.CuteButton
 import com.sosauce.cutecalc.components.CuteIconButton
 import com.sosauce.cutecalc.history.HistoryEvents
@@ -52,6 +64,7 @@ import com.sosauce.cutecalc.ui.theme.GlobalFont
 import kotlinx.coroutines.awaitCancellation
 
 
+@SuppressLint("NewApi")
 @Composable
 fun CalculatorUI(
     viewModel: CalcViewModel,
@@ -62,16 +75,14 @@ fun CalculatorUI(
 ) {
     val config = LocalConfiguration.current
     val portraitMode by remember { mutableIntStateOf(config.orientation) }
-    val decimal by rememberDecimal()
     val saveToHistory by rememberUseHistory()
-    val scrollState = rememberScrollState(0)
-    val previewScrollState = rememberScrollState(0)
     val firstRow = listOf("!", "%", "√", "π")
     val secondRow = listOf("C", viewModel.parenthesis, "^", "/")
     val thirdRow = listOf("7", "8", "9", "×")
     val fourthRow = listOf("4", "5", "6", "-")
     val fifthRow = listOf("1", "2", "3", "+")
     val sixthRow = listOf("0", ".")
+    val textColor = MaterialTheme.colorScheme.onBackground
 
 
     if (portraitMode != Configuration.ORIENTATION_PORTRAIT) {
@@ -90,14 +101,8 @@ fun CalculatorUI(
                 onNavigate = onNavigate,
                 onNavigateUp = onNavigateUp
             )
-        },
+        }
     ) { _ ->
-        LaunchedEffect(viewModel.displayText) {
-            scrollState.animateScrollTo(scrollState.maxValue)
-        }
-        LaunchedEffect(viewModel.preview) {
-            previewScrollState.animateScrollTo(previewScrollState.maxValue)
-        }
 
         Box(
             modifier = Modifier
@@ -113,32 +118,32 @@ fun CalculatorUI(
             ) {
                 Row(
                     modifier = Modifier
-                        .horizontalScroll(previewScrollState)
                         .align(Alignment.End)
                 ) {
 
-                    Text(
-                        text = viewModel.preview,
-                        textAlign = TextAlign.End,
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-                        fontSize = 32.sp,
-                        fontFamily = GlobalFont,
-                        maxLines = 1
+                    AndroidView(
+                        factory = { context ->
+                            AppCompatEditText(context).apply {
+                                isFocusable = false
+                                isFocusableInTouchMode = false
+                                isSingleLine = true
+                                showSoftInputOnFocus = false
+                                textSize = 32f
+                                maxLines = 1
+                                setTextColor(textColor.copy(0.7f).hashCode())
+                                setTypeface(ResourcesCompat.getFont(context, R.font.nunito))
+                            }
+                        },
+                        update = { view ->
+                            view.setText(viewModel.preview)
+                            view.setSelection(viewModel.preview.length)
+                        }
                     )
                 }
                 Row(
                     modifier = Modifier
-                        .horizontalScroll(scrollState)
                         .align(Alignment.End)
                 ) {
-//                    Text(
-//                        text = if (decimal) formatNumber(viewModel.displayText) else viewModel.displayText,
-//                        textAlign = TextAlign.End,
-//                        modifier = Modifier
-//                            .fillMaxWidth(),
-//                        fontSize = 55.sp,
-//                        fontFamily = GlobalFont
-//                    )
                     DisableSoftKeyboard {
                         BasicTextField(
                             value = viewModel.displayText,
@@ -154,8 +159,6 @@ fun CalculatorUI(
                         )
                     }
                 }
-
-
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -279,7 +282,7 @@ fun CalculatorUI(
                             .aspectRatio(1f)
                             .weight(1f),
                         onClick = {
-                            viewModel.handleAction(CalcAction.RemoveLast)
+                            viewModel.handleAction(CalcAction.Backspace)
                         }
                     )
                     CuteButton(
@@ -313,8 +316,6 @@ fun CalculatorUI(
 }
 
 // https://stackoverflow.com/a/78720287
-// Goated stackoverflow moment
-
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable fun DisableSoftKeyboard(
     disable: Boolean = true,

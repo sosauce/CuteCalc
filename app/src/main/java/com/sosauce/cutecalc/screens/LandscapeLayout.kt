@@ -14,15 +14,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +34,6 @@ import com.sosauce.cutecalc.history.HistoryViewModel
 import com.sosauce.cutecalc.logic.CalcAction
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.logic.Evaluator
-import com.sosauce.cutecalc.logic.rememberDecimal
 import com.sosauce.cutecalc.logic.rememberUseHistory
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
@@ -44,9 +44,7 @@ fun LandscapeLayout(
     historyViewModel: HistoryViewModel,
     historyState: HistoryState
 ) {
-    val decimal by rememberDecimal()
     val saveToHistory by rememberUseHistory()
-    val scrollState = rememberScrollState()
 
     Scaffold {
         Box(
@@ -55,9 +53,6 @@ fun LandscapeLayout(
                 .background(MaterialTheme.colorScheme.background)
                 .padding(15.dp)
         ) {
-            LaunchedEffect(viewModel.displayText) {
-                scrollState.animateScrollTo(scrollState.maxValue)
-            }
 
             Column(
                 modifier = Modifier
@@ -70,30 +65,20 @@ fun LandscapeLayout(
                         .horizontalScroll(rememberScrollState())
                         .align(Alignment.End)
                 ) {
-                    Text(
-                        text = viewModel.displayText.text,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp),
-                        fontSize = 35.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontFamily = GlobalFont
-                    )
-//                    CompositionLocalProvider(LocalTextInputService provides null) {
-//                        BasicTextField(
-//                            value = viewModel.displayText,
-//                            onValueChange = { viewModel.displayText = it },
-//                            singleLine = true,
-//                            textStyle = TextStyle(
-//                                textAlign = TextAlign.End,
-//                                color = MaterialTheme.colorScheme.onBackground,
-//                                fontSize = 35.sp
-//                            ),
-//                            cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
-//                            enabled = false
-//                        )
-//                    }
+                    DisableSoftKeyboard {
+                        BasicTextField(
+                            value = viewModel.displayText,
+                            onValueChange = { viewModel.displayText = it },
+                            singleLine = true,
+                            textStyle = TextStyle(
+                                textAlign = TextAlign.End,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                fontSize = 53.sp,
+                                fontFamily = GlobalFont
+                            ),
+                            cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
+                        )
+                    }
                 }
 
                 Row(
@@ -270,7 +255,7 @@ fun LandscapeLayout(
                         modifier = Modifier
                             .weight(0.15f),
                         onClick = {
-                            viewModel.handleAction(CalcAction.RemoveLast)
+                            viewModel.handleAction(CalcAction.Backspace)
                         }
                     )
                 }
