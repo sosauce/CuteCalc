@@ -49,6 +49,7 @@ import com.sosauce.cutecalc.AppBar
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.components.CuteButton
 import com.sosauce.cutecalc.components.CuteIconButton
+import com.sosauce.cutecalc.ecosys.EcosystemViewModel
 import com.sosauce.cutecalc.history.HistoryEvents
 import com.sosauce.cutecalc.history.HistoryState
 import com.sosauce.cutecalc.history.HistoryViewModel
@@ -71,7 +72,8 @@ fun CalculatorUI(
     historyViewModel: HistoryViewModel,
     historyState: HistoryState,
     onNavigateUp: () -> Unit,
-    onNavigate: (Screens) -> Unit
+    onNavigate: (Screens) -> Unit,
+    cmSongTitle: @Composable () -> Unit
 ) {
     val config = LocalConfiguration.current
     val portraitMode by remember { mutableIntStateOf(config.orientation) }
@@ -99,7 +101,8 @@ fun CalculatorUI(
             AppBar(
                 showBackArrow = false,
                 onNavigate = onNavigate,
-                onNavigateUp = onNavigateUp
+                onNavigateUp = onNavigateUp,
+                title = cmSongTitle
             )
         }
     ) { _ ->

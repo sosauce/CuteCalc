@@ -67,10 +67,15 @@ fun HistoryScreen(
         topBar = {
             AppBar(
                 showBackArrow = true,
-                title = "History",
                 showSortButton = true,
                 onNavigate = onNavigate,
-                onNavigateUp = onNavigateUp
+                onNavigateUp = onNavigateUp,
+                title = {
+                    Text(
+                        text = "History",
+                        fontFamily = GlobalFont
+                    )
+                }
             )
         },
         floatingActionButton = {

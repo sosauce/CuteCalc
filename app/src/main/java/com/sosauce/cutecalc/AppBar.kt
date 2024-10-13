@@ -2,12 +2,12 @@
 
 package com.sosauce.cutecalc
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,28 +40,20 @@ import com.sosauce.cutecalc.logic.navigation.Screens
 import com.sosauce.cutecalc.logic.rememberSortHistoryASC
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
-@SuppressLint("SuspiciousIndentation")
 @Composable
 fun AppBar(
-    title: String? = null,
+    title: @Composable () -> Unit,
     showBackArrow: Boolean,
     showSortButton: Boolean = false,
     onNavigateUp: () -> Unit,
-    onNavigate: (Screens) -> Unit
+    onNavigate: (Screens) -> Unit,
 ) {
     var dropDownExpanded by remember { mutableStateOf(false) }
     var sortASC by rememberSortHistoryASC()
 
 
     TopAppBar(
-        title = {
-            title?.let {
-                Text(
-                    text = it,
-                    fontFamily = GlobalFont
-                )
-            }
-        },
+        title = { title() },
         navigationIcon = {
             if (showBackArrow) {
                 IconButton(onClick = onNavigateUp) {
@@ -75,6 +67,7 @@ fun AppBar(
         colors = TopAppBarDefaults.largeTopAppBarColors(Color.Transparent),
         actions = {
             if (!showBackArrow) {
+                Spacer(Modifier.width(5.dp))
                 IconButton(onClick = { onNavigate(Screens.History) }) {
                     Icon(
                         imageVector = Icons.Rounded.History,
