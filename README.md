@@ -47,8 +47,8 @@
 
 ---
 <h1>💬 Contact Me</h1>
-<p>Discord server in progress...</p>
-<p>Email = sosauce_dev@protonmail.com</p>
+<p>Discord server: https://discord.gg/c6aCu4yjbu.</p>
+<p>Email: sosauce_dev@protonmail.com</p>
 
 ---
 <h1>❤️ Support</h1>
@@ -56,6 +56,7 @@
 <p>You can support me by donating on my PayPal: https://bit.ly/sosaucePayPal. Thank you so much for the support ❤️</p>
 
 ---
+
 <h1>⚠️ Copyright</h1>
 
 <p>Copyright (c)2024 sosauce
@@ -73,4 +74,6 @@ GNU General Public License for more details.
 The above copyright notice, this permission notice, and its license shall be included in all copies or substantial portions of the Software.
 
 You can find a copy of the GNU General Public License v3 [here](https://www.gnu.org/licenses/)</p>
+---
+#### You can find the SHA-256 here : https://sosauce.github.io/projects/
 
