@@ -36,16 +36,6 @@
 <p>I am 15 y/o and have been into computers ever since I was ~10, growing up, I always thought about how software could do anything someone could dream of, so I started learning multiple languages until stepping upon Kotlin. Since then, I've learnt and started to build Android apps, and CuteCalc is my first project upon, I hope, alot more. </p>
 
 ---
-<h1>🏃‍♂️ 2024 Roadmap for CuteCalc</h1>
-
-- Add scientific mode (Update: No)
-- Add themes ✅
-- Add landscape mode ✅
-- Make the app smaller ✅
-- Upload it to Google Play Store ❌ (Not hapenning until im 18, I'm sorry.)
-- And most importantly, learn more about it ! ✅
-
----
 <h1>💬 Contact Me</h1>
 <p>Discord server: https://discord.gg/c6aCu4yjbu.</p>
 <p>Email: sosauce_dev@protonmail.com</p>
