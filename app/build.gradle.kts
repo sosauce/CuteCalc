@@ -14,8 +14,8 @@ android {
         applicationId = "com.sosauce.cutecalc"
         minSdk = 21
         targetSdk = 35
-        versionCode = 34
-        versionName = "3.2.2"
+        versionCode = 35
+        versionName = "3.2.3"
     }
 
     buildTypes {
