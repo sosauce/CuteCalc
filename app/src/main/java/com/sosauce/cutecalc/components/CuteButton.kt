@@ -20,11 +20,11 @@ import com.sosauce.cutecalc.logic.rememberVibration
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
 @Composable
-inline fun CuteButton(
+fun CuteButton(
     modifier: Modifier = Modifier,
     text: String,
     color: ButtonColors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-    crossinline onClick: () -> Unit
+    onClick: () -> Unit
 ) {
     val shouldVibrate by rememberVibration()
     val haptic = LocalHapticFeedback.current

@@ -32,7 +32,13 @@ class CalcViewModel : ViewModel() {
 
     fun handleAction(action: CalcAction) {
         displayText = when (action) {
-            is CalcAction.GetResult -> TextFieldValue(Evaluator.eval(displayText.text))
+            is CalcAction.GetResult -> {
+                val result = Evaluator.eval(displayText.text)
+                TextFieldValue(
+                    result,
+                    TextRange(result.length)
+                )
+            }
             is CalcAction.ResetField -> TextFieldValue("")
             is CalcAction.Backspace -> displayText.backSpace()
             is CalcAction.AddToField -> displayText.insertText(action.value)
