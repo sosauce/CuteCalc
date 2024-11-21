@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.logic.rememberDecimal
 import com.sosauce.cutecalc.logic.rememberFollowSys
 import com.sosauce.cutecalc.logic.rememberUseAmoledMode
+import com.sosauce.cutecalc.logic.rememberUseButtonsAnimation
 import com.sosauce.cutecalc.logic.rememberUseDarkMode
 import com.sosauce.cutecalc.logic.rememberUseHistory
 import com.sosauce.cutecalc.logic.rememberVibration
@@ -53,7 +54,7 @@ fun History() {
             onCheckedChange = { enableHistory = !enableHistory },
             topDp = 24.dp,
             bottomDp = 24.dp,
-            text = "Enable History"
+            text = "Use History"
         )
     }
 }
@@ -62,6 +63,7 @@ fun History() {
 fun Misc() {
     var decimalSetting by rememberDecimal()
     var buttonVibrationSetting by rememberVibration()
+    var useButtonsAnimation by rememberUseButtonsAnimation()
 
     Column {
         Text(
@@ -79,9 +81,16 @@ fun Misc() {
 //            text = "Decimal Formatting"
 //        )
         SettingsCards(
+            checked = useButtonsAnimation,
+            onCheckedChange = { useButtonsAnimation = !useButtonsAnimation },
+            topDp = 24.dp,
+            bottomDp = 4.dp,
+            text = "Buttons Animation"
+        )
+        SettingsCards(
             checked = buttonVibrationSetting,
             onCheckedChange = { buttonVibrationSetting = !buttonVibrationSetting },
-            topDp = 24.dp,
+            topDp = 4.dp,
             bottomDp = 24.dp,
             text = "Haptic Feedback"
         )

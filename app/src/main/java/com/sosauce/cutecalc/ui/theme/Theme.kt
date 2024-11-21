@@ -144,4 +144,3 @@ fun CuteCalcTheme(
 }
 
 val GlobalFont = FontFamily(Font(R.font.nunito))
-val SegoeFont = FontFamily(Font(R.font.segoe))

@@ -11,8 +11,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HistoryViewModel(
-    private val dao: HistoryDao
+    private val dao: HistoryDao,
 ) : ViewModel() {
+
+
+
 
     private var allCalculations = dao.getAllCalculations()
     private val _state = MutableStateFlow(HistoryState())

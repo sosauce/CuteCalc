@@ -1,8 +1,10 @@
 package com.sosauce.cutecalc.components
 
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Backspace
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -11,11 +13,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sosauce.cutecalc.R
+import com.sosauce.cutecalc.logic.rememberUseButtonsAnimation
 import com.sosauce.cutecalc.logic.rememberVibration
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
@@ -23,11 +30,19 @@ import com.sosauce.cutecalc.ui.theme.GlobalFont
 fun CuteButton(
     modifier: Modifier = Modifier,
     text: String,
-    color: ButtonColors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-    onClick: () -> Unit
+    color: ButtonColors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer),
+    onClick: () -> Unit,
+    textColor: Color = MaterialTheme.colorScheme.onBackground
 ) {
     val shouldVibrate by rememberVibration()
+    val useButtonsAnimation by rememberUseButtonsAnimation()
     val haptic = LocalHapticFeedback.current
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val cornerRadius by animateIntAsState(
+        targetValue = if (isPressed && useButtonsAnimation) 24 else 50, label = ""
+    )
 
     Button(
         onClick = {
@@ -36,10 +51,12 @@ fun CuteButton(
         },
         colors = color,
         modifier = modifier,
+        shape = RoundedCornerShape(cornerRadius),
+        interactionSource = interactionSource
     ) {
         Text(
             text = text,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = textColor,
             fontSize = 35.sp,
             fontFamily = GlobalFont
         )
@@ -49,24 +66,34 @@ fun CuteButton(
 @Composable
 fun CuteIconButton(
     modifier: Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    color: ButtonColors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer)
 ) {
     val shouldVibrate by rememberVibration()
+    val useButtonsAnimation by rememberUseButtonsAnimation()
     val haptic = LocalHapticFeedback.current
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val cornerRadius by animateIntAsState(
+        targetValue = if (isPressed && useButtonsAnimation) 24 else 50, label = ""
+    )
 
     Button(
         onClick = {
             onClick()
             if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
         },
-        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-        modifier = modifier
+        colors = color,
+        modifier = modifier,
+        shape = RoundedCornerShape(cornerRadius),
+        interactionSource = interactionSource
     ) {
         Icon(
-            imageVector = Icons.AutoMirrored.Outlined.Backspace,
+            painter = painterResource(R.drawable.backspace_rounded),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.size(35.dp)
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(45.dp)
         )
     }
 }

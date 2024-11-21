@@ -28,14 +28,13 @@ import com.sosauce.cutecalc.screens.HistoryScreen
 import com.sosauce.cutecalc.screens.SettingsScreen
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 import com.sosauce.cutecalc.utils.CUTE_MUSIC
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun Nav(
-    ecosystemViewModel: EcosystemViewModel
+    ecosystemViewModel: EcosystemViewModel,
+    historyViewModel: HistoryViewModel
 ) {
     val navController = rememberNavController()
-    val historyViewModel = koinViewModel<HistoryViewModel>()
     val historyState by historyViewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
 

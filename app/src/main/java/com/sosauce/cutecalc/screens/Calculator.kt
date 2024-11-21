@@ -2,11 +2,7 @@ package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
-import android.graphics.drawable.Drawable
-import android.util.Log
-import android.view.animation.Animation
-import androidx.appcompat.widget.AppCompatEditText
-import androidx.compose.foundation.background
+import android.widget.EditText
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,45 +18,34 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
-import androidx.navigation.NavController
 import com.sosauce.cutecalc.AppBar
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.components.CuteButton
 import com.sosauce.cutecalc.components.CuteIconButton
-import com.sosauce.cutecalc.ecosys.EcosystemViewModel
 import com.sosauce.cutecalc.history.HistoryEvents
 import com.sosauce.cutecalc.history.HistoryState
 import com.sosauce.cutecalc.history.HistoryViewModel
 import com.sosauce.cutecalc.logic.CalcAction
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.logic.Evaluator
-import com.sosauce.cutecalc.logic.formatNumber
 import com.sosauce.cutecalc.logic.navigation.Screens
-import com.sosauce.cutecalc.logic.rememberDecimal
 import com.sosauce.cutecalc.logic.rememberUseHistory
-import com.sosauce.cutecalc.logic.rememberVibration
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 import kotlinx.coroutines.awaitCancellation
 
@@ -105,12 +90,15 @@ fun CalculatorUI(
                 title = cmSongTitle
             )
         }
-    ) { _ ->
-
+    ) { pv ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(15.dp)
+                .padding(pv)
+                .padding(
+                    start = 15.dp,
+                    end = 15.dp
+                )
                 .navigationBarsPadding()
         ) {
             Column(
@@ -122,11 +110,11 @@ fun CalculatorUI(
                 Row(
                     modifier = Modifier
                         .align(Alignment.End)
+                        .horizontalScroll(rememberScrollState())
                 ) {
-
                     AndroidView(
                         factory = { context ->
-                            AppCompatEditText(context).apply {
+                            EditText(context).apply {
                                 isFocusable = false
                                 isFocusableInTouchMode = false
                                 isSingleLine = true
@@ -195,8 +183,8 @@ fun CalculatorUI(
                                 if (it == "C") viewModel.handleAction(CalcAction.ResetField)
                                 else viewModel.handleAction(CalcAction.AddToField(it))
                             },
-                            color = if (it == "C") ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer)
-                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant)
+                            color = if (it == "C") ButtonDefaults.buttonColors(MaterialTheme.colorScheme.inversePrimary)
+                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer)
                         )
                     }
                 }
@@ -207,6 +195,9 @@ fun CalculatorUI(
                     horizontalArrangement = Arrangement.spacedBy(9.dp)
                 ) {
                     thirdRow.forEach {
+
+                        val isX = it == "×"
+
                         CuteButton(
                             text = it,
                             modifier = Modifier
@@ -215,9 +206,10 @@ fun CalculatorUI(
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField(it))
                             },
-                            color =
-                            if (it == "×") ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant)
-                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                            color = if (isX) ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer)
+                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer),
+                            textColor = if (isX) MaterialTheme.colorScheme.onSecondaryContainer
+                            else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -228,6 +220,9 @@ fun CalculatorUI(
                     horizontalArrangement = Arrangement.spacedBy(9.dp)
                 ) {
                     fourthRow.forEach {
+
+                        val isMinus = it == "-"
+
                         CuteButton(
                             text = it,
                             modifier = Modifier
@@ -237,8 +232,10 @@ fun CalculatorUI(
                                 viewModel.handleAction(CalcAction.AddToField(it))
                             },
                             color =
-                            if (it == "-") ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant)
-                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                            if (isMinus) ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer)
+                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer),
+                            textColor = if (isMinus) MaterialTheme.colorScheme.onSecondaryContainer
+                            else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -249,6 +246,9 @@ fun CalculatorUI(
                     horizontalArrangement = Arrangement.spacedBy(9.dp)
                 ) {
                     fifthRow.forEach {
+
+                        val isPlus = it == "+"
+
                         CuteButton(
                             text = it,
                             modifier = Modifier
@@ -258,8 +258,10 @@ fun CalculatorUI(
                                 viewModel.handleAction(CalcAction.AddToField(it))
                             },
                             color =
-                            if (it == "+") ButtonDefaults.buttonColors(MaterialTheme.colorScheme.outlineVariant)
-                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
+                            if (isPlus) ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer)
+                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer),
+                            textColor = if (isPlus) MaterialTheme.colorScheme.onSecondaryContainer
+                            else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -277,7 +279,8 @@ fun CalculatorUI(
                                 .weight(1f),
                             onClick = {
                                 viewModel.handleAction(CalcAction.AddToField(it))
-                            }
+                            },
+                            textColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     CuteIconButton(
@@ -290,8 +293,7 @@ fun CalculatorUI(
                     )
                     CuteButton(
                         text = "=",
-                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiaryContainer),
-
+                        color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.inversePrimary),
                         modifier = Modifier
                             .aspectRatio(1f)
                             .weight(1f),

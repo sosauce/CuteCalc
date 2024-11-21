@@ -7,7 +7,6 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:name=".App"
         android:icon="@mipmap/ic_launcher"
         android:label="CuteCalc"
         android:roundIcon="@mipmap/ic_launcher_round"

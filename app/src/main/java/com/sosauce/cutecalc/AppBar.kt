@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.automirrored.rounded.Sort
-import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.logic.navigation.Screens
 import com.sosauce.cutecalc.logic.rememberSortHistoryASC
@@ -70,7 +69,7 @@ fun AppBar(
                 Spacer(Modifier.width(5.dp))
                 IconButton(onClick = { onNavigate(Screens.History) }) {
                     Icon(
-                        imageVector = Icons.Rounded.History,
+                        painter = painterResource(R.drawable.history_rounded),
                         contentDescription = "History",
                         tint = MaterialTheme.colorScheme.onBackground
                     )
@@ -88,7 +87,7 @@ fun AppBar(
                     onClick = { dropDownExpanded = true }
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.Sort,
+                        painter = painterResource(R.drawable.sort_rounded),
                         contentDescription = null
                     )
                 }

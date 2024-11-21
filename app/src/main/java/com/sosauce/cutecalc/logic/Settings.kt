@@ -18,6 +18,7 @@ data object PreferencesKeys {
     val FOLLOW_SYS = booleanPreferencesKey("follow_sys")
     val ENABLE_HISTORY = booleanPreferencesKey("enable_history")
     val SORT_HISTORY_ASC = booleanPreferencesKey("sort_history_asc")
+    val USE_BUTTONS_ANIMATIONS = booleanPreferencesKey("use_buttons_animation")
 }
 
 @Composable
@@ -47,4 +48,8 @@ fun rememberUseHistory() =
 @Composable
 fun rememberSortHistoryASC() =
     rememberPreference(key = PreferencesKeys.SORT_HISTORY_ASC, defaultValue = true)
+
+@Composable
+fun rememberUseButtonsAnimation() =
+    rememberPreference(key = PreferencesKeys.USE_BUTTONS_ANIMATIONS, defaultValue = true)
 
