@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,7 +48,6 @@ import com.sosauce.cutecalc.ui.theme.GlobalFont
 fun HistoryScreen(
     state: HistoryState,
     onEvents: (HistoryEvents) -> Unit,
-    onNavigateUp: () -> Unit,
     onNavigate: (Screens) -> Unit
 ) {
     var isHistoryEnable by rememberUseHistory()
@@ -68,10 +68,9 @@ fun HistoryScreen(
                 showBackArrow = true,
                 showSortButton = true,
                 onNavigate = onNavigate,
-                onNavigateUp = onNavigateUp,
                 title = {
                     Text(
-                        text = "History",
+                        text = stringResource(R.string.history),
                         fontFamily = GlobalFont
                     )
                 }
@@ -98,7 +97,7 @@ fun HistoryScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "It looks like history isn't enabled !",
+                    text = stringResource(R.string.history_not_enabled),
                     fontFamily = GlobalFont
                 )
                 Spacer(Modifier.height(10.dp))
@@ -106,7 +105,7 @@ fun HistoryScreen(
                     onClick = { isHistoryEnable = !isHistoryEnable }
                 ) {
                     Text(
-                        text = "Enable History",
+                        text = stringResource(R.string.enable_history),
                         fontFamily = GlobalFont
                     )
                 }

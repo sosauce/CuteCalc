@@ -1,7 +1,5 @@
 package com.sosauce.cutecalc
 
-import android.content.IntentFilter
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,8 +13,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
-import com.sosauce.cutecalc.ecosys.CuteMusicReceiver
-import com.sosauce.cutecalc.ecosys.EcosystemViewModel
 import com.sosauce.cutecalc.history.HistoryDatabase
 import com.sosauce.cutecalc.history.HistoryViewModel
 import com.sosauce.cutecalc.logic.navigation.Nav
@@ -24,18 +20,7 @@ import com.sosauce.cutecalc.ui.theme.CuteCalcTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val ecosystemViewModel by viewModels<EcosystemViewModel>()
-    private val cmReceiver = CuteMusicReceiver(
-        action = {
-            if (it.isEmpty()) {
-                ecosystemViewModel.currentlyPlaying = null
-            } else {
-                ecosystemViewModel.currentlyPlaying = it
-            }
-        }
-    )
-
-    // I don't its necessary having a di framework just for that
+    // I don't think its necessary having a di framework just for that
     private val historyDb by lazy {
         Room.databaseBuilder(
             context = application,
@@ -57,14 +42,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            registerReceiver(
-                cmReceiver,
-                IntentFilter("CM_CUR_PLAY_CHANGED"),
-                RECEIVER_EXPORTED
-            )
-        }
-
         installSplashScreen()
         enableEdgeToEdge()
         setContent {
@@ -72,14 +49,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
                 ) { _ ->
-                    MaterialTheme(
-                        content = {
-                            Nav(
-                                ecosystemViewModel = ecosystemViewModel,
-                                historyViewModel = historyViewModel
-                            )
-                        }
-                    )
+                    MaterialTheme { Nav(historyViewModel) }
                 }
             }
         }
@@ -87,6 +57,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(cmReceiver)
     }
 }
+

@@ -34,28 +34,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.logic.navigation.Screens
 import com.sosauce.cutecalc.logic.rememberSortHistoryASC
 import com.sosauce.cutecalc.ui.theme.GlobalFont
+import com.sosauce.cutecalc.utils.thenIf
 
 @Composable
 fun AppBar(
-    title: @Composable () -> Unit,
+    title: @Composable () -> Unit = {},
     showBackArrow: Boolean,
     showSortButton: Boolean = false,
-    onNavigateUp: () -> Unit,
     onNavigate: (Screens) -> Unit,
 ) {
     var dropDownExpanded by remember { mutableStateOf(false) }
     var sortASC by rememberSortHistoryASC()
+    val surfaceContainer = MaterialTheme.colorScheme.surfaceContainer
 
 
     TopAppBar(
-        title = { title() },
+        title = title,
         navigationIcon = {
             if (showBackArrow) {
-                IconButton(onClick = onNavigateUp) {
+                IconButton(onClick = { onNavigate(Screens.MAIN) }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = "Back arrow"
@@ -63,21 +65,21 @@ fun AppBar(
                 }
             }
         },
-        colors = TopAppBarDefaults.largeTopAppBarColors(Color.Transparent),
+        colors = TopAppBarDefaults.topAppBarColors(Color.Transparent),
         actions = {
             if (!showBackArrow) {
                 Spacer(Modifier.width(5.dp))
-                IconButton(onClick = { onNavigate(Screens.History) }) {
+                IconButton(onClick = { onNavigate(Screens.HISTORY) }) {
                     Icon(
                         painter = painterResource(R.drawable.history_rounded),
-                        contentDescription = "History",
+                        contentDescription = stringResource(R.string.history),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
-                IconButton(onClick = { onNavigate(Screens.Settings) }) {
+                IconButton(onClick = { onNavigate(Screens.SETTINGS) }) {
                     Icon(
                         imageVector = Icons.Rounded.Settings,
-                        contentDescription = "More",
+                        contentDescription = stringResource(R.string.settings),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
@@ -96,7 +98,8 @@ fun AppBar(
                     onDismissRequest = { dropDownExpanded = false },
                     modifier = Modifier
                         .width(180.dp)
-                        .background(color = MaterialTheme.colorScheme.surface)
+                        .background(MaterialTheme.colorScheme.surface),
+                    shape = RoundedCornerShape(24.dp)
                 ) {
                     Column(
                         verticalArrangement = Arrangement.Center
@@ -108,20 +111,16 @@ fun AppBar(
                                 .padding(5.dp)
                                 .clip(RoundedCornerShape(12.dp))
                                 .clickable { sortASC = true }
-                                .then(
-                                    if (sortASC) {
-                                        Modifier.background(
-                                            color = MaterialTheme.colorScheme.surfaceContainer,
-                                            shape = RoundedCornerShape(12.dp)
-                                        )
-                                    } else {
-                                        Modifier
-                                    }
-                                ),
+                                .thenIf(sortASC) {
+                                    Modifier.background(
+                                        color = surfaceContainer,
+                                        shape = RoundedCornerShape(12.dp)
+                                    )
+                                },
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Ascending",
+                                text = stringResource(R.string.ascending),
                                 fontFamily = GlobalFont,
                                 modifier = Modifier.padding(start = 15.dp)
                             )
@@ -133,20 +132,16 @@ fun AppBar(
                                 .padding(5.dp)
                                 .clip(RoundedCornerShape(12.dp))
                                 .clickable { sortASC = false }
-                                .then(
-                                    if (!sortASC) {
-                                        Modifier.background(
-                                            color = MaterialTheme.colorScheme.surfaceContainer,
-                                            shape = RoundedCornerShape(12.dp)
-                                        )
-                                    } else {
-                                        Modifier
-                                    }
-                                ),
+                                .thenIf(!sortASC) {
+                                    Modifier.background(
+                                        color = surfaceContainer,
+                                        shape = RoundedCornerShape(12.dp)
+                                    )
+                                },
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Descending",
+                                text = stringResource(R.string.descending),
                                 fontFamily = GlobalFont,
                                 modifier = Modifier.padding(start = 15.dp)
                             )

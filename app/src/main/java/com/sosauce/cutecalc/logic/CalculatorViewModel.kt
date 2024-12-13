@@ -18,7 +18,7 @@ class CalcViewModel : ViewModel() {
         displayText.text.replace("π", "PI")
     }
     val preview by derivedStateOf {
-        when(displayText) {
+        when (displayText) {
             TextFieldValue("") -> ""
             else -> "= ${Evaluator.eval(processedText)}"
 
@@ -27,7 +27,6 @@ class CalcViewModel : ViewModel() {
     val parenthesis by derivedStateOf {
         if (displayText.text.count { it == '(' } > displayText.text.count { it == ')' }) ")" else "("
     }
-
 
 
     fun handleAction(action: CalcAction) {
@@ -39,6 +38,7 @@ class CalcViewModel : ViewModel() {
                     TextRange(result.length)
                 )
             }
+
             is CalcAction.ResetField -> TextFieldValue("")
             is CalcAction.Backspace -> displayText.backSpace()
             is CalcAction.AddToField -> displayText.insertText(action.value)

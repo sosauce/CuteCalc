@@ -56,9 +56,7 @@ fun CalculatorUI(
     viewModel: CalcViewModel,
     historyViewModel: HistoryViewModel,
     historyState: HistoryState,
-    onNavigateUp: () -> Unit,
     onNavigate: (Screens) -> Unit,
-    cmSongTitle: @Composable () -> Unit
 ) {
     val config = LocalConfiguration.current
     val portraitMode by remember { mutableIntStateOf(config.orientation) }
@@ -85,9 +83,7 @@ fun CalculatorUI(
         topBar = {
             AppBar(
                 showBackArrow = false,
-                onNavigate = onNavigate,
-                onNavigateUp = onNavigateUp,
-                title = cmSongTitle
+                onNavigate = { onNavigate(it) }
             )
         }
     ) { pv ->
@@ -121,6 +117,7 @@ fun CalculatorUI(
                                 showSoftInputOnFocus = false
                                 textSize = 32f
                                 maxLines = 1
+                                background = null
                                 setTextColor(textColor.copy(0.7f).hashCode())
                                 setTypeface(ResourcesCompat.getFont(context, R.font.nunito))
                             }
@@ -322,7 +319,8 @@ fun CalculatorUI(
 
 // https://stackoverflow.com/a/78720287
 @OptIn(ExperimentalComposeUiApi::class)
-@Composable fun DisableSoftKeyboard(
+@Composable
+fun DisableSoftKeyboard(
     disable: Boolean = true,
     content: @Composable () -> Unit,
 ) {

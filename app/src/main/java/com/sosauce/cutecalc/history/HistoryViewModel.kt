@@ -15,8 +15,6 @@ class HistoryViewModel(
 ) : ViewModel() {
 
 
-
-
     private var allCalculations = dao.getAllCalculations()
     private val _state = MutableStateFlow(HistoryState())
     val state = combine(_state, allCalculations) { state, calculation1 ->
@@ -44,6 +42,7 @@ class HistoryViewModel(
             is HistoryEvents.DeleteCalculation -> {
                 viewModelScope.launch { dao.deleteCalculation(event.calculation) }
             }
+
             is HistoryEvents.DeleteAllCalculation -> {
                 viewModelScope.launch { dao.deleteAllCalculations(event.calculations) }
             }

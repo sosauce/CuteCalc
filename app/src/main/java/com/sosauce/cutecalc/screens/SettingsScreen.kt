@@ -8,7 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.sosauce.cutecalc.AppBar
+import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.components.AboutCard
 import com.sosauce.cutecalc.components.History
 import com.sosauce.cutecalc.components.Misc
@@ -18,7 +20,6 @@ import com.sosauce.cutecalc.ui.theme.GlobalFont
 
 @Composable
 fun SettingsScreen(
-    onNavigateUp: () -> Unit,
     onNavigate: (Screens) -> Unit
 ) {
 
@@ -26,11 +27,10 @@ fun SettingsScreen(
         topBar = {
             AppBar(
                 showBackArrow = true,
-                onNavigateUp = onNavigateUp,
                 onNavigate = onNavigate,
                 title = {
                     Text(
-                        text = "Settings",
+                        text = stringResource(R.string.settings),
                         fontFamily = GlobalFont
                     )
                 }

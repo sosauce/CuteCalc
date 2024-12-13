@@ -19,9 +19,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.ui.theme.GlobalFont
+import com.sosauce.cutecalc.utils.GITHUB_RELEASES
 
 @Composable
 fun AboutCard() {
@@ -48,10 +50,12 @@ fun AboutCard() {
             )
             Column {
                 Text(
-                    text = "CuteCalc by sosauce", fontFamily = GlobalFont
+                    text = stringResource(R.string.cc_by_sosauce),
+                    fontFamily = GlobalFont
                 )
                 Text(
-                    text = "Version $version", fontFamily = GlobalFont,
+                    text = "${stringResource(R.string.version)} $version",
+                    fontFamily = GlobalFont,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.85f)
                 )
             }
@@ -62,11 +66,14 @@ fun AboutCard() {
 
             Row {
                 Button(
-                    onClick = { uriHandler.openUri("https://github.com/sosauce/CuteCalc/releases") },
+                    onClick = { uriHandler.openUri(GITHUB_RELEASES) },
                     shape = RoundedCornerShape(24.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "Check Updates", fontFamily = GlobalFont)
+                    Text(
+                        text = stringResource(R.string.update),
+                        fontFamily = GlobalFont
+                    )
                 }
             }
         }

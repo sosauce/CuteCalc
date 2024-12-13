@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="theme">Thème</string>
+    <string name="settings">Paramètres</string>
+    <string name="dark_mode">Mode sombre</string>
+    <string name="amoled_mode">Mode amoled</string>
+    <string name="version">Version</string>
+    <string name="update">Mettre à jour</string>
+    <string name="cc_by_sosauce">CuteCalc par sosauce</string>
+    <string name="follow_sys">Suivre le système</string>
+    <string name="buttons_anim">Animation des buttons</string>
+    <string name="history">Historique</string>
+    <string name="use_history">Utiliser l\'historique</string>
+    <string name="history_not_enabled">Il semblerait que l\'historique ne soit pas activé !</string>
+    <string name="enable_history">Activé l\'historique</string>
+    <string name="misc">Divers</string>
+    <string name="haptic_feedback">Vibrations</string>
+    <string name="ascending">Ascendant</string>
+    <string name="descending">Descendant</string>
+</resources>

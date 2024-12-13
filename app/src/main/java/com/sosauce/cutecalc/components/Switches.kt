@@ -25,8 +25,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.logic.rememberDecimal
 import com.sosauce.cutecalc.logic.rememberFollowSys
 import com.sosauce.cutecalc.logic.rememberUseAmoledMode
@@ -43,7 +45,7 @@ fun History() {
 
     Column {
         Text(
-            text = "History",
+            text = stringResource(R.string.history),
             fontFamily = GlobalFont,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(horizontal = 34.dp, vertical = 8.dp)
@@ -54,7 +56,7 @@ fun History() {
             onCheckedChange = { enableHistory = !enableHistory },
             topDp = 24.dp,
             bottomDp = 24.dp,
-            text = "Use History"
+            text = stringResource(R.string.use_history)
         )
     }
 }
@@ -67,7 +69,7 @@ fun Misc() {
 
     Column {
         Text(
-            text = "Misc",
+            text = stringResource(R.string.misc),
             fontFamily = GlobalFont,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(horizontal = 34.dp, vertical = 8.dp)
@@ -85,14 +87,14 @@ fun Misc() {
             onCheckedChange = { useButtonsAnimation = !useButtonsAnimation },
             topDp = 24.dp,
             bottomDp = 4.dp,
-            text = "Buttons Animation"
+            text = stringResource(R.string.buttons_anim)
         )
         SettingsCards(
             checked = buttonVibrationSetting,
             onCheckedChange = { buttonVibrationSetting = !buttonVibrationSetting },
             topDp = 4.dp,
             bottomDp = 24.dp,
-            text = "Haptic Feedback"
+            text = stringResource(R.string.haptic_feedback)
         )
     }
 }
@@ -105,7 +107,7 @@ fun ThemeManagement() {
 
     Column {
         Text(
-            text = "Theme",
+            text = stringResource(R.string.theme),
             fontFamily = GlobalFont,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(horizontal = 34.dp, vertical = 8.dp)
@@ -115,7 +117,7 @@ fun ThemeManagement() {
             onCheckedChange = { followSys = !followSys },
             topDp = 24.dp,
             bottomDp = 4.dp,
-            text = "Follow System"
+            text = stringResource(R.string.follow_sys)
         )
         AnimatedVisibility(
             visible = !followSys,
@@ -127,7 +129,7 @@ fun ThemeManagement() {
                 onCheckedChange = { darkMode = !darkMode },
                 topDp = 4.dp,
                 bottomDp = 4.dp,
-                text = "Dark Mode"
+                text = stringResource(R.string.dark_mode)
             )
         }
         SettingsCards(
@@ -135,7 +137,7 @@ fun ThemeManagement() {
             onCheckedChange = { amoledMode = !amoledMode },
             topDp = 4.dp,
             bottomDp = 24.dp,
-            text = "Amoled Mode"
+            text = stringResource(R.string.amoled_mode)
         )
     }
 }
