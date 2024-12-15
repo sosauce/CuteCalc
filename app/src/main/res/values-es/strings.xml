@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="theme">Tema</string>
+    <string name="settings">Ajustes</string>
+    <string name="dark_mode">Modo oscuro</string>
+    <string name="amoled_mode">Modo AMOLED</string>
+    <string name="version">Versión</string>
+    <string name="update">Buscar actualizaciones</string>
+    <string name="cc_by_sosauce">CuteCalc por sosauce</string>
+    <string name="follow_sys">Seguir sistema</string>
+    <string name="buttons_anim">Animación de botones</string>
+    <string name="history">Historial</string>
+    <string name="use_history">Usar historial</string>
+    <string name="history_not_enabled">¡Parece que el historial no está activado!</string>
+    <string name="enable_history">Activar historial</string>
+    <string name="misc">Varios</string>
+    <string name="haptic_feedback">Respuesta háptica</string>
+    <string name="ascending">Ascendente</string>
+    <string name="descending">Descendente</string>
+</resources>
