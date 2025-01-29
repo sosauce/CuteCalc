@@ -35,6 +35,7 @@ import com.sosauce.cutecalc.logic.rememberUseAmoledMode
 import com.sosauce.cutecalc.logic.rememberUseButtonsAnimation
 import com.sosauce.cutecalc.logic.rememberUseDarkMode
 import com.sosauce.cutecalc.logic.rememberUseHistory
+import com.sosauce.cutecalc.logic.rememberUseSystemFont
 import com.sosauce.cutecalc.logic.rememberVibration
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
@@ -66,6 +67,7 @@ fun Misc() {
     var decimalSetting by rememberDecimal()
     var buttonVibrationSetting by rememberVibration()
     var useButtonsAnimation by rememberUseButtonsAnimation()
+    var useSystemFont by rememberUseSystemFont()
 
     Column {
         Text(
@@ -75,17 +77,24 @@ fun Misc() {
             modifier = Modifier.padding(horizontal = 34.dp, vertical = 8.dp)
         )
 
-//        SettingsCards(
-//            checked = decimalSetting,
-//            onCheckedChange = { decimalSetting = !decimalSetting },
-//            topDp = 24.dp,
-//            bottomDp = 4.dp,
-//            text = "Decimal Formatting"
-//        )
+        SettingsCards(
+            checked = decimalSetting,
+            onCheckedChange = { decimalSetting = !decimalSetting },
+            topDp = 24.dp,
+            bottomDp = 4.dp,
+            text = stringResource(R.string.decimal_formatting)
+        )
+        SettingsCards(
+            checked = useSystemFont,
+            onCheckedChange = { useSystemFont = !useSystemFont },
+            topDp = 4.dp,
+            bottomDp = 4.dp,
+            text = stringResource(R.string.use_sys_font)
+        )
         SettingsCards(
             checked = useButtonsAnimation,
             onCheckedChange = { useButtonsAnimation = !useButtonsAnimation },
-            topDp = 24.dp,
+            topDp = 4.dp,
             bottomDp = 4.dp,
             text = stringResource(R.string.buttons_anim)
         )

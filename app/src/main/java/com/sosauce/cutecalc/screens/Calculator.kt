@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,10 +45,11 @@ import com.sosauce.cutecalc.history.HistoryViewModel
 import com.sosauce.cutecalc.logic.CalcAction
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.logic.Evaluator
+import com.sosauce.cutecalc.logic.formatOrNot
 import com.sosauce.cutecalc.logic.navigation.Screens
+import com.sosauce.cutecalc.logic.rememberDecimal
 import com.sosauce.cutecalc.logic.rememberUseHistory
 import com.sosauce.cutecalc.ui.theme.GlobalFont
-import kotlinx.coroutines.awaitCancellation
 
 
 @SuppressLint("NewApi")
@@ -68,6 +70,7 @@ fun CalculatorUI(
     val fifthRow = listOf("1", "2", "3", "+")
     val sixthRow = listOf("0", ".")
     val textColor = MaterialTheme.colorScheme.onBackground
+    val decimalSetting by rememberDecimal()
 
 
     if (portraitMode != Configuration.ORIENTATION_PORTRAIT) {
@@ -123,8 +126,9 @@ fun CalculatorUI(
                             }
                         },
                         update = { view ->
-                            view.setText(viewModel.preview)
-                            view.setSelection(viewModel.preview.length)
+                            view.setText(formatOrNot(viewModel.preview, decimalSetting))
+                            // Added decimal points and comma need to be taken account for !
+                            view.setSelection(formatOrNot(viewModel.preview, decimalSetting).length)
                         }
                     )
                 }
@@ -134,7 +138,7 @@ fun CalculatorUI(
                 ) {
                     DisableSoftKeyboard {
                         BasicTextField(
-                            value = viewModel.displayText,
+                            value = TextFieldValue(formatOrNot(viewModel.displayText.text, decimalSetting)),
                             onValueChange = { viewModel.displayText = it },
                             singleLine = true,
                             textStyle = TextStyle(
@@ -320,18 +324,11 @@ fun CalculatorUI(
 // https://stackoverflow.com/a/78720287
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun DisableSoftKeyboard(
-    disable: Boolean = true,
-    content: @Composable () -> Unit,
-) {
+fun DisableSoftKeyboard(content: @Composable () -> Unit) {
     InterceptPlatformTextInput(
         interceptor = { request, nextHandler ->
-            if (!disable) {
-                nextHandler.startInputMethod(request)
-            } else {
-                awaitCancellation()
-            }
+            nextHandler.startInputMethod(request)
         },
-        content = content,
+        content = content
     )
 }

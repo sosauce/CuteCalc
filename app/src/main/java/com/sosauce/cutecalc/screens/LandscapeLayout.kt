@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +35,8 @@ import com.sosauce.cutecalc.history.HistoryViewModel
 import com.sosauce.cutecalc.logic.CalcAction
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.logic.Evaluator
+import com.sosauce.cutecalc.logic.formatOrNot
+import com.sosauce.cutecalc.logic.rememberDecimal
 import com.sosauce.cutecalc.logic.rememberUseHistory
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
@@ -45,6 +48,8 @@ fun LandscapeLayout(
     historyState: HistoryState
 ) {
     val saveToHistory by rememberUseHistory()
+    val decimalSetting by rememberDecimal()
+
 
     Box(
         modifier = Modifier
@@ -66,7 +71,7 @@ fun LandscapeLayout(
             ) {
                 DisableSoftKeyboard {
                     BasicTextField(
-                        value = viewModel.displayText,
+                        value = TextFieldValue(formatOrNot(viewModel.displayText.text, decimalSetting)),
                         onValueChange = { viewModel.displayText = it },
                         singleLine = true,
                         textStyle = TextStyle(

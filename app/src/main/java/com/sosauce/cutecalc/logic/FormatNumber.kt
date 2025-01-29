@@ -1,15 +1,19 @@
 package com.sosauce.cutecalc.logic
 
-import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.Locale
 
-fun formatNumber(numberString: String): String {
-    val number = try {
-        numberString.toDouble()
-    } catch (e: NumberFormatException) {
-        return numberString // Return as is if parsing to double fails
-    }
+// A bit wonky ik
+fun formatOrNot(
+    expression: String,
+    shouldFormat: Boolean
+): String {
+    val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault())
+    val regex = """\d+(\.\d+)?""".toRegex()
 
-    val formatter = DecimalFormat("#,###.##")
-
-    return formatter.format(number)
+    return if (shouldFormat) {
+        regex.replace(expression) { matchResult ->
+            numberFormat.format(matchResult.value.toDouble())
+        }
+    } else expression
 }

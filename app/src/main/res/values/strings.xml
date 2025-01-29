@@ -8,6 +8,7 @@
     <string name="update">Check updates</string>
     <string name="cc_by_sosauce">CuteCalc by sosauce</string>
     <string name="follow_sys">Follow system</string>
+    <string name="use_sys_font">Use system font</string>
     <string name="buttons_anim">Buttons animation</string>
     <string name="history">History</string>
     <string name="use_history">Use history</string>
@@ -17,4 +18,5 @@
     <string name="haptic_feedback">Haptic feedback</string>
     <string name="ascending">Ascending</string>
     <string name="descending">Descending</string>
+    <string name="decimal_formatting">Decimal formatting</string>
 </resources>

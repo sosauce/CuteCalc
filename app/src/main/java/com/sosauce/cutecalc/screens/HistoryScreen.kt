@@ -39,7 +39,9 @@ import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.history.Calculation
 import com.sosauce.cutecalc.history.HistoryEvents
 import com.sosauce.cutecalc.history.HistoryState
+import com.sosauce.cutecalc.logic.formatOrNot
 import com.sosauce.cutecalc.logic.navigation.Screens
+import com.sosauce.cutecalc.logic.rememberDecimal
 import com.sosauce.cutecalc.logic.rememberSortHistoryASC
 import com.sosauce.cutecalc.logic.rememberUseHistory
 import com.sosauce.cutecalc.ui.theme.GlobalFont
@@ -141,6 +143,8 @@ private fun CalculationItem(
     bottomDp: Dp,
     modifier: Modifier = Modifier
 ) {
+    val decimalSetting by rememberDecimal()
+
     Card(
         modifier = modifier
             .padding(horizontal = 10.dp, vertical = 3.dp)
@@ -169,13 +173,13 @@ private fun CalculationItem(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = calculation.operation,
+                    text = formatOrNot(calculation.operation, decimalSetting),
                     fontSize = 20.sp,
                     modifier = Modifier.basicMarquee(),
                     fontFamily = GlobalFont
                 )
                 Text(
-                    text = "= ${calculation.result}",
+                    text = "= ${formatOrNot(calculation.result, decimalSetting)}",
                     fontSize = 22.sp,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
                     modifier = Modifier.basicMarquee(),

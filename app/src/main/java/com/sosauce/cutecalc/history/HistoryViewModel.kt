@@ -26,11 +26,17 @@ class HistoryViewModel(
     fun onEvent(event: HistoryEvents) {
         when (event) {
             is HistoryEvents.AddCalculation -> {
-                val calculation = Calculation(
-                    operation = state.value.operation.value,
-                    result = state.value.result.value
-                )
-                viewModelScope.launch { dao.insertCalculation(calculation) }
+
+                // Only save to history calculations that are not any kind of errors
+                if (state.value.result.value.all { it.isDigit() || it == '.' || it == '-' || it == ','}) {
+                    val calculation = Calculation(
+                        operation = state.value.operation.value,
+                        result = state.value.result.value
+                    )
+                    viewModelScope.launch { dao.insertCalculation(calculation) }
+                } else {
+                    return
+                }
                 _state.update {
                     it.copy(
                         operation = mutableStateOf(""),
