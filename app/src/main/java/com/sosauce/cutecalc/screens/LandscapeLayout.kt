@@ -21,9 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -71,7 +71,12 @@ fun LandscapeLayout(
             ) {
                 DisableSoftKeyboard {
                     BasicTextField(
-                        value = TextFieldValue(formatOrNot(viewModel.displayText.text, decimalSetting)),
+                        value = viewModel.displayText.copy(
+                            text = formatOrNot(
+                                viewModel.displayText.text,
+                                decimalSetting
+                            )
+                        ),
                         onValueChange = { viewModel.displayText = it },
                         singleLine = true,
                         textStyle = TextStyle(
@@ -135,10 +140,11 @@ fun LandscapeLayout(
             ) {
                 CuteButton(
                     text = "",
-                    color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.background),
+                    color = ButtonDefaults.buttonColors(disabledContainerColor = Color.Transparent),
                     modifier = Modifier
                         .weight(0.15f),
-                    onClick = {}
+                    onClick = {},
+                    enabled = false
                 )
                 CuteButton(
                     text = "9",
@@ -167,7 +173,6 @@ fun LandscapeLayout(
                 CuteButton(
                     text = "×",
                     color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-
                     modifier = Modifier
                         .weight(0.15f),
                     onClick = {
@@ -252,6 +257,7 @@ fun LandscapeLayout(
                     modifier = Modifier
                         .weight(0.15f),
                     onClick = { viewModel.handleAction(CalcAction.Backspace) },
+                    onLongClick = { viewModel.handleAction(CalcAction.ResetField) },
                     color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.inversePrimary)
                 )
             }
@@ -296,7 +302,6 @@ fun LandscapeLayout(
                 CuteButton(
                     text = "-",
                     color = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer),
-
                     modifier = Modifier
                         .weight(0.15f),
                     onClick = {

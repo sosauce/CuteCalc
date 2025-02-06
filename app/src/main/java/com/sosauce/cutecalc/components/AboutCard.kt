@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
-import com.sosauce.cutecalc.ui.theme.GlobalFont
 import com.sosauce.cutecalc.utils.GITHUB_RELEASES
 
 @Composable
@@ -35,6 +34,7 @@ fun AboutCard() {
     Card(
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceContainer),
         modifier = Modifier
+            .statusBarsPadding()
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 2.dp),
         shape = RoundedCornerShape(24.dp)
@@ -49,13 +49,9 @@ fun AboutCard() {
                     .clip(RoundedCornerShape(15))
             )
             Column {
-                Text(
-                    text = stringResource(R.string.cc_by_sosauce),
-                    fontFamily = GlobalFont
-                )
-                Text(
+                CuteText(stringResource(R.string.cc_by_sosauce))
+                CuteText(
                     text = "${stringResource(R.string.version)} $version",
-                    fontFamily = GlobalFont,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.85f)
                 )
             }
@@ -69,12 +65,7 @@ fun AboutCard() {
                     onClick = { uriHandler.openUri(GITHUB_RELEASES) },
                     shape = RoundedCornerShape(24.dp),
                     modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = stringResource(R.string.update),
-                        fontFamily = GlobalFont
-                    )
-                }
+                ) { CuteText(stringResource(R.string.update)) }
             }
         }
     }

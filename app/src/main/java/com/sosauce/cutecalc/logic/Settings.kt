@@ -20,6 +20,7 @@ data object PreferencesKeys {
     val SORT_HISTORY_ASC = booleanPreferencesKey("sort_history_asc")
     val USE_BUTTONS_ANIMATIONS = booleanPreferencesKey("use_buttons_animation")
     val USE_SYSTEM_FONT = booleanPreferencesKey("use_system_font")
+    val SHOW_CLEAR_BUTTON = booleanPreferencesKey("show_clear_button")
 }
 
 @Composable
@@ -57,4 +58,8 @@ fun rememberUseButtonsAnimation() =
 @Composable
 fun rememberUseSystemFont() =
     rememberPreference(key = PreferencesKeys.USE_SYSTEM_FONT, defaultValue = false)
+
+@Composable
+fun rememberShowClearButton() =
+    rememberPreference(key = PreferencesKeys.SHOW_CLEAR_BUTTON, defaultValue = true)
 

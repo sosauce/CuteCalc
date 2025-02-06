@@ -94,7 +94,7 @@ object Evaluator {
 
     @JvmStatic
     fun eval(formula: String): String = try {
-        val result = KEVAL.eval(formula)
+        val result = KEVAL.eval(formula.calculateRelativePercentage())
         if (result > Double.MAX_VALUE) {
             throw ValueTooLargeException()
         } else {
@@ -109,5 +109,24 @@ object Evaluator {
     } catch (e: KevalException) {
         "Error"
     }
+
+    fun String.calculateRelativePercentage(): String {
+        val regex = Regex("""(\d+(?:\.\d+)?)\s*([+\-*])\s*(\d+(?:\.\d+)?)%""")
+
+        return regex.replace(this) { match ->
+            val firstOperand = match.groupValues[1].toDouble()
+            val operator = match.groupValues[2]
+            val percentage = match.groupValues[3].toDouble()
+
+            when (operator) {
+                "+" -> "$firstOperand + ($firstOperand * $percentage / 100)"
+                "-" -> "$firstOperand - ($firstOperand * $percentage / 100)"
+                "*" -> "$firstOperand * ($percentage / 100)"
+                else -> "$firstOperand"
+            }
+
+        }
+    }
+
 
 }

@@ -28,7 +28,7 @@ class HistoryViewModel(
             is HistoryEvents.AddCalculation -> {
 
                 // Only save to history calculations that are not any kind of errors
-                if (state.value.result.value.all { it.isDigit() || it == '.' || it == '-' || it == ','}) {
+                if (state.value.result.value.all { it.isDigit() || it == '.' || it == '-' || it == ',' }) {
                     val calculation = Calculation(
                         operation = state.value.operation.value,
                         result = state.value.result.value

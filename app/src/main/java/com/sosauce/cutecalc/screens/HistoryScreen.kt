@@ -2,6 +2,7 @@ package com.sosauce.cutecalc.screens
 
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,19 +10,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -34,8 +34,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sosauce.cutecalc.AppBar
 import com.sosauce.cutecalc.R
+import com.sosauce.cutecalc.components.CuteNavigationButton
+import com.sosauce.cutecalc.components.CuteText
+import com.sosauce.cutecalc.components.HistoryActionButtons
 import com.sosauce.cutecalc.history.Calculation
 import com.sosauce.cutecalc.history.HistoryEvents
 import com.sosauce.cutecalc.history.HistoryState
@@ -44,7 +46,7 @@ import com.sosauce.cutecalc.logic.navigation.Screens
 import com.sosauce.cutecalc.logic.rememberDecimal
 import com.sosauce.cutecalc.logic.rememberSortHistoryASC
 import com.sosauce.cutecalc.logic.rememberUseHistory
-import com.sosauce.cutecalc.ui.theme.GlobalFont
+import com.sosauce.cutecalc.utils.thenIf
 
 @Composable
 fun HistoryScreen(
@@ -64,33 +66,11 @@ fun HistoryScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            AppBar(
-                showBackArrow = true,
-                showSortButton = true,
-                onNavigate = onNavigate,
-                title = {
-                    Text(
-                        text = stringResource(R.string.history),
-                        fontFamily = GlobalFont
-                    )
-                }
-            )
-        },
-        floatingActionButton = {
-            if (isHistoryEnable) {
-                FloatingActionButton(
-                    onClick = { onEvents(HistoryEvents.DeleteAllCalculation(state.calculation)) }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.trash_rounded),
-                        contentDescription = null
-                    )
-                }
-            }
-        }
-    ) { values ->
+    LaunchedEffect(Unit) {
+        println("history size: ${sortedCalculations.size}")
+    }
+
+    Box(Modifier.fillMaxSize()) {
         if (!isHistoryEnable) {
             Column(
                 modifier = Modifier
@@ -98,26 +78,16 @@ fun HistoryScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = stringResource(R.string.history_not_enabled),
-                    fontFamily = GlobalFont
-                )
+                CuteText(stringResource(R.string.history_not_enabled))
                 Spacer(Modifier.height(10.dp))
                 Button(
                     onClick = { isHistoryEnable = !isHistoryEnable }
                 ) {
-                    Text(
-                        text = stringResource(R.string.enable_history),
-                        fontFamily = GlobalFont
-                    )
+                    CuteText(stringResource(R.string.enable_history))
                 }
             }
         } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(values)
-            ) {
+            LazyColumn {
                 itemsIndexed(
                     items = sortedCalculations,
                     key = { _, item -> item.id }
@@ -127,11 +97,17 @@ fun HistoryScreen(
                         onEvents = onEvents,
                         topDp = if (index == 0) 24.dp else 4.dp,
                         bottomDp = if (index == state.calculation.size - 1) 24.dp else 4.dp,
-                        modifier = Modifier.animateItem()
+                        modifier = Modifier
+                            .animateItem()
+                            .thenIf(index == 0) { Modifier.statusBarsPadding() }
                     )
                 }
             }
         }
+
+        CuteNavigationButton { onNavigate(it) }
+        HistoryActionButtons { onEvents(HistoryEvents.DeleteAllCalculation(state.calculation)) }
+
     }
 }
 
@@ -172,18 +148,16 @@ private fun CalculationItem(
                     .weight(1f),
                 horizontalAlignment = Alignment.Start
             ) {
-                Text(
+                CuteText(
                     text = formatOrNot(calculation.operation, decimalSetting),
                     fontSize = 20.sp,
-                    modifier = Modifier.basicMarquee(),
-                    fontFamily = GlobalFont
+                    modifier = Modifier.basicMarquee()
                 )
-                Text(
+                CuteText(
                     text = "= ${formatOrNot(calculation.result, decimalSetting)}",
                     fontSize = 22.sp,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
-                    modifier = Modifier.basicMarquee(),
-                    fontFamily = GlobalFont
+                    modifier = Modifier.basicMarquee()
                 )
             }
             IconButton(

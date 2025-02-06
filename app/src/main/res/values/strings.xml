@@ -19,4 +19,6 @@
     <string name="ascending">Ascending</string>
     <string name="descending">Descending</string>
     <string name="decimal_formatting">Decimal formatting</string>
+    <string name="show_clear_button">Show clear button</string>
+    <string name="clear_button_desc">You can still long press the backspace button to clear the input field.</string>
 </resources>

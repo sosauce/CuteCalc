@@ -10,19 +10,18 @@ import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.text.input.getTextAfterSelection
 import androidx.compose.ui.text.input.getTextBeforeSelection
 import androidx.lifecycle.ViewModel
+import kotlin.text.all
 
 class CalcViewModel : ViewModel() {
 
     var displayText by mutableStateOf(TextFieldValue(""))
-    private val processedText by derivedStateOf {
-        displayText.text.replace("π", "PI")
-    }
     val preview by derivedStateOf {
-        when (displayText) {
-            TextFieldValue("") -> ""
-            else -> "= ${Evaluator.eval(processedText)}"
 
-        }
+        val evaluatedText = Evaluator.eval(displayText.text.replace("π", "PI"))
+
+        if (evaluatedText.all { it.isDigit() || it == '.' || it == '-' || it == ',' }) {
+            "= $evaluatedText"
+        } else ""
     }
     val parenthesis by derivedStateOf {
         if (displayText.text.count { it == '(' } > displayText.text.count { it == ')' }) ")" else "("

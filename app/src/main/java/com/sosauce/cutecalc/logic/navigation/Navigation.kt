@@ -1,6 +1,7 @@
 package com.sosauce.cutecalc.logic.navigation
 
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -10,10 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.sosauce.cutecalc.MainActivity
 import com.sosauce.cutecalc.history.HistoryViewModel
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.screens.CalculatorUI
@@ -27,7 +26,7 @@ import com.sosauce.cutecalc.screens.SettingsScreen
 fun Nav(historyViewModel: HistoryViewModel) {
 
 
-    val activity = (LocalContext.current as MainActivity)
+    val activity = LocalActivity.current
     var screenToDisplay by rememberSaveable { mutableStateOf(Screens.MAIN) }
     val viewModel = viewModel<CalcViewModel>()
     val historyState by historyViewModel.state.collectAsStateWithLifecycle()
@@ -38,7 +37,7 @@ fun Nav(historyViewModel: HistoryViewModel) {
         if (screenToDisplay != Screens.MAIN) {
             screenToDisplay = Screens.MAIN
         } else {
-            activity.moveTaskToBack(true)
+            activity?.moveTaskToBack(true)
         }
     }
 

@@ -1,6 +1,9 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.sosauce.cutecalc.components
 
 import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.size
@@ -10,7 +13,6 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -24,15 +26,16 @@ import androidx.compose.ui.unit.sp
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.logic.rememberUseButtonsAnimation
 import com.sosauce.cutecalc.logic.rememberVibration
-import com.sosauce.cutecalc.ui.theme.GlobalFont
 
 @Composable
 fun CuteButton(
     modifier: Modifier = Modifier,
     text: String,
     color: ButtonColors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer),
+
     onClick: () -> Unit,
-    textColor: Color = MaterialTheme.colorScheme.onBackground
+    textColor: Color = MaterialTheme.colorScheme.onBackground,
+    enabled: Boolean = true
 ) {
     val shouldVibrate by rememberVibration()
     val useButtonsAnimation by rememberUseButtonsAnimation()
@@ -52,21 +55,23 @@ fun CuteButton(
         colors = color,
         modifier = modifier,
         shape = RoundedCornerShape(cornerRadius),
-        interactionSource = interactionSource
+        interactionSource = interactionSource,
+        enabled = enabled
     ) {
-        Text(
+        CuteText(
             text = text,
             color = textColor,
-            fontSize = 35.sp,
-            fontFamily = GlobalFont
+            fontSize = 35.sp
         )
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CuteIconButton(
     modifier: Modifier,
     onClick: () -> Unit,
+    onLongClick: () -> Unit = {},
     color: ButtonColors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer)
 ) {
     val shouldVibrate by rememberVibration()
@@ -79,9 +84,14 @@ fun CuteIconButton(
         targetValue = if (isPressed && useButtonsAnimation) 24 else 50, label = ""
     )
 
-    Button(
+
+    LongClickButton(
         onClick = {
             onClick()
+            if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+        },
+        onLongClick = {
+            onLongClick()
             if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
         },
         colors = color,
@@ -96,4 +106,11 @@ fun CuteIconButton(
             modifier = Modifier.size(45.dp)
         )
     }
+
+
 }
+
+
+
+
+

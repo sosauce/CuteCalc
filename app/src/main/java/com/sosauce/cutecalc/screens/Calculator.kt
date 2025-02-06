@@ -1,8 +1,9 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
-import android.widget.EditText
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,9 +16,15 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -28,17 +35,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.res.ResourcesCompat
-import com.sosauce.cutecalc.AppBar
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.components.CuteButton
 import com.sosauce.cutecalc.components.CuteIconButton
+import com.sosauce.cutecalc.components.CuteText
 import com.sosauce.cutecalc.history.HistoryEvents
 import com.sosauce.cutecalc.history.HistoryState
 import com.sosauce.cutecalc.history.HistoryViewModel
@@ -48,8 +54,11 @@ import com.sosauce.cutecalc.logic.Evaluator
 import com.sosauce.cutecalc.logic.formatOrNot
 import com.sosauce.cutecalc.logic.navigation.Screens
 import com.sosauce.cutecalc.logic.rememberDecimal
+import com.sosauce.cutecalc.logic.rememberShowClearButton
 import com.sosauce.cutecalc.logic.rememberUseHistory
+import com.sosauce.cutecalc.logic.rememberUseSystemFont
 import com.sosauce.cutecalc.ui.theme.GlobalFont
+import kotlinx.coroutines.awaitCancellation
 
 
 @SuppressLint("NewApi")
@@ -63,13 +72,19 @@ fun CalculatorUI(
     val config = LocalConfiguration.current
     val portraitMode by remember { mutableIntStateOf(config.orientation) }
     val saveToHistory by rememberUseHistory()
+    val useSystemFont by rememberUseSystemFont()
+    val showClearButton by rememberShowClearButton()
     val firstRow = listOf("!", "%", "√", "π")
-    val secondRow = listOf("C", viewModel.parenthesis, "^", "/")
+    val secondRow = listOf(
+        if (showClearButton) "C" else "(",
+        if (showClearButton) viewModel.parenthesis else ")",
+        "^",
+        "/"
+    )
     val thirdRow = listOf("7", "8", "9", "×")
     val fourthRow = listOf("4", "5", "6", "-")
     val fifthRow = listOf("1", "2", "3", "+")
     val sixthRow = listOf("0", ".")
-    val textColor = MaterialTheme.colorScheme.onBackground
     val decimalSetting by rememberDecimal()
 
 
@@ -84,9 +99,24 @@ fun CalculatorUI(
 
     Scaffold(
         topBar = {
-            AppBar(
-                showBackArrow = false,
-                onNavigate = { onNavigate(it) }
+            TopAppBar(
+                title = {},
+                actions = {
+                    IconButton(onClick = { onNavigate(Screens.HISTORY) }) {
+                        Icon(
+                            painter = painterResource(R.drawable.history_rounded),
+                            contentDescription = stringResource(R.string.history),
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                    IconButton(onClick = { onNavigate(Screens.SETTINGS) }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Settings,
+                            contentDescription = stringResource(R.string.settings),
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                }
             )
         }
     ) { pv ->
@@ -111,25 +141,10 @@ fun CalculatorUI(
                         .align(Alignment.End)
                         .horizontalScroll(rememberScrollState())
                 ) {
-                    AndroidView(
-                        factory = { context ->
-                            EditText(context).apply {
-                                isFocusable = false
-                                isFocusableInTouchMode = false
-                                isSingleLine = true
-                                showSoftInputOnFocus = false
-                                textSize = 32f
-                                maxLines = 1
-                                background = null
-                                setTextColor(textColor.copy(0.7f).hashCode())
-                                setTypeface(ResourcesCompat.getFont(context, R.font.nunito))
-                            }
-                        },
-                        update = { view ->
-                            view.setText(formatOrNot(viewModel.preview, decimalSetting))
-                            // Added decimal points and comma need to be taken account for !
-                            view.setSelection(formatOrNot(viewModel.preview, decimalSetting).length)
-                        }
+                    CuteText(
+                        text = formatOrNot(viewModel.preview, decimalSetting),
+                        fontSize = 32.sp,
+                        color = MaterialTheme.colorScheme.onBackground.copy(0.85f)
                     )
                 }
                 Row(
@@ -138,17 +153,23 @@ fun CalculatorUI(
                 ) {
                     DisableSoftKeyboard {
                         BasicTextField(
-                            value = TextFieldValue(formatOrNot(viewModel.displayText.text, decimalSetting)),
+                            value = viewModel.displayText.copy(
+                                text = formatOrNot(
+                                    viewModel.displayText.text,
+                                    decimalSetting
+                                )
+                            ), // Use copy function to keep the correct range, or else the cursor will just stick to the start everytime
                             onValueChange = { viewModel.displayText = it },
                             singleLine = true,
                             textStyle = TextStyle(
                                 textAlign = TextAlign.End,
                                 color = MaterialTheme.colorScheme.onBackground,
                                 fontSize = 53.sp,
-                                fontFamily = GlobalFont
+                                fontFamily = if (!useSystemFont) GlobalFont else null
                             ),
                             cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
                         )
+
                     }
                 }
                 Row(
@@ -290,6 +311,9 @@ fun CalculatorUI(
                             .weight(1f),
                         onClick = {
                             viewModel.handleAction(CalcAction.Backspace)
+                        },
+                        onLongClick = {
+                            viewModel.handleAction(CalcAction.ResetField)
                         }
                     )
                     CuteButton(
@@ -324,11 +348,18 @@ fun CalculatorUI(
 // https://stackoverflow.com/a/78720287
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun DisableSoftKeyboard(content: @Composable () -> Unit) {
+fun DisableSoftKeyboard(
+    disable: Boolean = true,
+    content: @Composable () -> Unit,
+) {
     InterceptPlatformTextInput(
         interceptor = { request, nextHandler ->
-            nextHandler.startInputMethod(request)
+            if (!disable) {
+                nextHandler.startInputMethod(request)
+            } else {
+                awaitCancellation()
+            }
         },
-        content = content
+        content = content,
     )
 }
