@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalFoundationApi::class)
-
 package com.sosauce.cutecalc.components
 
 import androidx.compose.animation.core.animateIntAsState

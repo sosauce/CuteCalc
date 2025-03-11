@@ -10,9 +10,9 @@ import androidx.compose.ui.text.input.getSelectedText
 import androidx.compose.ui.text.input.getTextAfterSelection
 import androidx.compose.ui.text.input.getTextBeforeSelection
 import androidx.lifecycle.ViewModel
-import kotlin.text.all
 
 class CalcViewModel : ViewModel() {
+
 
     var displayText by mutableStateOf(TextFieldValue(""))
     val preview by derivedStateOf {

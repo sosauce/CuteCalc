@@ -1,10 +1,11 @@
 package com.sosauce.cutecalc.screens
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,18 +20,27 @@ import com.sosauce.cutecalc.logic.navigation.Screens
 fun SettingsScreen(
     onNavigate: (Screens) -> Unit
 ) {
-    Box(Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+
+    Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing
+    ) { pv ->
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            AboutCard()
-            ThemeManagement()
-            UI()
-            Misc()
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                contentPadding = pv
+            ) {
+                item {
+                    AboutCard()
+                    ThemeManagement()
+                    UI()
+                    Misc()
+                }
+            }
+            CuteNavigationButton { onNavigate(it) }
         }
-        CuteNavigationButton { onNavigate(it) }
+
     }
 }

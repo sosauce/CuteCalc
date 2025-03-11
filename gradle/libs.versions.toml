@@ -1,15 +1,15 @@
 [versions]
-agp = "8.8.0"
-composeBom = "2025.01.01"
+agp = "8.9.0"
+composeBom = "2025.02.00"
 coreSplashscreen = "1.0.1"
-datastorePreferences = "1.1.2"
+datastorePreferences = "1.1.3"
 keval = "1.1.1"
-kotlin = "2.1.0"
-ksp = "2.1.0-1.0.29"
+kotlin = "2.1.10"
+ksp = "2.1.10-1.0.31"
 lifecycleViewmodelCompose = "2.8.7"
-roomCompiler = "2.7.0-alpha13"
-roomKtx = "2.7.0-alpha13"
-activityCompose = "1.10.0"
+roomCompiler = "2.7.0-rc01"
+roomKtx = "2.7.0-rc01"
+activityCompose = "1.10.1"
 
 
 [libraries]

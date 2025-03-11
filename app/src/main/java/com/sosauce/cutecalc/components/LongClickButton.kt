@@ -112,23 +112,25 @@ private fun CustomSurface(
     ) {
         Box(
             modifier =
-            modifier
-                .minimumInteractiveComponentSize()
-                .surface(
-                    shape = shape,
-                    backgroundColor =
-                    surfaceColorAtElevation(color = color, elevation = absoluteElevation),
-                    border = border,
-                    shadowElevation = with(LocalDensity.current) { shadowElevation.toPx() }
-                )
-                .combinedClickable(
-                    interactionSource = interactionSource,
-                    indication = null,
-                    enabled = enabled,
-                    onClick = onClick,
-                    onLongClick = onLongClick
+                modifier
+                    .minimumInteractiveComponentSize()
+                    .surface(
+                        shape = shape,
+                        backgroundColor = surfaceColorAtElevation(
+                            color = color,
+                            elevation = absoluteElevation
+                        ),
+                        border = border,
+                        shadowElevation = with(LocalDensity.current) { shadowElevation.toPx() }
+                    )
+                    .combinedClickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                        enabled = enabled,
+                        onClick = onClick,
+                        onLongClick = onLongClick
 
-                ),
+                    ),
             propagateMinConstraints = true
         ) {
             content()
@@ -152,7 +154,7 @@ private fun Modifier.surface(
                 clip = false
             )
         }
-        .then(if (border != null) Modifier.border(border, shape) else Modifier)
+        .thenIf(border != null) { Modifier.border(border!!, shape) }
         .background(color = backgroundColor, shape = shape)
         .clip(shape)
 
@@ -163,7 +165,7 @@ private fun surfaceColorAtElevation(color: Color, elevation: Dp): Color =
 
 @Composable
 @ReadOnlyComposable
-internal fun ColorScheme.applyTonalElevation(backgroundColor: Color, elevation: Dp): Color {
+fun ColorScheme.applyTonalElevation(backgroundColor: Color, elevation: Dp): Color {
     val tonalElevationEnabled = LocalTonalElevationEnabled.current
     return if (backgroundColor == surface && tonalElevationEnabled) {
         surfaceColorAtElevation(elevation)

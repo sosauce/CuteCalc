@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.sosauce.cutecalc.screens
 
 import android.annotation.SuppressLint
@@ -12,19 +10,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -97,39 +93,37 @@ fun CalculatorUI(
     }
 
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {},
-                actions = {
-                    IconButton(onClick = { onNavigate(Screens.HISTORY) }) {
-                        Icon(
-                            painter = painterResource(R.drawable.history_rounded),
-                            contentDescription = stringResource(R.string.history),
-                            tint = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
-                    IconButton(onClick = { onNavigate(Screens.SETTINGS) }) {
-                        Icon(
-                            imageVector = Icons.Rounded.Settings,
-                            contentDescription = stringResource(R.string.settings),
-                            tint = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
-                }
-            )
-        }
-    ) { pv ->
+    Scaffold { pv ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(pv)
                 .padding(
-                    start = 15.dp,
-                    end = 15.dp
+                    start = 10.dp,
+                    end = 10.dp
                 )
-                .navigationBarsPadding()
         ) {
+            Row(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .offset(x = 15.dp) // "Cancel" the box's padding to keep the look it had with TopAppBar
+            ) {
+                IconButton(onClick = { onNavigate(Screens.HISTORY) }) {
+                    Icon(
+                        painter = painterResource(R.drawable.history_rounded),
+                        contentDescription = stringResource(R.string.history),
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+                IconButton(onClick = { onNavigate(Screens.SETTINGS) }) {
+                    Icon(
+                        imageVector = Icons.Rounded.Settings,
+                        contentDescription = stringResource(R.string.settings),
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+            }
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -254,8 +248,8 @@ fun CalculatorUI(
                                 viewModel.handleAction(CalcAction.AddToField(it))
                             },
                             color =
-                            if (isMinus) ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer)
-                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer),
+                                if (isMinus) ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer)
+                                else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer),
                             textColor = if (isMinus) MaterialTheme.colorScheme.onSecondaryContainer
                             else MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -280,8 +274,8 @@ fun CalculatorUI(
                                 viewModel.handleAction(CalcAction.AddToField(it))
                             },
                             color =
-                            if (isPlus) ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer)
-                            else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer),
+                                if (isPlus) ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondaryContainer)
+                                else ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer),
                             textColor = if (isPlus) MaterialTheme.colorScheme.onSecondaryContainer
                             else MaterialTheme.colorScheme.onSurfaceVariant
                         )

@@ -94,7 +94,7 @@ object Evaluator {
 
     @JvmStatic
     fun eval(formula: String): String = try {
-        val result = KEVAL.eval(formula.calculateRelativePercentage())
+        val result = KEVAL.eval(formula.handleRelativePercentage())
         if (result > Double.MAX_VALUE) {
             throw ValueTooLargeException()
         } else {
@@ -110,10 +110,30 @@ object Evaluator {
         "Error"
     }
 
-    fun String.calculateRelativePercentage(): String {
+
+    // We don't call "handleRelativePercentage" here to avoid some weird recursive-ness problem
+    @JvmStatic
+    fun evalParenthesis(formula: String): String = try {
+        val result = KEVAL.eval(formula)
+        if (result > Double.MAX_VALUE) {
+            throw ValueTooLargeException()
+        } else {
+            result.toBigDecimal().stripTrailingZeros().toPlainString()
+        }
+    } catch (e: KevalZeroDivisionException) {
+        "Can't divide by 0"
+    } catch (e: NegativeSquareRootException) {
+        "Undefined in Reals (negative sqrt)"
+    } catch (e: ValueTooLargeException) {
+        "Value too large!"
+    } catch (e: KevalException) {
+        "Error"
+    }
+
+    private fun String.handleRelativePercentage(): String {
         val regex = Regex("""(\d+(?:\.\d+)?)\s*([+\-*])\s*(\d+(?:\.\d+)?)%""")
 
-        return regex.replace(this) { match ->
+        return regex.replace(this.processParenthesisExpression()) { match ->
             val firstOperand = match.groupValues[1].toDouble()
             val operator = match.groupValues[2]
             val percentage = match.groupValues[3].toDouble()
@@ -126,7 +146,18 @@ object Evaluator {
             }
 
         }
+
     }
 
+    private fun String.processParenthesisExpression(): String {
+        val parenthesisRegex = Regex("""\(([^()]+)\)""")
+        var expression = this
 
+
+        parenthesisRegex.findAll(this).forEach { matchResult ->
+            val calculated = evalParenthesis(matchResult.value)
+            expression = expression.replace(matchResult.value, calculated)
+        }
+        return expression
+    }
 }

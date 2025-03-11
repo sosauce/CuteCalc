@@ -126,11 +126,9 @@ fun CuteCalcTheme(
                 )
             }
 
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.S -> {
+            else -> {
                 if (useDarkMode) DarkColors else LightColors
             }
-
-            else -> DarkColors
         }
     }
 
