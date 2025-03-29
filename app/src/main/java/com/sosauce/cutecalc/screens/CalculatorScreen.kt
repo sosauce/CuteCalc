@@ -59,7 +59,7 @@ import kotlinx.coroutines.awaitCancellation
 
 @SuppressLint("NewApi")
 @Composable
-fun CalculatorUI(
+fun CalculatorScreen(
     viewModel: CalcViewModel,
     historyViewModel: HistoryViewModel,
     historyState: HistoryState,
@@ -70,22 +70,22 @@ fun CalculatorUI(
     val saveToHistory by rememberUseHistory()
     val useSystemFont by rememberUseSystemFont()
     val showClearButton by rememberShowClearButton()
-    val firstRow = listOf("!", "%", "√", "π")
-    val secondRow = listOf(
+    val firstRow = arrayOf("!", "%", "√", "π")
+    val secondRow = arrayOf(
         if (showClearButton) "C" else "(",
         if (showClearButton) viewModel.parenthesis else ")",
         "^",
         "/"
     )
-    val thirdRow = listOf("7", "8", "9", "×")
-    val fourthRow = listOf("4", "5", "6", "-")
-    val fifthRow = listOf("1", "2", "3", "+")
-    val sixthRow = listOf("0", ".")
+    val thirdRow = arrayOf("7", "8", "9", "×")
+    val fourthRow = arrayOf("4", "5", "6", "-")
+    val fifthRow = arrayOf("1", "2", "3", "+")
+    val sixthRow = arrayOf("0", ".")
     val decimalSetting by rememberDecimal()
 
 
     if (portraitMode != Configuration.ORIENTATION_PORTRAIT) {
-        return LandscapeLayout(
+        return CalculatorScreenLandscape(
             historyState = historyState,
             historyViewModel = historyViewModel,
             viewModel = viewModel

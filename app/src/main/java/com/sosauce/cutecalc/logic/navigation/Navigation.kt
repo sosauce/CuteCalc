@@ -15,12 +15,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sosauce.cutecalc.history.HistoryViewModel
 import com.sosauce.cutecalc.logic.CalcViewModel
-import com.sosauce.cutecalc.screens.CalculatorUI
+import com.sosauce.cutecalc.screens.CalculatorScreen
 import com.sosauce.cutecalc.screens.HistoryScreen
 import com.sosauce.cutecalc.screens.SettingsScreen
-
-
-// Ta-da no need for navigation and serialization plugins for a simple app!
 
 @Composable
 fun Nav(historyViewModel: HistoryViewModel) {
@@ -48,7 +45,7 @@ fun Nav(historyViewModel: HistoryViewModel) {
     ) { screen ->
         when (screen) {
             Screens.MAIN -> {
-                CalculatorUI(
+                CalculatorScreen(
                     viewModel = viewModel,
                     onNavigate = { screenToDisplay = it },
                     historyViewModel = historyViewModel,

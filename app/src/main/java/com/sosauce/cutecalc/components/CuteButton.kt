@@ -30,7 +30,6 @@ fun CuteButton(
     modifier: Modifier = Modifier,
     text: String,
     color: ButtonColors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.surfaceContainer),
-
     onClick: () -> Unit,
     textColor: Color = MaterialTheme.colorScheme.onBackground,
     enabled: Boolean = true

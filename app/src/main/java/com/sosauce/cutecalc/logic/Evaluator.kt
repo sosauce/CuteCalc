@@ -113,21 +113,13 @@ object Evaluator {
 
     // We don't call "handleRelativePercentage" here to avoid some weird recursive-ness problem
     @JvmStatic
-    fun evalParenthesis(formula: String): String = try {
+    fun evalParenthesis(formula: String): String {
         val result = KEVAL.eval(formula)
-        if (result > Double.MAX_VALUE) {
+        return if (result > Double.MAX_VALUE) {
             throw ValueTooLargeException()
         } else {
             result.toBigDecimal().stripTrailingZeros().toPlainString()
         }
-    } catch (e: KevalZeroDivisionException) {
-        "Can't divide by 0"
-    } catch (e: NegativeSquareRootException) {
-        "Undefined in Reals (negative sqrt)"
-    } catch (e: ValueTooLargeException) {
-        "Value too large!"
-    } catch (e: KevalException) {
-        "Error"
     }
 
     private fun String.handleRelativePercentage(): String {
