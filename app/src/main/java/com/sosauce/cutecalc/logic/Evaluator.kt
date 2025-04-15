@@ -148,7 +148,8 @@ object Evaluator {
 
         parenthesisRegex.findAll(this).forEach { matchResult ->
             val calculated = evalParenthesis(matchResult.value)
-            expression = expression.replace(matchResult.value, calculated)
+            val replaceWith = if (this.contains("%")) calculated else "($calculated)"
+            expression = expression.replace(matchResult.value, replaceWith)
         }
         return expression
     }
