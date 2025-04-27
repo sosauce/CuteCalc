@@ -49,7 +49,7 @@
 
 <h1>⚠️ Copyright</h1>
 
-<p>Copyright (c)2024 sosauce
+<p>Copyright (c)2025 sosauce
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
