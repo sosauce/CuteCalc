@@ -5,18 +5,23 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.sosauce.cutecalc.history.HistoryDatabase
 import com.sosauce.cutecalc.history.HistoryViewModel
 import com.sosauce.cutecalc.logic.navigation.Nav
+import com.sosauce.cutecalc.logic.rememberAppTheme
 import com.sosauce.cutecalc.ui.theme.CuteCalcTheme
+import com.sosauce.cutecalc.utils.CuteTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -45,18 +50,25 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         enableEdgeToEdge()
         setContent {
+            val theme by rememberAppTheme()
+            val isSystemInDarkTheme = isSystemInDarkTheme()
+
             CuteCalcTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize()
-                ) { _ ->
-                    MaterialTheme { Nav(historyViewModel) }
+                WindowCompat
+                    .getInsetsController(window, window.decorView)
+                    .apply {
+
+                        val isLight = if (theme == CuteTheme.SYSTEM) !isSystemInDarkTheme else theme == CuteTheme.LIGHT
+
+                        isAppearanceLightStatusBars = isLight
+                        isAppearanceLightNavigationBars = isLight
+                    }
+
+                Scaffold { _ ->
+                    Nav(historyViewModel)
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 }
 

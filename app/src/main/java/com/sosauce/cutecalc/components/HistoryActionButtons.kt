@@ -14,6 +14,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,14 +24,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEach
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.logic.rememberSortHistoryASC
-import com.sosauce.cutecalc.utils.thenIf
 
 @Composable
 fun BoxScope.HistoryActionButtons(
@@ -38,14 +38,6 @@ fun BoxScope.HistoryActionButtons(
 ) {
     var dropDownExpanded by remember { mutableStateOf(false) }
     var sortASC by rememberSortHistoryASC()
-    val surfaceContainer = MaterialTheme.colorScheme.surfaceContainerHigh
-    val sorting = remember {
-        listOf(
-            R.string.ascending,
-            R.string.descending
-        )
-    }
-
 
     SmallFloatingActionButton(
         onClick = {},
@@ -67,7 +59,7 @@ fun BoxScope.HistoryActionButtons(
                         painter = if (it) painterResource(R.drawable.sort_rounded) else rememberVectorPainter(
                             Icons.Rounded.Close
                         ),
-                        contentDescription = null
+                        contentDescription = stringResource(R.string.sort)
                     )
                 }
             }
@@ -76,7 +68,7 @@ fun BoxScope.HistoryActionButtons(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.trash_rounded),
-                    contentDescription = null
+                    contentDescription = stringResource(R.string.delete)
                 )
             }
 
@@ -85,20 +77,36 @@ fun BoxScope.HistoryActionButtons(
                 onDismissRequest = { dropDownExpanded = false },
                 shape = RoundedCornerShape(24.dp)
             ) {
-                sorting.fastForEach {
-                    DropdownMenuItem(
-                        text = { CuteText(stringResource(it)) },
-                        onClick = { sortASC = it == R.string.descending },
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(12.dp))
-                            .thenIf((!sortASC && it == R.string.ascending) || (sortASC && it == R.string.descending)) {
-                                Modifier.background(
-                                    color = surfaceContainer,
-                                    shape = RoundedCornerShape(12.dp)
-                                )
-                            }
-                    )
-                }
+
+                DropdownMenuItem(
+                    modifier = Modifier
+                        .padding(horizontal = 2.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(if (!sortASC) MaterialTheme.colorScheme.surfaceContainer else Color.Transparent),
+                    onClick = { sortASC = true },
+                    text = { CuteText(stringResource(R.string.ascending)) },
+                    leadingIcon = {
+                        RadioButton(
+                            selected = sortASC,
+                            onClick = null
+                        )
+                    }
+                )
+
+                DropdownMenuItem(
+                    modifier = Modifier
+                        .padding(horizontal = 2.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(if (!sortASC) MaterialTheme.colorScheme.surfaceContainer else Color.Transparent),
+                    onClick = { sortASC = false },
+                    text = { CuteText(stringResource(R.string.descending)) },
+                    leadingIcon = {
+                        RadioButton(
+                            selected = !sortASC,
+                            onClick = null
+                        )
+                    }
+                )
             }
         }
     }

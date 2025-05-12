@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -105,7 +106,12 @@ fun HistoryScreen(
             }
         }
 
-        CuteNavigationButton { onNavigate(it) }
+        CuteNavigationButton(
+            modifier = Modifier
+                .padding(start = 15.dp)
+                .align(Alignment.BottomStart)
+                .navigationBarsPadding(),
+        ) { onNavigate(it) }
         HistoryActionButtons { onEvents(HistoryEvents.DeleteAllCalculation(state.calculation)) }
 
     }
@@ -165,7 +171,7 @@ private fun CalculationItem(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.trash_rounded),
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.delete),
                     tint = MaterialTheme.colorScheme.error
                 )
             }

@@ -13,8 +13,18 @@ android {
         applicationId = "com.sosauce.cutecalc"
         minSdk = 21
         targetSdk = 35
-        versionCode = 43
-        versionName = "3.4.3"
+        versionCode = 44
+        versionName = "3.4.4"
+    }
+
+    applicationVariants.all {
+        val variant = this
+        variant.outputs
+            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                val outputFileName = "CC_${variant.versionName}.apk"
+                output.outputFileName = outputFileName
+            }
     }
 
     buildTypes {

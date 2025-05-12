@@ -343,16 +343,11 @@ fun CalculatorScreen(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DisableSoftKeyboard(
-    disable: Boolean = true,
-    content: @Composable () -> Unit,
+    content: @Composable () -> Unit
 ) {
     InterceptPlatformTextInput(
-        interceptor = { request, nextHandler ->
-            if (!disable) {
-                nextHandler.startInputMethod(request)
-            } else {
-                awaitCancellation()
-            }
+        interceptor = { _, _ ->
+            awaitCancellation()
         },
         content = content,
     )

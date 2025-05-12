@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sosauce.cutecalc.R
@@ -47,7 +48,7 @@ fun CuteButton(
     Button(
         onClick = {
             onClick()
-            if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.Confirm)
         },
         colors = color,
         modifier = modifier,
@@ -85,11 +86,11 @@ fun CuteIconButton(
     LongClickButton(
         onClick = {
             onClick()
-            if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.Confirm)
         },
         onLongClick = {
             onLongClick()
-            if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.Confirm)
         },
         colors = color,
         modifier = modifier,
@@ -98,7 +99,7 @@ fun CuteIconButton(
     ) {
         Icon(
             painter = painterResource(R.drawable.backspace_rounded),
-            contentDescription = null,
+            contentDescription = stringResource(R.string.back),
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(45.dp)
         )

@@ -5,17 +5,17 @@ import androidx.compose.runtime.Composable
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.sosauce.cutecalc.utils.CuteTheme
 
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 data object PreferencesKeys {
-    val USE_DARK_MODE = booleanPreferencesKey("use_dark_mode")
-    val USE_AMOLED_MODE = booleanPreferencesKey("use_amoled_mode")
+    val THEME = stringPreferencesKey("theme")
     val BUTTON_VIBRATION_ENABLED = booleanPreferencesKey("button_vibration_enabled")
     val DECIMAL_FORMATTING = booleanPreferencesKey("decimal_formatting")
-    val FOLLOW_SYS = booleanPreferencesKey("follow_sys")
     val ENABLE_HISTORY = booleanPreferencesKey("enable_history")
     val SORT_HISTORY_ASC = booleanPreferencesKey("sort_history_asc")
     val USE_BUTTONS_ANIMATIONS = booleanPreferencesKey("use_buttons_animation")
@@ -28,20 +28,12 @@ fun rememberVibration() =
     rememberPreference(key = PreferencesKeys.BUTTON_VIBRATION_ENABLED, defaultValue = false)
 
 @Composable
-fun rememberUseDarkMode() =
-    rememberPreference(key = PreferencesKeys.USE_DARK_MODE, defaultValue = false)
-
-@Composable
-fun rememberUseAmoledMode() =
-    rememberPreference(key = PreferencesKeys.USE_AMOLED_MODE, defaultValue = false)
+fun rememberAppTheme() =
+    rememberPreference(key = PreferencesKeys.THEME, defaultValue = CuteTheme.SYSTEM)
 
 @Composable
 fun rememberDecimal() =
     rememberPreference(key = PreferencesKeys.DECIMAL_FORMATTING, defaultValue = false)
-
-@Composable
-fun rememberFollowSys() =
-    rememberPreference(key = PreferencesKeys.FOLLOW_SYS, defaultValue = true)
 
 @Composable
 fun rememberUseHistory() =
