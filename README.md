@@ -1,6 +1,6 @@
 <p align=center><image src="https://i.ibb.co/0DQR8x8/icon2.png" height="200" /></p>
 <h1 align="center">CuteCalc</h1>
-<p align="center">CuteCalc is a cute an elegant calculator app for Android!/p>
+<p align="center">CuteCalc is a cute and elegant calculator app for Android!/p>
 <p align="center">
   <image src="https://img.shields.io/github/downloads/sosauce/CuteCalc/total?style=for-the-badge&logo=GitHub&color=%23F9B3A9"/>
   <image src="https://img.shields.io/github/v/release/sosauce/CuteCalc?style=for-the-badge&logo=GitHub&color=%23F9B3A9"/>
