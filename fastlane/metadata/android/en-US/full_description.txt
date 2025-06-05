@@ -1,1 +1,1 @@
-<p><i>CuteCalc</i> is a lightweight, fast and open-source Android calculator app in Material 3 design which requires no permissions.</p>
+<p><i>CuteCalc</i> is a cute an elegant calculator app for Android!</p>

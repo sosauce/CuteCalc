@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -117,7 +115,7 @@ fun CalculatorScreen(
                 }
                 IconButton(onClick = { onNavigate(Screens.SETTINGS) }) {
                     Icon(
-                        imageVector = Icons.Rounded.Settings,
+                        painter = painterResource(R.drawable.settings_filled),
                         contentDescription = stringResource(R.string.settings),
                         tint = MaterialTheme.colorScheme.onBackground
                     )

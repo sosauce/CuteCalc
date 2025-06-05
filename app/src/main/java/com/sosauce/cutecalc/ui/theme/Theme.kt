@@ -1,11 +1,10 @@
-@file:Suppress("PrivatePropertyName")
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
 
 package com.sosauce.cutecalc.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
@@ -26,12 +25,13 @@ fun CuteCalcTheme(
     val appTheme by rememberAppTheme()
 
 
-    val colorScheme = when(appTheme) {
+    val colorScheme = when (appTheme) {
         CuteTheme.AMOLED -> anyDarkColorScheme().copy(
             surface = Color.Black,
             inverseSurface = Color.White,
             background = Color.Black,
         )
+
         CuteTheme.SYSTEM -> if (isSystemInDarkTheme) anyDarkColorScheme() else anyLightColorScheme()
         CuteTheme.DARK -> anyDarkColorScheme()
         CuteTheme.LIGHT -> anyLightColorScheme()
@@ -40,7 +40,7 @@ fun CuteCalcTheme(
 
 
 
-    MaterialTheme(
+    MaterialExpressiveTheme(
         colorScheme = colorScheme,
         content = content
     )

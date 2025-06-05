@@ -7,14 +7,14 @@ plugins {
 
 android {
     namespace = "com.sosauce.cutecalc"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.sosauce.cutecalc"
         minSdk = 21
-        targetSdk = 35
-        versionCode = 44
-        versionName = "3.4.4"
+        targetSdk = 36
+        versionCode = 45
+        versionName = "3.4.5"
     }
 
     applicationVariants.all {

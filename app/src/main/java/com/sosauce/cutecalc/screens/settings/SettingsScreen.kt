@@ -1,4 +1,4 @@
-package com.sosauce.cutecalc.screens
+package com.sosauce.cutecalc.screens.settings
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically

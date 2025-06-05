@@ -17,7 +17,7 @@ import com.sosauce.cutecalc.history.HistoryViewModel
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.screens.CalculatorScreen
 import com.sosauce.cutecalc.screens.HistoryScreen
-import com.sosauce.cutecalc.screens.SettingsScreen
+import com.sosauce.cutecalc.screens.settings.SettingsScreen
 
 @Composable
 fun Nav(historyViewModel: HistoryViewModel) {

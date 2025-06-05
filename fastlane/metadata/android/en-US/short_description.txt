@@ -1,1 +1,1 @@
-A simple, lightweight and open-source calculator.
+A cute an elegant calculator app for Android

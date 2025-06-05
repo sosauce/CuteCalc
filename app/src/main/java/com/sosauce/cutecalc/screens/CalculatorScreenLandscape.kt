@@ -118,8 +118,8 @@ fun CalculatorScreenLandscape(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 secondRow.forEach {
-                    val containerColor = when(it) {
-                        "×", viewModel.parenthesis  -> MaterialTheme.colorScheme.secondaryContainer
+                    val containerColor = when (it) {
+                        "×", viewModel.parenthesis -> MaterialTheme.colorScheme.secondaryContainer
                         "C" -> MaterialTheme.colorScheme.inversePrimary
                         else -> MaterialTheme.colorScheme.surfaceContainer
                     }
@@ -146,7 +146,7 @@ fun CalculatorScreenLandscape(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 thirdRow.forEach {
-                    val containerColor = when(it) {
+                    val containerColor = when (it) {
                         "+", "^" -> MaterialTheme.colorScheme.secondaryContainer
                         else -> MaterialTheme.colorScheme.surfaceContainer
                     }
@@ -173,7 +173,7 @@ fun CalculatorScreenLandscape(
                 verticalAlignment = Alignment.Bottom
             ) {
                 fourthRow.forEach {
-                    val containerColor = when(it) {
+                    val containerColor = when (it) {
                         "-", "/" -> MaterialTheme.colorScheme.secondaryContainer
                         "=" -> MaterialTheme.colorScheme.inversePrimary
                         else -> MaterialTheme.colorScheme.surfaceContainer

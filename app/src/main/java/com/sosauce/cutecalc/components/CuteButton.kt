@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+
 package com.sosauce.cutecalc.components
 
 import androidx.compose.animation.core.animateIntAsState
@@ -9,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -35,15 +38,15 @@ fun CuteButton(
     textColor: Color = MaterialTheme.colorScheme.onBackground,
     enabled: Boolean = true
 ) {
+    val haptic = LocalHapticFeedback.current
     val shouldVibrate by rememberVibration()
     val useButtonsAnimation by rememberUseButtonsAnimation()
-    val haptic = LocalHapticFeedback.current
-
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val cornerRadius by animateIntAsState(
-        targetValue = if (isPressed && useButtonsAnimation) 24 else 50, label = ""
+        targetValue = if (isPressed && useButtonsAnimation) 24 else 50
     )
+
 
     Button(
         onClick = {
@@ -79,7 +82,7 @@ fun CuteIconButton(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val cornerRadius by animateIntAsState(
-        targetValue = if (isPressed && useButtonsAnimation) 24 else 50, label = ""
+        targetValue = if (isPressed && useButtonsAnimation) 24 else 50
     )
 
 
@@ -104,9 +107,9 @@ fun CuteIconButton(
             modifier = Modifier.size(45.dp)
         )
     }
-
-
 }
+
+
 
 
 

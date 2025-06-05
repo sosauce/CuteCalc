@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,8 +20,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -47,7 +46,6 @@ import com.sosauce.cutecalc.logic.navigation.Screens
 import com.sosauce.cutecalc.logic.rememberDecimal
 import com.sosauce.cutecalc.logic.rememberSortHistoryASC
 import com.sosauce.cutecalc.logic.rememberUseHistory
-import com.sosauce.cutecalc.utils.thenIf
 
 @Composable
 fun HistoryScreen(
@@ -67,54 +65,54 @@ fun HistoryScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        println("history size: ${sortedCalculations.size}")
-    }
-
-    Box(Modifier.fillMaxSize()) {
-        if (!isHistoryEnable) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CuteText(stringResource(R.string.history_not_enabled))
-                Spacer(Modifier.height(10.dp))
-                Button(
-                    onClick = { isHistoryEnable = !isHistoryEnable }
+    Scaffold { paddingValues ->
+        Box(Modifier.fillMaxSize()) {
+            if (!isHistoryEnable) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    CuteText(stringResource(R.string.enable_history))
+                    CuteText(stringResource(R.string.history_not_enabled))
+                    Spacer(Modifier.height(10.dp))
+                    Button(
+                        onClick = { isHistoryEnable = !isHistoryEnable }
+                    ) {
+                        CuteText(stringResource(R.string.enable_history))
+                    }
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = paddingValues
+                ) {
+                    itemsIndexed(
+                        items = sortedCalculations,
+                        key = { _, item -> item.id }
+                    ) { index, item ->
+                        CalculationItem(
+                            calculation = item,
+                            onEvents = onEvents,
+                            topDp = if (index == 0) 24.dp else 4.dp,
+                            bottomDp = if (index == state.calculation.lastIndex) 24.dp else 4.dp,
+                            modifier = Modifier.animateItem()
+                        )
+                    }
                 }
             }
-        } else {
-            LazyColumn {
-                itemsIndexed(
-                    items = sortedCalculations,
-                    key = { _, item -> item.id }
-                ) { index, item ->
-                    CalculationItem(
-                        calculation = item,
-                        onEvents = onEvents,
-                        topDp = if (index == 0) 24.dp else 4.dp,
-                        bottomDp = if (index == state.calculation.size - 1) 24.dp else 4.dp,
-                        modifier = Modifier
-                            .animateItem()
-                            .thenIf(index == 0) { Modifier.statusBarsPadding() }
-                    )
-                }
-            }
+
+            CuteNavigationButton(
+                modifier = Modifier
+                    .padding(start = 15.dp)
+                    .align(Alignment.BottomStart)
+                    .navigationBarsPadding(),
+            ) { onNavigate(it) }
+            HistoryActionButtons { onEvents(HistoryEvents.DeleteAllCalculation(state.calculation)) }
+
         }
-
-        CuteNavigationButton(
-            modifier = Modifier
-                .padding(start = 15.dp)
-                .align(Alignment.BottomStart)
-                .navigationBarsPadding(),
-        ) { onNavigate(it) }
-        HistoryActionButtons { onEvents(HistoryEvents.DeleteAllCalculation(state.calculation)) }
-
     }
+
 }
 
 @Composable
