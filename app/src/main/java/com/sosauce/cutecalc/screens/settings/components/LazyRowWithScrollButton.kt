@@ -29,8 +29,7 @@ fun <T> LazyRowWithScrollButton(
             state = state
         ) {
             items(
-                items = items,
-                key = { it.hashCode() }
+                items = items
             ) { type ->
                 content(type)
             }

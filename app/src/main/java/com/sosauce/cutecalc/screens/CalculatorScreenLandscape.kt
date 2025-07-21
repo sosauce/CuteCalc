@@ -31,13 +31,14 @@ import androidx.compose.ui.unit.sp
 import com.sosauce.cutecalc.components.CuteButton
 import com.sosauce.cutecalc.components.CuteIconButton
 import com.sosauce.cutecalc.history.HistoryEvents
-import com.sosauce.cutecalc.history.HistoryState
 import com.sosauce.cutecalc.history.HistoryViewModel
 import com.sosauce.cutecalc.logic.CalcAction
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.logic.Evaluator
 import com.sosauce.cutecalc.logic.formatOrNot
 import com.sosauce.cutecalc.logic.rememberDecimal
+import com.sosauce.cutecalc.logic.rememberHistoryMaxItems
+import com.sosauce.cutecalc.logic.rememberSaveErrorsToHistory
 import com.sosauce.cutecalc.logic.rememberUseHistory
 import com.sosauce.cutecalc.ui.theme.GlobalFont
 
@@ -45,11 +46,12 @@ import com.sosauce.cutecalc.ui.theme.GlobalFont
 @Composable
 fun CalculatorScreenLandscape(
     viewModel: CalcViewModel,
-    historyViewModel: HistoryViewModel,
-    historyState: HistoryState
+    historyViewModel: HistoryViewModel
 ) {
     val saveToHistory by rememberUseHistory()
     val decimalSetting by rememberDecimal()
+    val historyMaxItems by rememberHistoryMaxItems()
+    val saveErrorsToHistory by rememberSaveErrorsToHistory()
     val firstRow = arrayOf("!", "%", "√", "π")
     val secondRow = arrayOf("", "9", "8", "7", "×", viewModel.parenthesis, "C")
     val thirdRow = arrayOf("3", "4", "5", "6", "+", "^")
@@ -186,15 +188,12 @@ fun CalculatorScreenLandscape(
                         onClick = {
                             if (it == "=") {
                                 if (saveToHistory) {
-                                    historyState.operation.value =
-                                        viewModel.displayText.text
-                                    historyState.result.value =
-                                        Evaluator.eval(viewModel.displayText.text)
-
                                     historyViewModel.onEvent(
                                         HistoryEvents.AddCalculation(
-                                            operation = historyState.operation.value,
-                                            result = historyState.result.value
+                                            operation = viewModel.displayText.text,
+                                            result = Evaluator.eval(viewModel.displayText.text),
+                                            maxHistoryItems = historyMaxItems,
+                                            saveErrors = saveErrorsToHistory
                                         )
                                     )
                                 }

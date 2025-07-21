@@ -5,3 +5,10 @@ enum class Screens {
     HISTORY,
     SETTINGS
 }
+
+enum class SettingsScreen {
+    SETTINGS,
+    LOOK_AND_FEEL,
+    HISTORY,
+    MISC
+}

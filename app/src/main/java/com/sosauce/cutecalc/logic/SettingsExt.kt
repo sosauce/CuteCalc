@@ -12,11 +12,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-
-/* The below code was taken from IacobIonut01's Gallery app
- * All credits to them : https://github.com/IacobIonut01/
- */
-
 @Composable
 fun <T> rememberPreference(
     key: Preferences.Key<T>,

@@ -9,7 +9,8 @@
     <string name="update">Check updates</string>
     <string name="cc_by_sosauce">CuteCalc by sosauce</string>
     <string name="follow_sys">System</string>
-    <string name="use_sys_font">Use system font</string>
+    <string name="font">Font</string>
+    <string name="system">System</string>
     <string name="buttons_anim">Buttons animation</string>
     <string name="history">History</string>
     <string name="use_history">Use history</string>
@@ -26,4 +27,21 @@
     <string name="sort">Sort</string>
     <string name="delete">Delete</string>
     <string name="backspace">Backspace</string>
+    <string name="put_field">Put back in input field</string>
+    <string name="copy">Copy to clipboard</string>
+    <string name="more_actions">More actions</string>
+    <string name="look_and_feel">Look and feel</string>
+    <string name="look_and_feel_desc">Why not calculate in style ?</string>
+    <string name="default_font">Default</string>
+    <string name="ui">UI</string>
+    <string name="history_desc">Remember everything !</string>
+    <string name="max_history_items">Max saved items in history</string>
+    <string name="no_limit">No limit</string>
+    <string name="misc_desc">Other settings that didn\'t deserve their own page.</string>
+    <string name="formatting">Formatting</string>
+    <string name="show_back_button">Show back button</string>
+    <string name="clear_history">Clear history</string>
+    <string name="cant_be_undone">Are you sure you want to do that ? This action can\'t be undone !</string>
+    <string name="cancel">Cancel</string>
+    <string name="save_errors">Save errors to history</string>
 </resources>

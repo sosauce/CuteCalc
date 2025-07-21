@@ -1,6 +1,7 @@
 package com.sosauce.cutecalc.utils
 
 import android.os.Build
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -17,6 +18,15 @@ fun Modifier.thenIf(
     return if (condition) {
         this.then(modifier())
     } else this
+}
+
+inline fun <T, R : Comparable<R>> List<T>.sort(
+    sortAsc: Boolean,
+    crossinline selector: (T) -> R?
+): List<T> {
+    return if (sortAsc) {
+        this.sortedBy(selector)
+    } else this.sortedByDescending(selector)
 }
 
 @Composable
@@ -40,3 +50,16 @@ fun anyDarkColorScheme(): ColorScheme {
         darkColorScheme()
     }
 }
+
+val LazyListState.showBottomBar
+    get() =
+        if (layoutInfo.totalItemsCount == 0) {
+            true
+        } else if (
+            layoutInfo.visibleItemsInfo.firstOrNull()?.index == 0 &&
+            layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
+        ) {
+            true
+        } else {
+            layoutInfo.visibleItemsInfo.lastOrNull()?.index != layoutInfo.totalItemsCount - 1
+        }

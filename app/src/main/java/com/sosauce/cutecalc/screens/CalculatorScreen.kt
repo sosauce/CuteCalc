@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
@@ -40,7 +39,6 @@ import com.sosauce.cutecalc.components.CuteButton
 import com.sosauce.cutecalc.components.CuteIconButton
 import com.sosauce.cutecalc.components.CuteText
 import com.sosauce.cutecalc.history.HistoryEvents
-import com.sosauce.cutecalc.history.HistoryState
 import com.sosauce.cutecalc.history.HistoryViewModel
 import com.sosauce.cutecalc.logic.CalcAction
 import com.sosauce.cutecalc.logic.CalcViewModel
@@ -48,6 +46,8 @@ import com.sosauce.cutecalc.logic.Evaluator
 import com.sosauce.cutecalc.logic.formatOrNot
 import com.sosauce.cutecalc.logic.navigation.Screens
 import com.sosauce.cutecalc.logic.rememberDecimal
+import com.sosauce.cutecalc.logic.rememberHistoryMaxItems
+import com.sosauce.cutecalc.logic.rememberSaveErrorsToHistory
 import com.sosauce.cutecalc.logic.rememberShowClearButton
 import com.sosauce.cutecalc.logic.rememberUseHistory
 import com.sosauce.cutecalc.logic.rememberUseSystemFont
@@ -60,7 +60,6 @@ import kotlinx.coroutines.awaitCancellation
 fun CalculatorScreen(
     viewModel: CalcViewModel,
     historyViewModel: HistoryViewModel,
-    historyState: HistoryState,
     onNavigate: (Screens) -> Unit,
 ) {
     val config = LocalConfiguration.current
@@ -68,6 +67,8 @@ fun CalculatorScreen(
     val saveToHistory by rememberUseHistory()
     val useSystemFont by rememberUseSystemFont()
     val showClearButton by rememberShowClearButton()
+    val historyMaxItems by rememberHistoryMaxItems()
+    val saveErrorsToHistory by rememberSaveErrorsToHistory()
     val firstRow = arrayOf("!", "%", "√", "π")
     val secondRow = arrayOf(
         if (showClearButton) "C" else "(",
@@ -84,7 +85,6 @@ fun CalculatorScreen(
 
     if (portraitMode != Configuration.ORIENTATION_PORTRAIT) {
         return CalculatorScreenLandscape(
-            historyState = historyState,
             historyViewModel = historyViewModel,
             viewModel = viewModel
         )
@@ -96,15 +96,10 @@ fun CalculatorScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(pv)
-                .padding(
-                    start = 10.dp,
-                    end = 10.dp
-                )
         ) {
             Row(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .offset(x = 15.dp) // "Cancel" the box's padding to keep the look it had with TopAppBar
             ) {
                 IconButton(onClick = { onNavigate(Screens.HISTORY) }) {
                     Icon(
@@ -136,7 +131,7 @@ fun CalculatorScreen(
                     CuteText(
                         text = formatOrNot(viewModel.preview, decimalSetting),
                         fontSize = 32.sp,
-                        color = MaterialTheme.colorScheme.onBackground.copy(0.85f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 Row(
@@ -316,15 +311,12 @@ fun CalculatorScreen(
                             .weight(1f),
                         onClick = {
                             if (saveToHistory) {
-                                historyState.operation.value =
-                                    viewModel.displayText.text
-                                historyState.result.value =
-                                    Evaluator.eval(viewModel.displayText.text)
-
                                 historyViewModel.onEvent(
                                     HistoryEvents.AddCalculation(
-                                        operation = historyState.operation.value,
-                                        result = historyState.result.value
+                                        operation = viewModel.displayText.text,
+                                        result = Evaluator.eval(viewModel.displayText.text),
+                                        maxHistoryItems = historyMaxItems,
+                                        saveErrors = saveErrorsToHistory
                                     )
                                 )
                             }
@@ -347,6 +339,6 @@ fun DisableSoftKeyboard(
         interceptor = { _, _ ->
             awaitCancellation()
         },
-        content = content,
+        content = content
     )
 }

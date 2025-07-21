@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sosauce.cutecalc.history.HistoryViewModel
+import com.sosauce.cutecalc.logic.CalcAction
 import com.sosauce.cutecalc.logic.CalcViewModel
 import com.sosauce.cutecalc.screens.CalculatorScreen
 import com.sosauce.cutecalc.screens.HistoryScreen
@@ -26,7 +27,7 @@ fun Nav(historyViewModel: HistoryViewModel) {
     val activity = LocalActivity.current
     var screenToDisplay by rememberSaveable { mutableStateOf(Screens.MAIN) }
     val viewModel = viewModel<CalcViewModel>()
-    val historyState by historyViewModel.state.collectAsStateWithLifecycle()
+    val calculations by historyViewModel.allCalculations.collectAsStateWithLifecycle()
 
 
     // Mimic back behavior from navigation
@@ -40,7 +41,6 @@ fun Nav(historyViewModel: HistoryViewModel) {
 
     AnimatedContent(
         targetState = screenToDisplay,
-        label = "",
         transitionSpec = { fadeIn() togetherWith fadeOut() }
     ) { screen ->
         when (screen) {
@@ -48,16 +48,19 @@ fun Nav(historyViewModel: HistoryViewModel) {
                 CalculatorScreen(
                     viewModel = viewModel,
                     onNavigate = { screenToDisplay = it },
-                    historyViewModel = historyViewModel,
-                    historyState = historyState
+                    historyViewModel = historyViewModel
                 )
             }
 
             Screens.HISTORY -> {
                 HistoryScreen(
-                    state = historyState,
+                    calculations = calculations,
                     onNavigate = { screenToDisplay = it },
-                    onEvents = historyViewModel::onEvent
+                    onEvents = historyViewModel::onEvent,
+                    onPutBackToField = { calculation ->
+                        viewModel.handleAction(CalcAction.ResetField)
+                        viewModel.handleAction(CalcAction.AddToField(calculation))
+                    }
                 )
             }
 

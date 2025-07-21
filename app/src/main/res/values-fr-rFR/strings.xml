@@ -8,7 +8,7 @@
     <string name="update">Mettre à jour</string>
     <string name="cc_by_sosauce">CuteCalc par sosauce</string>
     <string name="follow_sys">Suivre le système</string>
-    <string name="use_sys_font">Utiliser la police système</string>
+    <string name="system">Système</string>
     <string name="buttons_anim">Animation des buttons</string>
     <string name="history">Historique</string>
     <string name="use_history">Utiliser l\'historique</string>

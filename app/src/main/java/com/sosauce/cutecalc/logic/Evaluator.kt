@@ -94,11 +94,16 @@ object Evaluator {
 
     @JvmStatic
     fun eval(formula: String): String = try {
-        val result = KEVAL.eval(formula.handleRelativePercentage())
+        val result = KEVAL
+
+            .eval(formula.replace("π", "PI").handleRelativePercentage())
         if (result > Double.MAX_VALUE) {
             throw ValueTooLargeException()
         } else {
-            result.toBigDecimal().stripTrailingZeros().toPlainString()
+            result
+                .toBigDecimal()
+                .stripTrailingZeros()
+                .toPlainString()
         }
     } catch (e: KevalZeroDivisionException) {
         "Can't divide by 0"
@@ -107,13 +112,13 @@ object Evaluator {
     } catch (e: ValueTooLargeException) {
         "Value too large!"
     } catch (e: KevalException) {
-        "Error"
+        "Undetermined error"
     }
 
 
     // We don't call "handleRelativePercentage" here to avoid some weird recursive-ness problem
     @JvmStatic
-    fun evalParenthesis(formula: String): String {
+    private fun evalParenthesis(formula: String): String {
         val result = KEVAL.eval(formula)
         return if (result > Double.MAX_VALUE) {
             throw ValueTooLargeException()

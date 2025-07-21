@@ -15,8 +15,8 @@ interface HistoryDao {
     @Delete
     suspend fun deleteCalculation(calculation: Calculation)
 
-    @Delete
-    suspend fun deleteAllCalculations(calculations: List<Calculation>)
+    @Query("DELETE FROM calculation")
+    suspend fun deleteAllCalculations()
 
     @Query("SELECT * FROM calculation")
     fun getAllCalculations(): Flow<List<Calculation>>

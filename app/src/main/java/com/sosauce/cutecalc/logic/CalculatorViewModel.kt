@@ -17,7 +17,7 @@ class CalcViewModel : ViewModel() {
     var displayText by mutableStateOf(TextFieldValue(""))
     val preview by derivedStateOf {
 
-        val evaluatedText = Evaluator.eval(displayText.text.replace("π", "PI"))
+        val evaluatedText = Evaluator.eval(displayText.text)
 
         if (evaluatedText.all { it.isDigit() || it == '.' || it == '-' || it == ',' }) {
             "= $evaluatedText"
@@ -36,6 +36,7 @@ class CalcViewModel : ViewModel() {
                     result,
                     TextRange(result.length)
                 )
+
             }
 
             is CalcAction.ResetField -> TextFieldValue("")

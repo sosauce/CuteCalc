@@ -10,15 +10,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
-import com.sosauce.cutecalc.logic.navigation.Screens
 
 @Composable
 fun CuteNavigationButton(
     modifier: Modifier = Modifier,
-    onNavigate: (Screens) -> Unit
+    onNavigateUp: () -> Unit
 ) {
     SmallFloatingActionButton(
-        onClick = { onNavigate(Screens.MAIN) },
+        onClick = onNavigateUp,
         modifier = modifier,
         shape = RoundedCornerShape(14.dp),
         containerColor = MaterialTheme.colorScheme.surfaceContainer
