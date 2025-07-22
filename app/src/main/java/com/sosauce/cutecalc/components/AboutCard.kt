@@ -1,6 +1,7 @@
 package com.sosauce.cutecalc.components
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,11 +11,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -38,19 +41,25 @@ fun AboutCard() {
         shape = RoundedCornerShape(24.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painterResource(id = R.drawable.icon2),
-                contentDescription = "App Icon",
+            Box(
                 modifier = Modifier
                     .size(100.dp)
                     .padding(15.dp)
                     .clip(RoundedCornerShape(15))
-            )
+                    .background(Color(0xFFFAB3AA)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.calculator),
+                    contentDescription = null,
+                    modifier = Modifier.size(50.dp)
+                )
+            }
             Column {
                 CuteText(stringResource(R.string.cc_by_sosauce))
                 CuteText(
                     text = "${stringResource(R.string.version)} $version",
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.85f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }

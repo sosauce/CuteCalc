@@ -96,10 +96,10 @@ fun CalculatorScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(pv)
+                .padding(horizontal = 10.dp)
         ) {
             Row(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
+                modifier = Modifier.align(Alignment.TopEnd)
             ) {
                 IconButton(onClick = { onNavigate(Screens.HISTORY) }) {
                     Icon(
@@ -116,13 +116,14 @@ fun CalculatorScreen(
                     )
                 }
             }
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter),
                 verticalArrangement = Arrangement.spacedBy(9.dp),
             ) {
+
+
                 Row(
                     modifier = Modifier
                         .align(Alignment.End)

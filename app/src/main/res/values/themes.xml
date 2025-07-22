@@ -5,7 +5,7 @@
 
     <style name="Theme.CuteSplash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/backgroundDark</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/calculator</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/icon_splash</item>
         <item name="postSplashScreenTheme">@style/Theme.CuteCalc</item>
 
     </style>
