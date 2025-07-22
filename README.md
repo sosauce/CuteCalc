@@ -1,6 +1,6 @@
-<p align=center><image src="https://i.ibb.co/0DQR8x8/icon2.png" height="200" /></p>
+<p align=center><image src="https://i.ibb.co/36BCvbV/Cute-Calc-Icon-V2.png" height="200" /></p>
 <h1 align="center">CuteCalc</h1>
-<p align="center">CuteCalc is a cute and elegant calculator app for Android!</p>
+<p align="center">CuteCalc is a cute and elegant calculator app for Android !</p>
 <p align="center">
   <image src="https://img.shields.io/github/downloads/sosauce/CuteCalc/total?style=for-the-badge&logo=GitHub&color=%23F9B3A9"/>
   <image src="https://img.shields.io/github/v/release/sosauce/CuteCalc?style=for-the-badge&logo=GitHub&color=%23F9B3A9"/>
@@ -16,8 +16,9 @@
  </a>
 </p>
 
-
-<p align=center><image src="https://i.ibb.co/PN7SpLT/image.png" height="512"/>
+<p align=center>
+<image src="https://i.ibb.co/99j3KMGV/screenshot1.png" height="512"/>
+<image src="https://i.ibb.co/5xnCKtTb/screenshot2.png" height="512"/>
 
 
 
@@ -25,10 +26,10 @@
 ---
 <h1>👀 Overview</h1>
 
-- Lightweight (~1.2 Mb APK size)
+- Very lightweight (~1.2 Mb APK size) !
 - No permissions needed !
-- Material 3 & You Design
-- Very fast and snappy !
+- Material 3 Expressive Design !
+- Very fast and feature-rich !
 
 ---
 <h1>🤔 Why ?</h1>
@@ -37,13 +38,15 @@
 
 ---
 <h1>💬 Contact Me</h1>
-<p>Discord server: https://discord.gg/c6aCu4yjbu.</p>
-<p>Email: sosauce_dev@protonmail.com</p>
+
+[Discord server](https://discord.gg/c6aCu4yjbu)
+</br>
+[Email](sosauce_dev@protonmail.com)
 
 ---
 <h1>❤️ Support</h1>
 
-<p>You can support me by donating on my PayPal: https://bit.ly/sosaucePayPal. Thank you so much for the support ❤️</p>
+If you wish to support me, you can see how to do so on [my website](https://sosauce.github.io/support/)
 
 ---
 
@@ -65,5 +68,5 @@ The above copyright notice, this permission notice, and its license shall be inc
 
 You can find a copy of the GNU General Public License v3 [here](https://www.gnu.org/licenses/)</p>
 ---
-#### You can find the SHA-256 here : https://sosauce.github.io/projects/
+#### You can find the SHA-256 [here](https://sosauce.github.io/projects/)
 
