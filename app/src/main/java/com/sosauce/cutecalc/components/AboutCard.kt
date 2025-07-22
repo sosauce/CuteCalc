@@ -4,9 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -25,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.utils.GITHUB_RELEASES
+import com.sosauce.cutecalc.utils.SUPPORT_PAGE
 
 @Composable
 fun AboutCard() {
@@ -66,14 +69,27 @@ fun AboutCard() {
         Row(
             modifier = Modifier.padding(8.dp)
         ) {
-
-            Row {
-                Button(
-                    onClick = { uriHandler.openUri(GITHUB_RELEASES) },
-                    shape = RoundedCornerShape(24.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) { CuteText(stringResource(R.string.update)) }
-            }
+            Button(
+                onClick = { uriHandler.openUri(GITHUB_RELEASES) },
+                shape = RoundedCornerShape(
+                    topStart = 24.dp,
+                    bottomStart = 24.dp,
+                    topEnd = 4.dp,
+                    bottomEnd = 4.dp
+                ),
+                modifier = Modifier.weight(1f)
+            ) { CuteText(stringResource(R.string.update)) }
+            Spacer(Modifier.width(2.dp))
+            Button(
+                onClick = { uriHandler.openUri(SUPPORT_PAGE) },
+                shape = RoundedCornerShape(
+                    topStart = 4.dp,
+                    bottomStart = 4.dp,
+                    topEnd = 24.dp,
+                    bottomEnd = 24.dp
+                ),
+                modifier = Modifier.weight(1f)
+            ) { CuteText(stringResource(R.string.support)) }
         }
     }
 }

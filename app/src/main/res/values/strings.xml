@@ -44,4 +44,5 @@
     <string name="cant_be_undone">Are you sure you want to do that ? This action can\'t be undone !</string>
     <string name="cancel">Cancel</string>
     <string name="save_errors">Save errors to history</string>
+    <string name="support">Support</string>
 </resources>
