@@ -45,4 +45,9 @@
     <string name="cancel">Annuler</string>
     <string name="save_errors">Sauvegarder les erreurs dans l\'historique</string>
     <string name="support">Supporter</string>
+    <string name="decimal_precision">Précision décimale</string>
+    <string name="decimal_precision_desc">Ajuster le nombre de chiffres après la décimale</string>
+    <string name="formatting_desc">Rendez les nombres beaux !</string>
+    <string name="show_ls">Montrer l\'app sur l\'écran de vérouillage</string>
+    <string name="show_ls_desc">L\'app sera utilisable sur l\'écran de vérouillage.</string>
 </resources>

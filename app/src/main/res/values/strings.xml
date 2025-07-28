@@ -45,4 +45,9 @@
     <string name="cancel">Cancel</string>
     <string name="save_errors">Save errors to history</string>
     <string name="support">Support</string>
+    <string name="decimal_precision">Decimal precision</string>
+    <string name="decimal_precision_desc">Adjust the number of decimal places.</string>
+    <string name="formatting_desc">Make numbers look great !</string>
+    <string name="show_ls">Show app on lock screen</string>
+    <string name="show_ls_desc">The app will still be usable on the lock screen. This can be useful for example, in stores.</string>
 </resources>

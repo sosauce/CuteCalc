@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import com.sosauce.cutecalc.R
-import com.sosauce.cutecalc.logic.rememberAppTheme
+import com.sosauce.cutecalc.data.datastore.rememberAppTheme
 import com.sosauce.cutecalc.utils.CuteTheme
 import com.sosauce.cutecalc.utils.anyDarkColorScheme
 import com.sosauce.cutecalc.utils.anyLightColorScheme

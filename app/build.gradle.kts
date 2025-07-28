@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlin)
@@ -13,8 +15,8 @@ android {
         applicationId = "com.sosauce.cutecalc"
         minSdk = 21
         targetSdk = 36
-        versionCode = 48
-        versionName = "3.5.2"
+        versionCode = 49
+        versionName = "3.6.0"
     }
 
     applicationVariants.all {
@@ -44,12 +46,21 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
+
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
+        }
     }
 
     buildFeatures {
         compose = true
+        aidl = false
+        renderScript = false
+        shaders = false
+        buildConfig = false
+        resValues = false
+        viewBinding = false
     }
     dependenciesInfo {
         includeInApk = false

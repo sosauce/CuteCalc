@@ -27,10 +27,10 @@
         </activity>
 
         <service
-            android:name=".components.QSTile"
+            android:name=".data.sysui.QSTile"
             android:exported="true"
-            android:label="CuteCalc"
             android:icon="@drawable/calculator"
+            android:label="CuteCalc"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
