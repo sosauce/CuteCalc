@@ -23,9 +23,9 @@
     <string name="decimal_formatting">Formato decimal</string>
     <string name="show_clear_button">Mostrar botón borrar</string>
     <string name="clear_button_desc">Aún puede mantener presionado el botón de retroceso para borrar el campo de entrada.</string>
-    <string name="Atras">Back</string>
-    <string name="Ordenar">Sort</string>
-    <string name="Eliminar">Delete</string>
+    <string name="back">Atras</string>
+    <string name="sort">Ordenar</string>
+    <string name="delete">Eliminar</string>
     <string name="backspace">Retroceso</string>
     <string name="put_field">Poner retroceso en el campo de entrada</string>
     <string name="copy">Copiar al portapapeles</string>
