@@ -89,6 +89,10 @@ object Evaluator {
         }
 
     }
+	
+    // Storing the previous result to show previous output even though expression is not complete
+    @JvmStatic
+    private var prevResult: String = "0"
 
     @JvmStatic
     fun eval(
@@ -98,7 +102,7 @@ object Evaluator {
         val result = KEVAL
             .eval(formula.replace("π", "PI").handleRelativePercentage())
 
-        if (result > Double.MAX_VALUE) {
+        val formattedResult = if (result > Double.MAX_VALUE) {
             throw ValueTooLargeException()
         } else {
             result
@@ -106,12 +110,18 @@ object Evaluator {
                 .setScale(precision, RoundingMode.HALF_UP)
                 .stripTrailingZeros()
                 .toPlainString()
-
         }
+	prevResult = formattedResult
+	formattedResult
     } catch (e: Exception) {
-        e.message ?: "Undetermined error"
-    }
+         val errorPattern = "^Invalid expression at position -?\\d+ .*$".toRegex()
 
+         if (e.message?.matches(errorPattern) ?: false) {
+             prevResult
+         } else {
+             e.message ?: "Undetermined error"
+       }
+    } 
 
     // We don't call "handleRelativePercentage" here to avoid recursive
     @JvmStatic
