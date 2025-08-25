@@ -8,7 +8,10 @@
 </p>
 
 <p align="center">
- <a href="https://github.com/sosauce/CuteCalc/releases">
+ <a href="https://f-droid.org/packages/com.sosauce.cutecalc/">
+   <image src="https://f-droid.org/badge/get-it-on.png" height="80"/>
+ </a>
+ <a href="https://github.com/sosauce/CuteCalc/releases/latest">
    <image src="https://i.ibb.co/q0mdc4Z/get-it-on-github.png" height="80"/>
  </a>
   <a href="https://apt.izzysoft.de/fdroid/index/apk/com.sosauce.cutecalc">
@@ -19,8 +22,6 @@
 <p align=center>
 <image src="https://i.ibb.co/99j3KMGV/screenshot1.png" height="512"/>
 <image src="https://i.ibb.co/5xnCKtTb/screenshot2.png" height="512"/>
-
-
 
 
 ---
