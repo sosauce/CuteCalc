@@ -7,16 +7,23 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+
+val versionNameLocal = "3.6.2"
+
 android {
     namespace = "com.sosauce.cutecalc"
     compileSdk = 36
 
     defaultConfig {
+
+        //noinspection WrongGradleMethod
+        val (major, minor, patch) = versionNameLocal.split(".").map { it.toInt() }
+
         applicationId = "com.sosauce.cutecalc"
         minSdk = 21
         targetSdk = 36
-        versionCode = 50
-        versionName = "3.6.1"
+        versionCode = major * 10000 + minor * 100 + patch // https://proandroiddev.com/quick-tip-auto-generate-your-versioncode-614629f7d3bd
+        versionName = versionNameLocal
     }
 
     applicationVariants.all {
@@ -24,7 +31,7 @@ android {
         variant.outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                val outputFileName = "CC_${variant.versionName}.apk"
+                val outputFileName = "CC_$versionNameLocal.apk"
                 output.outputFileName = outputFileName
             }
     }
@@ -46,7 +53,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-
     kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_17
@@ -62,6 +68,7 @@ android {
         resValues = false
         viewBinding = false
     }
+
     dependenciesInfo {
         includeInApk = false
         includeInBundle = false

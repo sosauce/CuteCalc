@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.ripple
@@ -59,6 +61,8 @@ fun RowScope.CuteButton(
         targetValue = if (isPressed && useButtonsAnimation) 24 else 50
     )
 
+
+
     Box(
         modifier = modifier
             .semantics { role = Role.Button }
@@ -88,7 +92,7 @@ fun RowScope.CuteButton(
     ) {
         if (text == BACKSPACE) {
             Icon(
-                painter = painterResource(R.drawable.backspace_rounded),
+                painter = painterResource(R.drawable.backspace_filled),
                 contentDescription = stringResource(R.string.back),
                 tint = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
                 modifier = Modifier.size(48.dp)

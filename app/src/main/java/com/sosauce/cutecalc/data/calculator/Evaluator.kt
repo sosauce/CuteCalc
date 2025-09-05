@@ -92,7 +92,8 @@ object Evaluator {
 	
     // Storing the previous result to show previous output even though expression is not complete
     @JvmStatic
-    private var prevResult: String = "0"
+    private var prevResult: String = ""
+
 
     @JvmStatic
     fun eval(
@@ -114,16 +115,15 @@ object Evaluator {
 	prevResult = formattedResult
 	formattedResult
     } catch (e: Exception) {
-         val errorPattern = "^Invalid expression at position -?\\d+ .*$".toRegex()
 
-         if (e.message?.matches(errorPattern) ?: false) {
+         if (e.message?.startsWith("Invalid expression at position") ?: false) {
              prevResult
          } else {
              e.message ?: "Undetermined error"
        }
     } 
 
-    // We don't call "handleRelativePercentage" here to avoid recursive
+    // We don't call "handleRelativePercentage" here to avoid recursive call
     @JvmStatic
     private fun evalParenthesis(formula: String): String {
         val result = KEVAL.eval(formula)

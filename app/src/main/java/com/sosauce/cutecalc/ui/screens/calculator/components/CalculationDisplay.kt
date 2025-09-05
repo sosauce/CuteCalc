@@ -12,13 +12,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sosauce.cutecalc.data.datastore.rememberDecimal
 import com.sosauce.cutecalc.data.datastore.rememberUseSystemFont
 import com.sosauce.cutecalc.ui.screens.calculator.CalculatorViewModel
 import com.sosauce.cutecalc.ui.shared_components.CuteText
-import com.sosauce.cutecalc.ui.theme.GlobalFont
+import com.sosauce.cutecalc.ui.theme.nunitoFontFamily
 import com.sosauce.cutecalc.utils.FormatTransformation
 import com.sosauce.cutecalc.utils.formatNumber
 import com.sosauce.cutecalc.utils.isErrorMessage
@@ -52,6 +53,7 @@ fun CalculationDisplay(
                 .horizontalScroll(previewScrollState),
             style = MaterialTheme.typography.displaySmall.copy(
                 textAlign = TextAlign.End,
+                fontWeight = FontWeight.SemiBold,
                 color = if (!viewModel.evaluatedCalculation.isErrorMessage()) {
                     MaterialTheme.colorScheme.onSurfaceVariant
                 } else MaterialTheme.colorScheme.error
@@ -64,7 +66,8 @@ fun CalculationDisplay(
                 textStyle = MaterialTheme.typography.displayMedium.copy(
                     textAlign = TextAlign.End,
                     color = MaterialTheme.colorScheme.onBackground,
-                    fontFamily = if (!useSystemFont) GlobalFont else null,
+                    fontFamily = if (!useSystemFont) nunitoFontFamily else null,
+                    fontWeight = FontWeight.ExtraBold
                 ),
                 modifier = Modifier.fillMaxWidth(),
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),

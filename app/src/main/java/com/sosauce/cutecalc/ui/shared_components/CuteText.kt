@@ -8,11 +8,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import com.sosauce.cutecalc.data.datastore.rememberUseSystemFont
-import com.sosauce.cutecalc.ui.theme.GlobalFont
+import com.sosauce.cutecalc.ui.theme.nunitoFontFamily
 
 @Composable
 fun CuteText(
@@ -20,6 +21,7 @@ fun CuteText(
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
+    fontWeight: FontWeight? = FontWeight.ExtraBold,
     textAlign: TextAlign? = null,
     maxLines: Int = Int.MAX_VALUE,
     style: TextStyle = LocalTextStyle.current,
@@ -30,7 +32,7 @@ fun CuteText(
     val fontFamily = if (useSystemFont) {
         null
     } else {
-        GlobalFont
+        nunitoFontFamily
     }
 
     Text(
@@ -39,6 +41,7 @@ fun CuteText(
         color = color,
         fontSize = fontSize,
         textAlign = textAlign,
+        fontWeight = fontWeight,
         maxLines = maxLines,
         fontFamily = fontFamily,
         style = style,

@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.data.datastore.rememberAppTheme
@@ -33,7 +34,7 @@ import com.sosauce.cutecalc.ui.screens.settings.components.SettingsSwitch
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsWithTitle
 import com.sosauce.cutecalc.ui.screens.settings.components.ThemeSelector
 import com.sosauce.cutecalc.ui.shared_components.ScaffoldWithBackArrow
-import com.sosauce.cutecalc.ui.theme.GlobalFont
+import com.sosauce.cutecalc.ui.theme.nunitoFontFamily
 import com.sosauce.cutecalc.utils.CuteTheme
 import com.sosauce.cutecalc.utils.anyDarkColorScheme
 import com.sosauce.cutecalc.utils.anyLightColorScheme
@@ -96,7 +97,8 @@ fun SettingsLookAndFeel(
             text = {
                 Text(
                     text = "Tt",
-                    fontFamily = GlobalFont
+                    fontFamily = nunitoFontFamily,
+                    fontWeight = FontWeight.ExtraBold
                 )
             },
         ),
