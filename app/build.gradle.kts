@@ -8,7 +8,7 @@ plugins {
 }
 
 
-val versionNameLocal = "3.6.2"
+val versionNameLocal = "3.6.3"
 
 android {
     namespace = "com.sosauce.cutecalc"
@@ -24,6 +24,11 @@ android {
         targetSdk = 36
         versionCode = major * 10000 + minor * 100 + patch // https://proandroiddev.com/quick-tip-auto-generate-your-versioncode-614629f7d3bd
         versionName = versionNameLocal
+        ndk {
+            //noinspection ChromeOsAbiSupport
+            abiFilters += arrayOf("arm64-v8a", "armeabi-v7a")
+        }
+
     }
 
     applicationVariants.all {
