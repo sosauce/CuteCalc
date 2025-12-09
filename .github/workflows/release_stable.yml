@@ -42,7 +42,7 @@ jobs:
         SIGNING_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
     - uses: actions/upload-artifact@v4
       with:
-        name: CuteMusic Release
+        name: CuteCalc Release
         path: app/build/**/*.apk
     - name: Generate Changelog Content
       id: generate_changelog
