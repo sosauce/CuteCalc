@@ -8,7 +8,6 @@ plugins {
 }
 
 
-val versionNameLocal = "3.6.3"
 
 android {
     namespace = "com.sosauce.cutecalc"
@@ -16,14 +15,11 @@ android {
 
     defaultConfig {
 
-        //noinspection WrongGradleMethod
-        val (major, minor, patch) = versionNameLocal.split(".").map { it.toInt() }
-
         applicationId = "com.sosauce.cutecalc"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 36
-        versionCode = major * 10000 + minor * 100 + patch // https://proandroiddev.com/quick-tip-auto-generate-your-versioncode-614629f7d3bd
-        versionName = versionNameLocal
+        versionCode = 40001
+        versionName = "3.6.4"
         ndk {
             //noinspection ChromeOsAbiSupport
             abiFilters += arrayOf("arm64-v8a", "armeabi-v7a")
@@ -36,9 +32,18 @@ android {
         variant.outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                val outputFileName = "CC_$versionNameLocal.apk"
+                val outputFileName = "CC_${variant.versionName}.apk"
                 output.outputFileName = outputFileName
             }
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("release_key.jks")
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("KEY_ALIAS")
+            keyPassword = System.getenv("KEY_PASSWORD")
+        }
     }
 
     buildTypes {
@@ -46,6 +51,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             isCrunchPngs = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -90,5 +96,6 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.keval)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.compose.material3)
     ksp(libs.androidx.room.compiler)
 }

@@ -16,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.data.datastore.rememberDecimal
-import com.sosauce.cutecalc.ui.shared_components.CuteText
 
 
 @Composable
@@ -66,9 +66,9 @@ fun SettingsSwitch(
                     .weight(1f)
             ) {
                 Column {
-                    CuteText(stringResource(text))
+                    Text(stringResource(text))
                     optionalDescription?.let {
-                        CuteText(
+                        Text(
                             text = stringResource(it),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 12.sp
@@ -124,9 +124,9 @@ fun SettingsDropdownMenu(
                     .weight(1f)
             ) {
                 Column {
-                    CuteText(stringResource(text))
+                    Text(stringResource(text))
                     optionalDescription?.let {
-                        CuteText(
+                        Text(
                             text = stringResource(it),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 12.sp
@@ -140,7 +140,7 @@ fun SettingsDropdownMenu(
                 AnimatedContent(
                     targetState = value
                 ) {
-                    CuteText(
+                    Text(
                         text = if (it == Long.MAX_VALUE) stringResource(R.string.no_limit) else it.toString(),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 15.sp

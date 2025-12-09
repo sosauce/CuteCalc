@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.ui.screens.settings.FontStyle
-import com.sosauce.cutecalc.ui.shared_components.CuteText
 
 @Composable
 fun FontSelector(
@@ -54,7 +54,7 @@ fun FontSelector(
             contentAlignment = Alignment.Center
         ) { item.text() }
         Spacer(Modifier.weight(1f))
-        CuteText(
+        Text(
             text = if (item.fontStyle == FontStyle.SYSTEM) stringResource(R.string.system) else "Default"
         )
     }

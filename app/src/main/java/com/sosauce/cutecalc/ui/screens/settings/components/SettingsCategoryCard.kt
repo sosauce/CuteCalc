@@ -11,6 +11,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,7 +19,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.sosauce.cutecalc.ui.shared_components.CuteText
 
 @Composable
 fun SettingsCategoryCard(
@@ -53,8 +53,8 @@ fun SettingsCategoryCard(
             )
             Spacer(Modifier.width(15.dp))
             Column {
-                CuteText(stringResource(name))
-                CuteText(
+                Text(stringResource(name))
+                Text(
                     text = stringResource(description),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium

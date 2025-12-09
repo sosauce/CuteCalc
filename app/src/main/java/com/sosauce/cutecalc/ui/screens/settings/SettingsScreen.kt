@@ -10,9 +10,12 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
@@ -27,7 +30,8 @@ import com.sosauce.cutecalc.ui.navigation.Screens
 import com.sosauce.cutecalc.ui.navigation.SettingsScreen
 import com.sosauce.cutecalc.ui.screens.settings.components.AboutCard
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsCategoryCard
-import com.sosauce.cutecalc.ui.shared_components.ScaffoldWithBackArrow
+import com.sosauce.cutecalc.ui.shared_components.CuteNavigationButton
+import com.sosauce.cutecalc.utils.selfAlignHorizontally
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -120,9 +124,16 @@ private fun SettingsPage(
         )
     )
 
-    ScaffoldWithBackArrow(
-        backArrowVisible = !listState.canScrollBackward,
-        onNavigateUp = { onNavigate(Screens.MAIN) }
+    Scaffold(
+        bottomBar = {
+            CuteNavigationButton(
+                modifier = Modifier
+                    .padding(start = 15.dp)
+                    .navigationBarsPadding()
+                    .selfAlignHorizontally(Alignment.Start),
+                onNavigateUp = { onNavigate(Screens.MAIN) }
+            )
+        }
     ) { pv ->
         LazyColumn(
             modifier = Modifier.fillMaxSize(),

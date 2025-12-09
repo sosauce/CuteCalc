@@ -9,6 +9,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,9 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
-import com.sosauce.cutecalc.data.datastore.rememberSortHistoryASC
+import com.sosauce.cutecalc.data.datastore.rememberHistoryNewestFirst
 import com.sosauce.cutecalc.ui.shared_components.CuteDropdownMenuItem
-import com.sosauce.cutecalc.ui.shared_components.CuteText
 
 @Composable
 fun HistoryActionButtons(
@@ -29,7 +29,7 @@ fun HistoryActionButtons(
     onDeleteHistory: () -> Unit
 ) {
     var dropDownExpanded by remember { mutableStateOf(false) }
-    var sortASC by rememberSortHistoryASC()
+    var newestFirst by rememberHistoryNewestFirst()
 
     SmallFloatingActionButton(
         onClick = {},
@@ -68,21 +68,21 @@ fun HistoryActionButtons(
                 shape = RoundedCornerShape(24.dp)
             ) {
                 CuteDropdownMenuItem(
-                    onClick = { sortASC = true },
-                    text = { CuteText(stringResource(R.string.ascending)) },
+                    onClick = { newestFirst = true },
+                    text = { Text(stringResource(R.string.newest_first)) },
                     leadingIcon = {
                         RadioButton(
-                            selected = sortASC,
+                            selected = newestFirst,
                             onClick = null
                         )
                     }
                 )
                 CuteDropdownMenuItem(
-                    onClick = { sortASC = false },
-                    text = { CuteText(stringResource(R.string.descending)) },
+                    onClick = { newestFirst = false },
+                    text = { Text(stringResource(R.string.oldest_first)) },
                     leadingIcon = {
                         RadioButton(
-                            selected = !sortASC,
+                            selected = !newestFirst,
                             onClick = null
                         )
                     }

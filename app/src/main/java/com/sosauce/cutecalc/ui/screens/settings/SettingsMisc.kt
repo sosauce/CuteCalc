@@ -1,19 +1,23 @@
 package com.sosauce.cutecalc.ui.screens.settings
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.data.datastore.rememberShowOnLockScreen
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsSwitch
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsWithTitle
-import com.sosauce.cutecalc.ui.shared_components.ScaffoldWithBackArrow
+import com.sosauce.cutecalc.ui.shared_components.CuteNavigationButton
+import com.sosauce.cutecalc.utils.selfAlignHorizontally
 
 @Composable
 fun SettingsMisc(
@@ -22,9 +26,16 @@ fun SettingsMisc(
     val scrollState = rememberScrollState()
     var showOnLockScreen by rememberShowOnLockScreen()
 
-    ScaffoldWithBackArrow(
-        backArrowVisible = !scrollState.canScrollBackward,
-        onNavigateUp = onNavigateUp
+    Scaffold(
+        bottomBar = {
+            CuteNavigationButton(
+                modifier = Modifier
+                    .padding(start = 15.dp)
+                    .navigationBarsPadding()
+                    .selfAlignHorizontally(Alignment.Start),
+                onNavigateUp = onNavigateUp
+            )
+        }
     ) { pv ->
         Column(
             modifier = Modifier

@@ -50,4 +50,8 @@
     <string name="formatting_desc">Make numbers look great !</string>
     <string name="show_ls">Show app on lock screen</string>
     <string name="show_ls_desc">The app will still be usable on the lock screen. This can be useful for example, in stores.</string>
+    <string name="newest_first">Newest first</string>
+    <string name="oldest_first">Oldest first</string>
+    <string name="no_calc_found">No calculation found !</string>
+    <string name="calc_empty">Start calculating already !</string>
 </resources>

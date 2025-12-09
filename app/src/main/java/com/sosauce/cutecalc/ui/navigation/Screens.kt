@@ -2,7 +2,6 @@ package com.sosauce.cutecalc.ui.navigation
 
 enum class Screens {
     MAIN,
-    HISTORY,
     SETTINGS
 }
 

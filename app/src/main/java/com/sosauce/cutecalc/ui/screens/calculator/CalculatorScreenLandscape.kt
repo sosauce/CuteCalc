@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 
 package com.sosauce.cutecalc.ui.screens.calculator
 
@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.Scaffold
@@ -48,7 +50,8 @@ import java.text.DecimalFormatSymbols
 fun CalculatorScreenLandscape(
     viewModel: CalculatorViewModel,
     historyViewModel: HistoryViewModel,
-    onNavigate: (Screens) -> Unit
+    onNavigate: (Screens) -> Unit,
+    onScrollToHistory: () -> Unit
 ) {
     val showClearButton by rememberShowClearButton()
     val localeDecimalChar =
@@ -237,14 +240,20 @@ fun CalculatorScreenLandscape(
                 .padding(pv)
         ) {
             NavigationRail {
-                IconButton(onClick = { onNavigate(Screens.SETTINGS) }) {
+                IconButton(
+                    onClick = { onNavigate(Screens.SETTINGS) },
+                    shapes = IconButtonDefaults.shapes()
+                ) {
                     Icon(
                         painter = painterResource(R.drawable.settings_filled),
                         contentDescription = stringResource(R.string.settings),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
-                IconButton(onClick = { onNavigate(Screens.HISTORY) }) {
+                IconButton(
+                    onClick = onScrollToHistory,
+                    shapes = IconButtonDefaults.shapes()
+                ) {
                     Icon(
                         painter = painterResource(R.drawable.history_rounded),
                         contentDescription = stringResource(R.string.history),

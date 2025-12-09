@@ -3,6 +3,7 @@ package com.sosauce.cutecalc.ui.screens.settings
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -10,11 +11,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -23,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.data.datastore.rememberAppTheme
-import com.sosauce.cutecalc.data.datastore.rememberShowBackButton
 import com.sosauce.cutecalc.data.datastore.rememberShowClearButton
 import com.sosauce.cutecalc.data.datastore.rememberUseButtonsAnimation
 import com.sosauce.cutecalc.data.datastore.rememberUseSystemFont
@@ -33,11 +35,12 @@ import com.sosauce.cutecalc.ui.screens.settings.components.LazyRowWithScrollButt
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsSwitch
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsWithTitle
 import com.sosauce.cutecalc.ui.screens.settings.components.ThemeSelector
-import com.sosauce.cutecalc.ui.shared_components.ScaffoldWithBackArrow
+import com.sosauce.cutecalc.ui.shared_components.CuteNavigationButton
 import com.sosauce.cutecalc.ui.theme.nunitoFontFamily
 import com.sosauce.cutecalc.utils.CuteTheme
 import com.sosauce.cutecalc.utils.anyDarkColorScheme
 import com.sosauce.cutecalc.utils.anyLightColorScheme
+import com.sosauce.cutecalc.utils.selfAlignHorizontally
 
 @Composable
 fun SettingsLookAndFeel(
@@ -49,7 +52,6 @@ fun SettingsLookAndFeel(
     var useButtonsAnimation by rememberUseButtonsAnimation()
     var useHapticFeedback by rememberVibration()
     var showClearButton by rememberShowClearButton()
-    var showBackButton by rememberShowBackButton()
     val themeItems = listOf(
         _root_ide_package_.com.sosauce.cutecalc.ui.screens.settings.components.ThemeItem(
             onClick = { theme = CuteTheme.SYSTEM },
@@ -110,9 +112,16 @@ fun SettingsLookAndFeel(
         )
     )
 
-    ScaffoldWithBackArrow(
-        backArrowVisible = !scrollState.canScrollBackward,
-        onNavigateUp = onNavigateUp
+    Scaffold(
+        bottomBar = {
+            CuteNavigationButton(
+                modifier = Modifier
+                    .padding(start = 15.dp)
+                    .navigationBarsPadding()
+                    .selfAlignHorizontally(Alignment.Start),
+                onNavigateUp = onNavigateUp
+            )
+        }
     ) { pv ->
         Column(
             modifier = Modifier
@@ -186,16 +195,9 @@ fun SettingsLookAndFeel(
                     checked = showClearButton,
                     onCheckedChange = { showClearButton = !showClearButton },
                     topDp = 4.dp,
-                    bottomDp = 4.dp,
+                    bottomDp = 24.dp,
                     text = R.string.show_clear_button,
                     optionalDescription = R.string.clear_button_desc
-                )
-                SettingsSwitch(
-                    checked = showBackButton,
-                    onCheckedChange = { showBackButton = !showBackButton },
-                    topDp = 4.dp,
-                    bottomDp = 24.dp,
-                    text = R.string.show_back_button
                 )
             }
         }

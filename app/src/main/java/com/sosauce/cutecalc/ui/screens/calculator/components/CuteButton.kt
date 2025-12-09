@@ -13,12 +13,11 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -39,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.data.datastore.rememberUseButtonsAnimation
 import com.sosauce.cutecalc.data.datastore.rememberVibration
-import com.sosauce.cutecalc.ui.shared_components.CuteText
 import com.sosauce.cutecalc.utils.BACKSPACE
 import com.sosauce.cutecalc.utils.thenIf
 
@@ -98,9 +96,9 @@ fun RowScope.CuteButton(
                 modifier = Modifier.size(48.dp)
             )
         } else {
-            CuteText(
+            Text(
                 text = text,
-                color = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
+                color = contentColorFor(backgroundColor),
                 style = MaterialTheme.typography.displaySmall
             )
         }

@@ -15,6 +15,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
-import com.sosauce.cutecalc.ui.shared_components.CuteText
 import com.sosauce.cutecalc.utils.GITHUB_RELEASES
 import com.sosauce.cutecalc.utils.SUPPORT_PAGE
 
@@ -60,8 +60,8 @@ fun AboutCard() {
                 )
             }
             Column {
-                CuteText(stringResource(R.string.cc_by_sosauce))
-                CuteText(
+                Text(stringResource(R.string.cc_by_sosauce))
+                Text(
                     text = "${stringResource(R.string.version)} $version",
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -79,7 +79,7 @@ fun AboutCard() {
                     bottomEnd = 4.dp
                 ),
                 modifier = Modifier.weight(1f)
-            ) { CuteText(stringResource(R.string.update)) }
+            ) { Text(stringResource(R.string.update)) }
             Spacer(Modifier.width(2.dp))
             Button(
                 onClick = { uriHandler.openUri(SUPPORT_PAGE) },
@@ -90,7 +90,7 @@ fun AboutCard() {
                     bottomEnd = 24.dp
                 ),
                 modifier = Modifier.weight(1f)
-            ) { CuteText(stringResource(R.string.support)) }
+            ) { Text(stringResource(R.string.support)) }
         }
     }
 }

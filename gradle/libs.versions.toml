@@ -1,16 +1,17 @@
 [versions]
-agp = "8.11.1" # dont update for now, AGP 12+ fails on F-droid
-composeBom = "2025.08.01"
-coreSplashscreen = "1.0.1"
-datastorePreferences = "1.1.7"
+agp = "8.13.1"
+composeBom = "2025.12.00"
+coreSplashscreen = "1.2.0"
+datastorePreferences = "1.2.0"
 keval = "1.1.1"
-kotlin = "2.2.10"
-ksp = "2.2.10-2.0.2"
-lifecycleViewmodelCompose = "2.9.3"
-roomCompiler = "2.7.2"
-roomKtx = "2.7.2"
-activityCompose = "1.10.1"
-material3 = "1.4.0-alpha18" # Don't update for now as it will require bumping minSDK to 23
+kotlin = "2.2.21"
+ksp = "2.3.3"
+lifecycleViewmodelCompose = "2.10.0"
+roomCompiler = "2.8.4"
+roomKtx = "2.8.4"
+activityCompose = "1.12.1"
+material3 = "1.5.0-alpha10"
+material3Version = "1.4.0"
 
 
 [libraries]
@@ -24,6 +25,7 @@ keval = { module = "com.notkamui.libs:keval", version.ref = "keval" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3Version" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

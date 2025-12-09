@@ -89,7 +89,7 @@ object Evaluator {
         }
 
     }
-	
+
     // Storing the previous result to show previous output even though expression is not complete
     @JvmStatic
     private var prevResult: String = ""
@@ -112,16 +112,16 @@ object Evaluator {
                 .stripTrailingZeros()
                 .toPlainString()
         }
-	prevResult = formattedResult
-	formattedResult
+        prevResult = formattedResult
+        formattedResult
     } catch (e: Exception) {
 
-         if (e.message?.startsWith("Invalid expression at position") ?: false) {
-             prevResult
-         } else {
-             e.message ?: "Undetermined error"
-       }
-    } 
+        if (e.message?.startsWith("Invalid expression at position") ?: false) {
+            prevResult
+        } else {
+            e.message ?: "Undetermined error"
+        }
+    }
 
     // We don't call "handleRelativePercentage" here to avoid recursive call
     @JvmStatic

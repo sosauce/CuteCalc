@@ -3,6 +3,8 @@ package com.sosauce.cutecalc.utils
 import android.app.Activity
 import android.os.Build
 import android.view.WindowManager
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
@@ -15,8 +17,10 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.sosauce.cutecalc.domain.model.Calculation
 import java.text.DecimalFormatSymbols
 
 fun Modifier.thenIf(
@@ -28,13 +32,15 @@ fun Modifier.thenIf(
     } else this
 }
 
-inline fun <T, R : Comparable<R>> List<T>.sort(
-    sortAsc: Boolean,
-    crossinline selector: (T) -> R?
-): List<T> {
-    return if (sortAsc) {
-        this.sortedBy(selector)
-    } else this.sortedByDescending(selector)
+
+fun List<Calculation>.sort(
+    newestFirst: Boolean
+): List<Calculation> {
+    return if (newestFirst) {
+        this.sortedByDescending { it.id }
+    } else {
+        this
+    }
 }
 
 @Composable
@@ -215,6 +221,13 @@ fun Activity.showOnLockScreen(show: Boolean) {
     }
 }
 
+fun Modifier.selfAlignHorizontally(align: Alignment.Horizontal = Alignment.CenterHorizontally): Modifier {
+    return this.then(
+        Modifier
+            .fillMaxWidth()
+            .wrapContentWidth(align)
+    )
+}
 
 
 

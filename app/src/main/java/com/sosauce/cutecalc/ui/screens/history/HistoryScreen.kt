@@ -11,12 +11,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -24,6 +27,8 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,22 +40,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.data.datastore.rememberDecimal
-import com.sosauce.cutecalc.data.datastore.rememberSortHistoryASC
+import com.sosauce.cutecalc.data.datastore.rememberHistoryNewestFirst
 import com.sosauce.cutecalc.data.datastore.rememberUseHistory
 import com.sosauce.cutecalc.domain.model.Calculation
 import com.sosauce.cutecalc.domain.repository.HistoryEvents
 import com.sosauce.cutecalc.ui.navigation.Screens
+import com.sosauce.cutecalc.ui.screens.history.components.DeletionConfirmationDialog
+import com.sosauce.cutecalc.ui.screens.history.components.HistoryActionButtons
 import com.sosauce.cutecalc.ui.shared_components.CuteDropdownMenuItem
-import com.sosauce.cutecalc.ui.shared_components.CuteText
-import com.sosauce.cutecalc.ui.shared_components.ScaffoldWithBackArrow
+import com.sosauce.cutecalc.ui.shared_components.CuteNavigationButton
 import com.sosauce.cutecalc.utils.formatExpression
 import com.sosauce.cutecalc.utils.formatNumber
 import com.sosauce.cutecalc.utils.isErrorMessage
-import com.sosauce.cutecalc.utils.showBottomBar
 import com.sosauce.cutecalc.utils.sort
 
 @Composable
@@ -58,17 +64,33 @@ fun HistoryScreen(
     calculations: List<Calculation>,
     onEvents: (HistoryEvents) -> Unit,
     onPutBackToField: (String) -> Unit,
-    onNavigate: (Screens) -> Unit
+    onScrollToMain: () -> Unit
 ) {
     val lazyState = rememberLazyListState()
     var isHistoryEnable by rememberUseHistory()
-    val sortASC by rememberSortHistoryASC()
+    val newestFirst by rememberHistoryNewestFirst()
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
 
-    ScaffoldWithBackArrow(
-        backArrowVisible = lazyState.showBottomBar,
-        showHistoryActions = true,
-        onDeleteHistory = { onEvents(HistoryEvents.DeleteAllCalculation) },
-        onNavigateUp = { onNavigate(Screens.MAIN) }
+    if (showDeleteConfirmation) {
+        DeletionConfirmationDialog(
+            onDismissRequest = { showDeleteConfirmation = false },
+            onDelete = { onEvents(HistoryEvents.DeleteAllCalculation) }
+        )
+    }
+
+    Scaffold(
+        bottomBar = {
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 15.dp)
+                    .fillMaxWidth()
+                    .navigationBarsPadding(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                CuteNavigationButton(onNavigateUp = onScrollToMain)
+                HistoryActionButtons { showDeleteConfirmation = true }
+            }
+        }
     ) { pv ->
         if (!isHistoryEnable) {
             Column(
@@ -77,12 +99,13 @@ fun HistoryScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                CuteText(stringResource(R.string.history_not_enabled))
+                Text(stringResource(R.string.history_not_enabled))
                 Spacer(Modifier.height(10.dp))
                 Button(
-                    onClick = { isHistoryEnable = !isHistoryEnable }
+                    onClick = { isHistoryEnable = !isHistoryEnable },
+                    shapes = ButtonDefaults.shapes()
                 ) {
-                    CuteText(stringResource(R.string.enable_history))
+                    Text(stringResource(R.string.enable_history))
                 }
             }
         } else {
@@ -91,19 +114,47 @@ fun HistoryScreen(
                 contentPadding = pv,
                 state = lazyState
             ) {
-                itemsIndexed(
-                    items = calculations.sort(sortASC) { it.id },
-                    key = { _, item -> item.id }
-                ) { index, item ->
-                    CalculationItem(
-                        calculation = item,
-                        onEvents = onEvents,
-                        onPutBackToField = onPutBackToField,
-                        topDp = if (index == 0) 24.dp else 4.dp,
-                        bottomDp = if (index == calculations.lastIndex) 24.dp else 4.dp,
-                        modifier = Modifier.animateItem()
-                    )
+
+                if (calculations.isEmpty()) {
+                    item {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.history_rounded),
+                                contentDescription = null,
+                                modifier = Modifier.size(70.dp)
+                            )
+                            Spacer(Modifier.height(10.dp))
+                            Text(
+                                text = stringResource(R.string.no_calc_found),
+                                style = MaterialTheme.typography.headlineMediumEmphasized,
+                                fontWeight = FontWeight.Black
+                            )
+                            Text(
+                                text = stringResource(R.string.calc_empty),
+                                style = MaterialTheme.typography.bodyMediumEmphasized,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                } else {
+                    itemsIndexed(
+                        items = calculations.sort(newestFirst),
+                        key = { _, item -> item.id }
+                    ) { index, item ->
+                        CalculationItem(
+                            calculation = item,
+                            onEvents = onEvents,
+                            onPutBackToField = onPutBackToField,
+                            topDp = if (index == 0) 24.dp else 4.dp,
+                            bottomDp = if (index == calculations.lastIndex) 24.dp else 4.dp,
+                            modifier = Modifier.animateItem()
+                        )
+                    }
                 }
+
             }
         }
     }
@@ -171,12 +222,12 @@ private fun CalculationItem(
                     .weight(1f),
                 horizontalAlignment = Alignment.Start
             ) {
-                CuteText(
+                Text(
                     text = calculation.operation.formatExpression(shouldFormat),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.basicMarquee()
                 )
-                CuteText(
+                Text(
                     text = calculation.result.formatNumber(shouldFormat),
                     style = MaterialTheme.typography.titleLarge.copy(
                         color = if (calculation.result.isErrorMessage()) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
@@ -203,7 +254,7 @@ private fun CalculationItem(
                                 action.onClick()
                                 actionsExpanded = false
                             },
-                            text = { CuteText(stringResource(action.text)) },
+                            text = { Text(stringResource(action.text)) },
                             leadingIcon = {
                                 Icon(
                                     painter = painterResource(action.icon),
@@ -215,7 +266,7 @@ private fun CalculationItem(
                     CuteDropdownMenuItem(
                         onClick = { onEvents(HistoryEvents.DeleteCalculation(calculation)) },
                         text = {
-                            CuteText(
+                            Text(
                                 text = stringResource(R.string.delete),
                                 color = MaterialTheme.colorScheme.error
                             )

@@ -2,18 +2,17 @@
 
 package com.sosauce.cutecalc.ui.screens.calculator
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
@@ -22,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -51,6 +49,7 @@ fun CalculatorScreen(
     viewModel: CalculatorViewModel,
     historyViewModel: HistoryViewModel,
     onNavigate: (Screens) -> Unit,
+    onScrollToHistory: () -> Unit
 ) {
     val isLandscape = rememberIsLandscape()
     val localeDecimalChar =
@@ -236,7 +235,8 @@ fun CalculatorScreen(
         return CalculatorScreenLandscape(
             historyViewModel = historyViewModel,
             viewModel = viewModel,
-            onNavigate = onNavigate
+            onNavigate = onNavigate,
+            onScrollToHistory = onScrollToHistory
         )
     }
 
@@ -245,14 +245,20 @@ fun CalculatorScreen(
             TopAppBar(
                 title = {},
                 actions = {
-                    IconButton(onClick = { onNavigate(Screens.HISTORY) }) {
+                    IconButton(
+                        onClick = onScrollToHistory,
+                        shapes = IconButtonDefaults.shapes()
+                    ) {
                         Icon(
                             painter = painterResource(R.drawable.history_rounded),
                             contentDescription = stringResource(R.string.history),
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
-                    IconButton(onClick = { onNavigate(Screens.SETTINGS) }) {
+                    IconButton(
+                        onClick = { onNavigate(Screens.SETTINGS) },
+                        shapes = IconButtonDefaults.shapes()
+                    ) {
                         Icon(
                             painter = painterResource(R.drawable.settings_filled),
                             contentDescription = stringResource(R.string.settings),

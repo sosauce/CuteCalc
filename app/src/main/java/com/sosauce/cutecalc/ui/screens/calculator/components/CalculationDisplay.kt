@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,7 +19,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sosauce.cutecalc.data.datastore.rememberDecimal
 import com.sosauce.cutecalc.data.datastore.rememberUseSystemFont
 import com.sosauce.cutecalc.ui.screens.calculator.CalculatorViewModel
-import com.sosauce.cutecalc.ui.shared_components.CuteText
 import com.sosauce.cutecalc.ui.theme.nunitoFontFamily
 import com.sosauce.cutecalc.utils.FormatTransformation
 import com.sosauce.cutecalc.utils.formatNumber
@@ -44,7 +44,7 @@ fun CalculationDisplay(
 
 
     Column(modifier) {
-        CuteText(
+        Text(
             text = viewModel.evaluatedCalculation
                 .formatNumber(shouldFormat)
                 .takeIf { !it.isErrorMessage() || previewCanShowErrors } ?: "",
