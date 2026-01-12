@@ -232,14 +232,15 @@ fun CalculatorScreenLandscape(
     )
 
     Scaffold(contentWindowInsets = WindowInsets.safeDrawing) { pv ->
-
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .consumeWindowInsets(pv)
-                .padding(pv)
+                .padding(pv),
+            contentAlignment = Alignment.BottomCenter
         ) {
-            NavigationRail {
+            Column(
+                modifier = Modifier.align(Alignment.TopStart)
+            ) {
                 IconButton(
                     onClick = { onNavigate(Screens.SETTINGS) },
                     shapes = IconButtonDefaults.shapes()
@@ -261,55 +262,51 @@ fun CalculatorScreenLandscape(
                     )
                 }
             }
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                Column {
-                    CalculationDisplay(
-                        viewModel = viewModel
-                    )
-                    Column(
-                        modifier = Modifier.padding(horizontal = 10.dp),
-                        verticalArrangement = Arrangement.spacedBy(9.dp),
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(9.dp)
-                        ) {
-                            row1.fastForEach { button ->
-                                CuteButton(
-                                    text = button.text,
-                                    backgroundColor = button.backgroundColor,
-                                    onClick = button.onClick,
-                                    roundButton = false
-                                )
-                            }
 
+            Column {
+                CalculationDisplay(
+                    viewModel = viewModel
+                )
+                Column(
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    verticalArrangement = Arrangement.spacedBy(9.dp),
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(9.dp)
+                    ) {
+                        row1.fastForEach { button ->
+                            CuteButton(
+                                text = button.text,
+                                backgroundColor = button.backgroundColor,
+                                onClick = button.onClick,
+                                roundButton = false
+                            )
                         }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(9.dp)
-                        ) {
-                            row2.fastForEach { button ->
-                                CuteButton(
-                                    text = button.text,
-                                    backgroundColor = button.backgroundColor,
-                                    onClick = button.onClick,
-                                    onLongClick = button.onLongClick,
-                                    roundButton = false
-                                )
-                            }
+
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(9.dp)
+                    ) {
+                        row2.fastForEach { button ->
+                            CuteButton(
+                                text = button.text,
+                                backgroundColor = button.backgroundColor,
+                                onClick = button.onClick,
+                                onLongClick = button.onLongClick,
+                                roundButton = false
+                            )
                         }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(9.dp)
-                        ) {
-                            row3.fastForEach { button ->
-                                CuteButton(
-                                    text = button.text,
-                                    backgroundColor = button.backgroundColor,
-                                    onClick = button.onClick,
-                                    roundButton = false
-                                )
-                            }
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(9.dp)
+                    ) {
+                        row3.fastForEach { button ->
+                            CuteButton(
+                                text = button.text,
+                                backgroundColor = button.backgroundColor,
+                                onClick = button.onClick,
+                                roundButton = false
+                            )
                         }
                     }
                 }

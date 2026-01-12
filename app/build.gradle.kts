@@ -1,4 +1,7 @@
+import com.android.build.gradle.internal.tasks.AarMetadataReader.Companion.load
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.lang.System.load
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -18,8 +21,8 @@ android {
         applicationId = "com.sosauce.cutecalc"
         minSdk = 23
         targetSdk = 36
-        versionCode = 40001
-        versionName = "3.6.4"
+        versionCode = 40002
+        versionName = "3.6.5"
         ndk {
             //noinspection ChromeOsAbiSupport
             abiFilters += arrayOf("arm64-v8a", "armeabi-v7a")
@@ -37,12 +40,17 @@ android {
             }
     }
 
+    val keystoreFile = file("release_key.jks")
     signingConfigs {
         create("release") {
-            storeFile = file("release_key.jks")
-            storePassword = System.getenv("SIGNING_STORE_PASSWORD")
-            keyAlias = System.getenv("SIGNING_KEY_ALIAS")
-            keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+            if (keystoreFile.exists()) {
+                storeFile = keystoreFile
+                storePassword = System.getenv("SIGNING_STORE_PASSWORD")
+                keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+                keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+            } else {
+                println("No keystore found, APK will be unsigned")
+            }
         }
     }
 
@@ -51,7 +59,9 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             isCrunchPngs = true
-            signingConfig = signingConfigs.getByName("release")
+            if (keystoreFile.exists()) {
+                signingConfig = signingConfigs.findByName("release")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -96,6 +106,5 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.keval)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.compose.material3)
     ksp(libs.androidx.room.compiler)
 }

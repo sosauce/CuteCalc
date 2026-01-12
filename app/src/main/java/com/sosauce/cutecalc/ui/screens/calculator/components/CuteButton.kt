@@ -83,9 +83,7 @@ fun RowScope.CuteButton(
                 }
             )
             .weight(1f)
-            .thenIf(roundButton) {
-                aspectRatio(1f)
-            },
+            .aspectRatio(if (roundButton) 1f else 1.5f),
         contentAlignment = Alignment.Center
     ) {
         if (text == BACKSPACE) {
