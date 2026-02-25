@@ -20,8 +20,8 @@
 </p>
 
 <p align=center>
-<image src="https://i.ibb.co/99j3KMGV/screenshot1.png" height="512"/>
-<image src="https://i.ibb.co/5xnCKtTb/screenshot2.png" height="512"/>
+<image src="https://i.ibb.co/BKgJZXc3/1.png" height="512"/>
+<image src="https://i.ibb.co/60F5qmP9/2.png" height="512"/>
 
 
 ---
