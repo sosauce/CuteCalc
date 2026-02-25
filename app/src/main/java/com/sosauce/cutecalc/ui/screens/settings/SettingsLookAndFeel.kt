@@ -22,10 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.data.datastore.rememberAppTheme
+import com.sosauce.cutecalc.data.datastore.rememberColoredOperators
 import com.sosauce.cutecalc.data.datastore.rememberShowClearButton
 import com.sosauce.cutecalc.data.datastore.rememberUseButtonsAnimation
 import com.sosauce.cutecalc.data.datastore.rememberUseSystemFont
@@ -36,7 +38,6 @@ import com.sosauce.cutecalc.ui.screens.settings.components.SettingsSwitch
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsWithTitle
 import com.sosauce.cutecalc.ui.screens.settings.components.ThemeSelector
 import com.sosauce.cutecalc.ui.shared_components.CuteNavigationButton
-import com.sosauce.cutecalc.ui.theme.nunitoFontFamily
 import com.sosauce.cutecalc.utils.CuteTheme
 import com.sosauce.cutecalc.utils.anyDarkColorScheme
 import com.sosauce.cutecalc.utils.anyLightColorScheme
@@ -52,6 +53,7 @@ fun SettingsLookAndFeel(
     var useButtonsAnimation by rememberUseButtonsAnimation()
     var useHapticFeedback by rememberVibration()
     var showClearButton by rememberShowClearButton()
+    var coloredOperators by rememberColoredOperators()
     val themeItems = listOf(
         _root_ide_package_.com.sosauce.cutecalc.ui.screens.settings.components.ThemeItem(
             onClick = { theme = CuteTheme.SYSTEM },
@@ -99,7 +101,6 @@ fun SettingsLookAndFeel(
             text = {
                 Text(
                     text = "Tt",
-                    fontFamily = nunitoFontFamily,
                     fontWeight = FontWeight.ExtraBold
                 )
             },
@@ -108,7 +109,13 @@ fun SettingsLookAndFeel(
             onClick = { useSystemFont = true },
             fontStyle = FontStyle.SYSTEM,
             borderColor = if (useSystemFont) MaterialTheme.colorScheme.primary else Color.Transparent,
-            text = { Text("Tt") }
+            text = {
+                Text(
+                    text = "Tt",
+                    fontFamily = FontFamily.Default,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            }
         )
     )
 
@@ -183,6 +190,13 @@ fun SettingsLookAndFeel(
                     topDp = 24.dp,
                     bottomDp = 4.dp,
                     text = R.string.buttons_anim
+                )
+                SettingsSwitch(
+                    checked = coloredOperators,
+                    onCheckedChange = { coloredOperators = !coloredOperators },
+                    topDp = 4.dp,
+                    bottomDp = 4.dp,
+                    text = R.string.colored_operatos
                 )
                 SettingsSwitch(
                     checked = useHapticFeedback,

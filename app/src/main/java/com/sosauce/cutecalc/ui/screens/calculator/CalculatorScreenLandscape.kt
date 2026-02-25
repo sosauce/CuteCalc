@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,8 +17,6 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,29 +27,34 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.zIndex
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.data.actions.CalcAction
+import com.sosauce.cutecalc.data.calculator.Tokens
 import com.sosauce.cutecalc.data.datastore.rememberHistoryMaxItems
 import com.sosauce.cutecalc.data.datastore.rememberSaveErrorsToHistory
 import com.sosauce.cutecalc.data.datastore.rememberShowClearButton
 import com.sosauce.cutecalc.data.datastore.rememberUseHistory
 import com.sosauce.cutecalc.domain.repository.HistoryEvents
 import com.sosauce.cutecalc.ui.navigation.Screens
+import com.sosauce.cutecalc.ui.screens.calculator.components.ButtonType
 import com.sosauce.cutecalc.ui.screens.calculator.components.CalcButton
 import com.sosauce.cutecalc.ui.screens.calculator.components.CalculationDisplay
 import com.sosauce.cutecalc.ui.screens.calculator.components.CuteButton
 import com.sosauce.cutecalc.ui.screens.history.HistoryViewModel
 import com.sosauce.cutecalc.utils.BACKSPACE
+import com.sosauce.cutecalc.utils.PARENTHESES
 import com.sosauce.cutecalc.utils.whichParenthesis
 import java.text.DecimalFormatSymbols
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CalculatorScreenLandscape(
+    modifier: Modifier = Modifier,
     viewModel: CalculatorViewModel,
     historyViewModel: HistoryViewModel,
     onNavigate: (Screens) -> Unit,
-    onScrollToHistory: () -> Unit
+    onGotoHistory: () -> Unit
 ) {
     val showClearButton by rememberShowClearButton()
     val localeDecimalChar =
@@ -63,155 +66,152 @@ fun CalculatorScreenLandscape(
     val row1 = listOf(
         CalcButton(
             text = "√",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("√")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.SQUARE_ROOT)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "π",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("π")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.PI)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "9",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("9")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.NINE)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "8",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("8")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.EIGHT)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "7",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("7")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.SEVEN)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "^",
-            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("^")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.POWER)) },
+            type = ButtonType.OPERATOR
         ),
         if (showClearButton) {
             CalcButton(
-                text = viewModel.textFieldState.text.toString().whichParenthesis(),
-                backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+                text = PARENTHESES,
                 onClick = {
                     viewModel.handleAction(
                         CalcAction.AddToField(
-                            viewModel.textFieldState.text.toString().whichParenthesis()
+                            viewModel.textFieldState.text.whichParenthesis()
                         )
                     )
-                }
+                },
+                type = ButtonType.OPERATOR
             )
         } else {
             CalcButton(
                 text = "(",
-                backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-                onClick = { viewModel.handleAction(CalcAction.AddToField("(")) }
+                onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.OPEN_PARENTHESIS)) },
+                type = ButtonType.OPERATOR
             )
         },
         if (showClearButton) {
             CalcButton(
                 text = "C",
-                backgroundColor = MaterialTheme.colorScheme.inversePrimary,
-                onClick = { viewModel.handleAction(CalcAction.ResetField) }
+                onClick = { viewModel.handleAction(CalcAction.ResetField) },
+                type = ButtonType.ACTION
             )
         } else {
             CalcButton(
                 text = ")",
-                backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
                 onClick = {
                     viewModel.handleAction(
-                        CalcAction.AddToField(
-                            viewModel.textFieldState.text.toString().whichParenthesis()
-                        )
+                        CalcAction.AddToField(Tokens.CLOSED_PARENTHESIS)
                     )
-                }
+                },
+                type = ButtonType.OPERATOR
             )
         }
     )
     val row2 = listOf(
         CalcButton(
             text = "%",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("%")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.MODULO)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "3",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("3")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.THREE)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "4",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("4")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.FOUR)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "5",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("5")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.FIVE)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "6",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("6")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.SIX)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "+",
-            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("+")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.ADD)) },
+            type = ButtonType.OPERATOR
         ),
         CalcButton(
             text = "-",
-            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("-")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.SUBTRACT)) },
+            type = ButtonType.OPERATOR
         ),
         CalcButton(
             text = BACKSPACE,
-            backgroundColor = MaterialTheme.colorScheme.inversePrimary,
             onClick = { viewModel.handleAction(CalcAction.Backspace) },
-            onLongClick = { viewModel.handleAction(CalcAction.ResetField) }
+            onLongClick = { viewModel.handleAction(CalcAction.ResetField) },
+            type = ButtonType.ACTION
         )
     )
     val row3 = listOf(
         CalcButton(
             text = "!",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("!")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.FACTORIAL)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "2",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("2")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.TWO)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "1",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("1")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.ONE)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "0",
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("0")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.ZERO)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = localeDecimalChar,
-            backgroundColor = MaterialTheme.colorScheme.surfaceContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField(".")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.DECIMAL)) },
+            type = ButtonType.OTHER
         ),
         CalcButton(
             text = "×",
-            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("×")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.MULTIPLY)) },
+            type = ButtonType.OPERATOR
         ),
         CalcButton(
             text = "/",
-            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-            onClick = { viewModel.handleAction(CalcAction.AddToField("/")) }
+            onClick = { viewModel.handleAction(CalcAction.AddToField(Tokens.DIVIDE)) },
+            type = ButtonType.OPERATOR
         ),
         CalcButton(
             text = "=",
-            backgroundColor = MaterialTheme.colorScheme.inversePrimary,
             onClick = {
                 val operation = viewModel.textFieldState.text.toString()
                 viewModel.handleAction(CalcAction.GetResult)
@@ -228,10 +228,14 @@ fun CalculatorScreenLandscape(
                     )
                 }
             },
+            type = ButtonType.ACTION
         )
     )
 
-    Scaffold(contentWindowInsets = WindowInsets.safeDrawing) { pv ->
+    Scaffold(
+        modifier = modifier,
+        contentWindowInsets = WindowInsets.safeDrawing
+    ) { pv ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -239,7 +243,9 @@ fun CalculatorScreenLandscape(
             contentAlignment = Alignment.BottomCenter
         ) {
             Column(
-                modifier = Modifier.align(Alignment.TopStart)
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .zIndex(1f) //history doesnt click otherwise ?
             ) {
                 IconButton(
                     onClick = { onNavigate(Screens.SETTINGS) },
@@ -247,66 +253,47 @@ fun CalculatorScreenLandscape(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.settings_filled),
-                        contentDescription = stringResource(R.string.settings),
-                        tint = MaterialTheme.colorScheme.onBackground
+                        contentDescription = stringResource(R.string.settings)
                     )
                 }
                 IconButton(
-                    onClick = onScrollToHistory,
+                    onClick = onGotoHistory,
                     shapes = IconButtonDefaults.shapes()
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.history_rounded),
-                        contentDescription = stringResource(R.string.history),
-                        tint = MaterialTheme.colorScheme.onBackground
+                        contentDescription = stringResource(R.string.history)
                     )
                 }
             }
 
             Column {
                 CalculationDisplay(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onNavigate = onNavigate
                 )
+
+
                 Column(
-                    modifier = Modifier.padding(horizontal = 10.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(9.dp),
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(9.dp)
-                    ) {
-                        row1.fastForEach { button ->
-                            CuteButton(
-                                text = button.text,
-                                backgroundColor = button.backgroundColor,
-                                onClick = button.onClick,
-                                roundButton = false
-                            )
-                        }
+                    val rows = listOf(row1, row2, row3)
 
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(9.dp)
-                    ) {
-                        row2.fastForEach { button ->
-                            CuteButton(
-                                text = button.text,
-                                backgroundColor = button.backgroundColor,
-                                onClick = button.onClick,
-                                onLongClick = button.onLongClick,
-                                roundButton = false
-                            )
-                        }
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(9.dp)
-                    ) {
-                        row3.fastForEach { button ->
-                            CuteButton(
-                                text = button.text,
-                                backgroundColor = button.backgroundColor,
-                                onClick = button.onClick,
-                                roundButton = false
-                            )
+                    rows.forEach { row ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(9.dp)
+                        ) {
+                            row.fastForEach { button ->
+                                CuteButton(
+                                    text = button.text,
+                                    onClick = button.onClick,
+                                    onLongClick = button.onLongClick,
+                                    rectangle = true,
+                                    buttonType = button.type
+                                )
+                            }
                         }
                     }
                 }

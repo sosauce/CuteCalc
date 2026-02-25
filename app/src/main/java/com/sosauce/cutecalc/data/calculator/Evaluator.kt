@@ -2,49 +2,50 @@ package com.sosauce.cutecalc.data.calculator
 
 import com.notkamui.keval.Keval
 import com.notkamui.keval.KevalInvalidArgumentException
+import com.notkamui.keval.KevalInvalidExpressionException
 import com.notkamui.keval.KevalZeroDivisionException
 import java.math.RoundingMode
 import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class NegativeSquareRootException : RuntimeException("Negative square root")
+class NegativeSquareRootException : RuntimeException("Be for real 3:<")
 class ValueTooLargeException : RuntimeException("Value too large")
 object Evaluator {
 
     private val KEVAL = Keval.create {
         binaryOperator {
-            symbol = '+'
+            symbol = Tokens.ADD
             precedence = 2
             isLeftAssociative = true
             implementation = { a, b -> a + b }
         }
         unaryOperator {
-            symbol = '+'
+            symbol = Tokens.ADD
             isPrefix = true
             implementation = { it }
         }
         binaryOperator {
-            symbol = '-'
+            symbol = Tokens.SUBTRACT
             precedence = 2
             isLeftAssociative = true
             implementation = { a, b -> a - b }
         }
         unaryOperator {
-            symbol = '-'
+            symbol = Tokens.SUBTRACT
             isPrefix = true
             implementation = { -it }
         }
 
         binaryOperator {
-            symbol = '×'
+            symbol = Tokens.MULTIPLY
             precedence = 3
             isLeftAssociative = true
             implementation = { a, b -> a * b }
         }
 
         binaryOperator {
-            symbol = '/'
+            symbol = Tokens.DIVIDE
             precedence = 3
             isLeftAssociative = true
             implementation = { a, b ->
@@ -54,14 +55,14 @@ object Evaluator {
         }
 
         binaryOperator {
-            symbol = '^'
+            symbol = Tokens.POWER
             precedence = 4
             isLeftAssociative = false
             implementation = { a, b -> a.pow(b) }
         }
 
         unaryOperator {
-            symbol = '!'
+            symbol = Tokens.FACTORIAL
             isPrefix = false
             implementation = {
                 if (it < 0) throw KevalInvalidArgumentException("Factorial of a negative number")
@@ -71,14 +72,14 @@ object Evaluator {
         }
 
         unaryOperator {
-            symbol = '√'
+            symbol = Tokens.SQUARE_ROOT
             isPrefix = true
             implementation =
                 { arg -> if (arg < 0) throw NegativeSquareRootException() else sqrt(arg) }
         }
 
         unaryOperator {
-            symbol = '%'
+            symbol = Tokens.MODULO
             isPrefix = false
             implementation = { arg -> arg / 100 }
         }
@@ -90,8 +91,6 @@ object Evaluator {
 
     }
 
-    // Storing the previous result to show previous output even though expression is not complete
-    @JvmStatic
     private var prevResult: String = ""
 
 
@@ -101,7 +100,7 @@ object Evaluator {
         precision: Int
     ): String = try {
         val result = KEVAL
-            .eval(formula.replace("π", "PI").handleRelativePercentage())
+            .eval(formula.replace(Tokens.PI.toString(), "PI").handleRelativePercentage())
 
         val formattedResult = if (result > Double.MAX_VALUE) {
             throw ValueTooLargeException()
@@ -114,13 +113,10 @@ object Evaluator {
         }
         prevResult = formattedResult
         formattedResult
+    } catch (e: KevalInvalidExpressionException) {
+        prevResult
     } catch (e: Exception) {
-
-        if (e.message?.startsWith("Invalid expression at position") ?: false) {
-            prevResult
-        } else {
-            e.message ?: "Undetermined error"
-        }
+        e.message ?: "Undetermined error"
     }
 
     // We don't call "handleRelativePercentage" here to avoid recursive call
@@ -135,9 +131,8 @@ object Evaluator {
     }
 
     private fun String.handleRelativePercentage(): String {
-        val regex = Regex("""(\d+(?:\.\d+)?)\s*([+\-*])\s*(\d+(?:\.\d+)?)%""")
 
-        return regex.replace(this.processParenthesisExpression()) { match ->
+        return relativePercentageRegex.replace(this.processParenthesisExpression()) { match ->
             val firstOperand = match.groupValues[1].toDouble()
             val operator = match.groupValues[2]
             val percentage = match.groupValues[3].toDouble()
@@ -154,7 +149,6 @@ object Evaluator {
     }
 
     private fun String.processParenthesisExpression(): String {
-        val parenthesisRegex = Regex("""\(([^()]+)\)""")
         var expression = this
 
 
@@ -165,6 +159,9 @@ object Evaluator {
         }
         return expression
     }
+
+    private val parenthesisRegex = Regex("""\(([^()]+)\)""")
+    private val relativePercentageRegex = Regex("""(\d+(?:\.\d+)?)\s*([+\-*])\s*(\d+(?:\.\d+)?)%""")
 
 
 }

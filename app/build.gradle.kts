@@ -5,7 +5,6 @@ import java.lang.System.load
 
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
 }
@@ -21,8 +20,8 @@ android {
         applicationId = "com.sosauce.cutecalc"
         minSdk = 23
         targetSdk = 36
-        versionCode = 40002
-        versionName = "3.6.5"
+        versionCode = 40003
+        versionName = "3.7.0"
         ndk {
             //noinspection ChromeOsAbiSupport
             abiFilters += arrayOf("arm64-v8a", "armeabi-v7a")
@@ -83,7 +82,6 @@ android {
     buildFeatures {
         compose = true
         aidl = false
-        renderScript = false
         shaders = false
         buildConfig = false
         resValues = false

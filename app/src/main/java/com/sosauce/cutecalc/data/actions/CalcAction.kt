@@ -5,6 +5,10 @@ sealed interface CalcAction {
     data object ResetField : CalcAction
     data object Backspace : CalcAction
     data class AddToField(
-        val value: String
+        val char: Char
+    ) : CalcAction
+
+    data class AddExpressionToField(
+        val expression: String
     ) : CalcAction
 }

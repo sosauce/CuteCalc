@@ -17,6 +17,7 @@ import com.sosauce.cutecalc.R
 @Composable
 fun CuteNavigationButton(
     modifier: Modifier = Modifier,
+    icon: Int = R.drawable.back_arrow,
     onNavigateUp: () -> Unit
 ) {
     FloatingActionButton(
@@ -26,7 +27,7 @@ fun CuteNavigationButton(
         containerColor = MaterialTheme.colorScheme.surfaceContainer
     ) {
         Icon(
-            painter = painterResource(R.drawable.back_arrow),
+            painter = painterResource(icon),
             contentDescription = stringResource(R.string.back)
         )
     }

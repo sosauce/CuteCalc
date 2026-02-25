@@ -64,9 +64,10 @@ class CalculatorViewModel(
                 }
             }
 
-            is CalcAction.AddToField -> textFieldState.insertText(action.value)
+            is CalcAction.AddToField -> textFieldState.insertText(action.char)
             is CalcAction.ResetField -> textFieldState.clearText()
             is CalcAction.Backspace -> textFieldState.backspace()
+            is CalcAction.AddExpressionToField -> textFieldState.setTextAndPlaceCursorAtEnd(action.expression)
         }
     }
 

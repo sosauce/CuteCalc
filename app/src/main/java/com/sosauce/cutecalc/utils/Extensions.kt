@@ -5,9 +5,6 @@ import android.os.Build
 import android.view.WindowManager
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.text.input.OutputTransformation
-import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.delete
 import androidx.compose.foundation.text.input.insert
@@ -20,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.sosauce.cutecalc.data.calculator.Tokens
 import com.sosauce.cutecalc.domain.model.Calculation
 import java.text.DecimalFormatSymbols
 
@@ -65,43 +63,56 @@ fun anyDarkColorScheme(): ColorScheme {
     }
 }
 
-val LazyListState.showBottomBar
-    get() =
-        if (layoutInfo.totalItemsCount == 0) {
-            true
-        } else if (
-            layoutInfo.visibleItemsInfo.firstOrNull()?.index == 0 &&
-            layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
-        ) {
-            true
-        } else {
-            layoutInfo.visibleItemsInfo.lastOrNull()?.index != layoutInfo.totalItemsCount - 1
-        }
+fun TextFieldState.insertText(char: Char) {
 
-fun TextFieldState.insertText(text: String) {
 
-    val textAsChar =
-        text.first() // We're not mean to be able to input more than one char at once anyways
     val expression = this.text
     val cursorPosition = selection.start
     val charInfrontCursor = expression.getOrNull(cursorPosition - 1) ?: ' '
     val charBehindCursor = expression.getOrNull(cursorPosition) ?: ' '
 
 
-    when {
-        expression.isEmpty() -> {
-            if (textAsChar.canStartExpression()) {
-                edit { insert(cursorPosition, text) }
-            }
+    when (char) {
+        Tokens.ZERO, Tokens.ONE, Tokens.TWO, Tokens.THREE, Tokens.FOUR,
+        Tokens.FIVE, Tokens.SIX, Tokens.SEVEN, Tokens.EIGHT, Tokens.NINE,
+        Tokens.PI, Tokens.OPEN_PARENTHESIS, Tokens.CLOSED_PARENTHESIS,
+        Tokens.SQUARE_ROOT, Tokens.MODULO, Tokens.FACTORIAL -> {
+            edit { insert(cursorPosition, char.toString()) }
         }
 
-        textAsChar.isOperator() -> {
-            if (charInfrontCursor.isChainable() && charBehindCursor.isChainable()) {
-                edit { insert(cursorPosition, text) }
-            }
+        Tokens.DECIMAL -> {
+            val toInsert = if (!charInfrontCursor.isDigit()) {
+                "${Tokens.ZERO}${Tokens.DECIMAL}"
+            } else Tokens.DECIMAL.toString()
+
+            edit { insert(cursorPosition, toInsert) }
         }
 
-        else -> edit { insert(cursorPosition, text) }
+        Tokens.SUBTRACT -> {
+            if (charInfrontCursor.isOperator()) {
+                edit { insert(cursorPosition, "${Tokens.OPEN_PARENTHESIS}${Tokens.SUBTRACT}") }
+            } else if (charBehindCursor.isOperator()) {
+                edit {
+                    replace(cursorPosition, cursorPosition + 1, char.toString())
+                }
+            } else {
+                edit { insert(cursorPosition, char.toString()) }
+            }
+
+        }
+
+
+        Tokens.ADD, Tokens.DIVIDE, Tokens.MULTIPLY, Tokens.POWER -> {
+            if (charInfrontCursor.isOperator()) {
+                edit { replace(cursorPosition - 1, cursorPosition, char.toString()) }
+            } else if (charBehindCursor.isOperator()) {
+                edit {
+                    replace(cursorPosition, cursorPosition + 1, char.toString())
+                }
+            } else {
+                edit { insert(cursorPosition, char.toString()) }
+            }
+        }
     }
 }
 
@@ -114,37 +125,25 @@ fun TextFieldState.backspace() {
     }
 }
 
+fun Char.isOperator(): Boolean {
+    val operators =
+        listOf(Tokens.ADD, Tokens.SUBTRACT, Tokens.DIVIDE, Tokens.MULTIPLY, Tokens.POWER)
+    return this in operators
+}
+
 
 fun String.isErrorMessage(): Boolean {
     return any { char -> char.isLetter() }
 }
 
-fun String.whichParenthesis(): String {
-    return if (count { it == '(' } > count { it == ')' }) {
-        ")"
+fun CharSequence.whichParenthesis(): Char {
+    return if (count { it == Tokens.OPEN_PARENTHESIS } > count { it == Tokens.CLOSED_PARENTHESIS }) {
+        Tokens.CLOSED_PARENTHESIS
     } else {
-        "("
+        Tokens.OPEN_PARENTHESIS
     }
 }
 
-fun Char.isChainable(): Boolean {
-
-    val unchainableOperators = listOf('×', '/', '^', '.')
-
-
-    return this !in unchainableOperators
-}
-
-fun Char.canStartExpression(): Boolean {
-    val startables = listOf('-', '+', '√', 'π', '(')
-    return this in startables || this.isDigit()
-}
-
-fun Char.isOperator(): Boolean {
-    val allOperators = listOf('×', '/', '^', '.', '√', '!', '%')
-
-    return this in allOperators
-}
 
 /**
  * Formats a number not an expression !!
@@ -154,18 +153,20 @@ fun String.formatNumber(shouldFormat: Boolean): String {
     val localSymbols = DecimalFormatSymbols.getInstance()
 
     if (number.any { it.isLetter() } || !shouldFormat) return number
-    var integer = number.takeWhile { it != '.' }
+
+    val integer = number.takeWhile { it != '.' }
     val decimal = number.removePrefix(integer).replace('.', localSymbols.decimalSeparator)
-    val offset = 3 - integer.length.mod(3)
-    val formattedInteger = if (offset != 3) {
-        integer = " ".repeat(offset) + integer
-        integer.chunked(3).joinToString(localSymbols.groupingSeparator.toString()).drop(offset)
-    } else {
-        integer.chunked(3).joinToString(localSymbols.groupingSeparator.toString())
-    }
+
+    // 1234
+    val formattedInteger = integer
+        .reversed() // 4321
+        .chunked(3) // [432, 1]
+        .joinToString(localSymbols.groupingSeparator.toString()) // 432,1
+        .reversed() // 1,234
 
     return "${formattedInteger}${decimal}"
 }
+
 
 fun String.formatExpression(shouldFormat: Boolean): String {
 
@@ -182,31 +183,6 @@ fun String.formatExpression(shouldFormat: Boolean): String {
 
 }
 
-
-object FormatTransformation : OutputTransformation {
-    override fun TextFieldBuffer.transformOutput() {
-        val expression = this.originalText.toString()
-
-        if (expression.isEmpty()) return
-
-        val localSymbols = DecimalFormatSymbols.getInstance()
-
-        expression.formatExpression(true).forEachIndexed { index, char ->
-            when (char) {
-                localSymbols.groupingSeparator -> insert(
-                    index,
-                    localSymbols.groupingSeparator.toString()
-                )
-
-                localSymbols.decimalSeparator -> replace(
-                    index,
-                    index + 1,
-                    localSymbols.decimalSeparator.toString()
-                )
-            }
-        }
-    }
-}
 
 fun Activity.showOnLockScreen(show: Boolean) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {

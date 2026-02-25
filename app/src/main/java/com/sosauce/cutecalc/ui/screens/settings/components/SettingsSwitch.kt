@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuGroup
+import androidx.compose.material3.DropdownMenuPopup
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -98,7 +100,6 @@ fun SettingsDropdownMenu(
 ) {
 
     var expanded by remember { mutableStateOf(false) }
-    val useDecimalFormatting by rememberDecimal()
 
 
     Card(
@@ -147,11 +148,15 @@ fun SettingsDropdownMenu(
                     )
                 }
 
-                DropdownMenu(
+
+                DropdownMenuPopup(
                     expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    shape = RoundedCornerShape(24.dp)
-                ) { dropdownContent() }
+                    onDismissRequest = { expanded = false }
+                ) {
+                    DropdownMenuGroup(
+                        shapes = MenuDefaults.groupShapes()
+                    ) { dropdownContent() }
+                }
             }
         }
     }

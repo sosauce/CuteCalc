@@ -1,16 +1,16 @@
 [versions]
-agp = "8.13.2"
-composeBom = "2025.12.01"
+agp = "9.0.1"
+composeBom = "2026.02.00"
 coreSplashscreen = "1.2.0"
 datastorePreferences = "1.2.0"
 keval = "1.1.1"
-kotlin = "2.3.0"
-ksp = "2.3.3"
+kotlin = "2.3.10"
+ksp = "2.3.4"
 lifecycleViewmodelCompose = "2.10.0"
 roomCompiler = "2.8.4"
 roomKtx = "2.8.4"
-activityCompose = "1.12.2"
-material3 = "1.5.0-alpha11"
+activityCompose = "1.12.4"
+material3 = "1.5.0-alpha14"
 
 
 [libraries]
@@ -27,6 +27,5 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

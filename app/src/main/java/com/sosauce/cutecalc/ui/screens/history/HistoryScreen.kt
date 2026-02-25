@@ -22,11 +22,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuGroup
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenuPopup
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,27 +41,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEachIndexed
 import com.sosauce.cutecalc.R
+import com.sosauce.cutecalc.data.datastore.rememberColoredOperators
 import com.sosauce.cutecalc.data.datastore.rememberDecimal
 import com.sosauce.cutecalc.data.datastore.rememberHistoryNewestFirst
 import com.sosauce.cutecalc.data.datastore.rememberUseHistory
 import com.sosauce.cutecalc.domain.model.Calculation
 import com.sosauce.cutecalc.domain.repository.HistoryEvents
-import com.sosauce.cutecalc.ui.navigation.Screens
 import com.sosauce.cutecalc.ui.screens.history.components.DeletionConfirmationDialog
 import com.sosauce.cutecalc.ui.screens.history.components.HistoryActionButtons
-import com.sosauce.cutecalc.ui.shared_components.CuteDropdownMenuItem
 import com.sosauce.cutecalc.ui.shared_components.CuteNavigationButton
 import com.sosauce.cutecalc.utils.formatExpression
 import com.sosauce.cutecalc.utils.formatNumber
 import com.sosauce.cutecalc.utils.isErrorMessage
+import com.sosauce.cutecalc.utils.isOperator
 import com.sosauce.cutecalc.utils.sort
 
 @Composable
@@ -64,7 +73,7 @@ fun HistoryScreen(
     calculations: List<Calculation>,
     onEvents: (HistoryEvents) -> Unit,
     onPutBackToField: (String) -> Unit,
-    onScrollToMain: () -> Unit
+    onGotoMain: () -> Unit
 ) {
     val lazyState = rememberLazyListState()
     var isHistoryEnable by rememberUseHistory()
@@ -87,7 +96,10 @@ fun HistoryScreen(
                     .navigationBarsPadding(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                CuteNavigationButton(onNavigateUp = onScrollToMain)
+                CuteNavigationButton(
+                    icon = R.drawable.arrow_up,
+                    onNavigateUp = onGotoMain
+                )
                 HistoryActionButtons { showDeleteConfirmation = true }
             }
         }
@@ -171,9 +183,11 @@ private fun CalculationItem(
     modifier: Modifier = Modifier
 ) {
     val clipboardManager = LocalClipboard.current
+    val localContentColor = LocalContentColor.current
     val shouldFormat by rememberDecimal()
+    val coloredOperators by rememberColoredOperators()
     var actionsExpanded by remember { mutableStateOf(false) }
-    val actions = arrayOf(
+    val actions = listOf(
         HistoryAction(
             onClick = { onPutBackToField(calculation.operation) },
             icon = R.drawable.undo,
@@ -190,6 +204,12 @@ private fun CalculationItem(
             },
             icon = R.drawable.copy,
             text = R.string.copy
+        ),
+        HistoryAction(
+            onClick = { onEvents(HistoryEvents.DeleteCalculation(calculation)) },
+            icon = R.drawable.delete,
+            text = R.string.delete,
+            tint = MaterialTheme.colorScheme.error
         )
     )
 
@@ -197,17 +217,16 @@ private fun CalculationItem(
     Card(
         onClick = { onPutBackToField(calculation.operation) },
         modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 2.dp)
-            .clip(
-                RoundedCornerShape(
-                    topStart = topDp,
-                    topEnd = topDp,
-                    bottomEnd = bottomDp,
-                    bottomStart = bottomDp
-                )
-            ),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 2.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
+        ),
+        shape = RoundedCornerShape(
+            topStart = topDp,
+            topEnd = topDp,
+            bottomEnd = bottomDp,
+            bottomStart = bottomDp
         )
     ) {
         Row(
@@ -223,62 +242,69 @@ private fun CalculationItem(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = calculation.operation.formatExpression(shouldFormat),
-                    style = MaterialTheme.typography.titleLarge,
+                    text = buildAnnotatedString {
+                        calculation.operation.formatExpression(shouldFormat).forEach { char ->
+                            if (coloredOperators && char.isOperator()) {
+                                withStyle(SpanStyle(MaterialTheme.colorScheme.primary)) {
+                                    append(char)
+                                }
+                            } else append(char)
+                        }
+                    },
+                    style = MaterialTheme.typography.titleLargeEmphasized,
                     modifier = Modifier.basicMarquee()
                 )
                 Text(
                     text = calculation.result.formatNumber(shouldFormat),
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        color = if (calculation.result.isErrorMessage()) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
+                    style = MaterialTheme.typography.titleLargeEmphasized.copy(
+                        color = if (calculation.result.isErrorMessage()) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary
                     ),
                     modifier = Modifier.basicMarquee()
                 )
             }
             IconButton(
-                onClick = { actionsExpanded = true }
+                onClick = { actionsExpanded = true },
+                shapes = IconButtonDefaults.shapes()
             ) {
                 Icon(
                     painter = painterResource(R.drawable.more_vert),
                     contentDescription = stringResource(R.string.more_actions)
                 )
 
-                DropdownMenu(
+                DropdownMenuPopup(
                     expanded = actionsExpanded,
-                    onDismissRequest = { actionsExpanded = false },
-                    shape = RoundedCornerShape(24.dp)
+                    onDismissRequest = { actionsExpanded = false }
                 ) {
-                    actions.forEach { action ->
-                        CuteDropdownMenuItem(
-                            onClick = {
-                                action.onClick()
-                                actionsExpanded = false
-                            },
-                            text = { Text(stringResource(action.text)) },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(action.icon),
-                                    contentDescription = null
-                                )
-                            }
-                        )
-                    }
-                    CuteDropdownMenuItem(
-                        onClick = { onEvents(HistoryEvents.DeleteCalculation(calculation)) },
-                        text = {
-                            Text(
-                                text = stringResource(R.string.delete),
-                                color = MaterialTheme.colorScheme.error
-                            )
-                        },
-                        leadingIcon = {
-                            Icon(
-                                painter = painterResource(R.drawable.delete),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.error
+                    DropdownMenuGroup(
+                        shapes = MenuDefaults.groupShapes()
+                    ) {
+                        actions.fastForEachIndexed { index, action ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    action.onClick()
+                                    actionsExpanded = false
+                                },
+                                text = {
+                                    Text(
+                                        text = stringResource(action.text),
+                                        color = action.tint ?: localContentColor
+                                    )
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        painter = painterResource(action.icon),
+                                        contentDescription = null,
+                                        tint = action.tint ?: localContentColor
+                                    )
+                                },
+                                shape = when (index) {
+                                    0 -> MenuDefaults.leadingItemShape
+                                    actions.lastIndex -> MenuDefaults.trailingItemShape
+                                    else -> MenuDefaults.middleItemShape
+                                }
                             )
                         }
-                    )
+                    }
                 }
             }
         }
@@ -288,5 +314,6 @@ private fun CalculationItem(
 private data class HistoryAction(
     val onClick: () -> Unit,
     val icon: Int,
-    val text: Int
+    val text: Int,
+    val tint: Color? = null
 )

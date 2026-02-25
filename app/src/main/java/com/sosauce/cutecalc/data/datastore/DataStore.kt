@@ -27,6 +27,7 @@ data object PreferencesKeys {
     val DECIMAL_PRECISION = intPreferencesKey("DECIMAL_PRECISION")
     val SHOW_ON_LOCKSCREEN = booleanPreferencesKey("SHOW_ON_LOCKSCREEN")
     val HISTORY_NEWEST_FIRST = booleanPreferencesKey("HISTORY_NEWEST_FIRST")
+    val COLORED_OPERATORS = booleanPreferencesKey("COLORED_OPERATORS")
 }
 
 @Composable
@@ -110,6 +111,13 @@ fun rememberShowOnLockScreen() =
 fun rememberHistoryNewestFirst() =
     rememberPreference(
         key = PreferencesKeys.HISTORY_NEWEST_FIRST,
+        defaultValue = true
+    )
+
+@Composable
+fun rememberColoredOperators() =
+    rememberPreference(
+        key = PreferencesKeys.COLORED_OPERATORS,
         defaultValue = true
     )
 

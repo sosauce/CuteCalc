@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+
 package com.sosauce.cutecalc.ui.screens.settings
 
 import androidx.compose.foundation.layout.Column
@@ -5,6 +7,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -15,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastForEachIndexed
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.data.datastore.rememberHistoryMaxItems
 import com.sosauce.cutecalc.data.datastore.rememberSaveErrorsToHistory
@@ -23,7 +28,6 @@ import com.sosauce.cutecalc.data.datastore.rememberUseHistory
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsDropdownMenu
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsSwitch
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsWithTitle
-import com.sosauce.cutecalc.ui.shared_components.CuteDropdownMenuItem
 import com.sosauce.cutecalc.ui.shared_components.CuteNavigationButton
 import com.sosauce.cutecalc.utils.selfAlignHorizontally
 
@@ -89,15 +93,20 @@ fun SettingsHistory(
                     bottomDp = 24.dp,
                     text = R.string.max_history_items
                 ) {
-                    historyItemsChoice.fastForEach {
-                        CuteDropdownMenuItem(
-                            onClick = { historyMaxItems = it },
-                            text = { Text(if (it == Long.MAX_VALUE) stringResource(R.string.no_limit) else it.toString()) },
+                    historyItemsChoice.fastForEachIndexed { index, number ->
+                        DropdownMenuItem(
+                            onClick = { historyMaxItems = number },
+                            text = { Text(if (number == Long.MAX_VALUE) stringResource(R.string.no_limit) else number.toString()) },
                             leadingIcon = {
                                 RadioButton(
-                                    selected = historyMaxItems == it,
+                                    selected = historyMaxItems == number,
                                     onClick = null
                                 )
+                            },
+                            shape = when (index) {
+                                0 -> MenuDefaults.leadingItemShape
+                                historyItemsChoice.lastIndex -> MenuDefaults.trailingItemShape
+                                else -> MenuDefaults.middleItemShape
                             }
                         )
                     }

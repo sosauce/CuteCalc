@@ -1,12 +1,18 @@
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+
 package com.sosauce.cutecalc.ui.screens.history.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuGroup
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenuPopup
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
@@ -21,7 +27,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.data.datastore.rememberHistoryNewestFirst
-import com.sosauce.cutecalc.ui.shared_components.CuteDropdownMenuItem
 
 @Composable
 fun HistoryActionButtons(
@@ -62,31 +67,36 @@ fun HistoryActionButtons(
                 )
             }
 
-            DropdownMenu(
+            DropdownMenuPopup(
                 expanded = dropDownExpanded,
-                onDismissRequest = { dropDownExpanded = false },
-                shape = RoundedCornerShape(24.dp)
+                onDismissRequest = { dropDownExpanded = false }
             ) {
-                CuteDropdownMenuItem(
-                    onClick = { newestFirst = true },
-                    text = { Text(stringResource(R.string.newest_first)) },
-                    leadingIcon = {
-                        RadioButton(
-                            selected = newestFirst,
-                            onClick = null
-                        )
-                    }
-                )
-                CuteDropdownMenuItem(
-                    onClick = { newestFirst = false },
-                    text = { Text(stringResource(R.string.oldest_first)) },
-                    leadingIcon = {
-                        RadioButton(
-                            selected = !newestFirst,
-                            onClick = null
-                        )
-                    }
-                )
+                DropdownMenuGroup(
+                    shapes = MenuDefaults.groupShapes()
+                ) {
+                    DropdownMenuItem(
+                        onClick = { newestFirst = true },
+                        text = { Text(stringResource(R.string.newest_first)) },
+                        leadingIcon = {
+                            RadioButton(
+                                selected = newestFirst,
+                                onClick = null
+                            )
+                        },
+                        shape = MenuDefaults.leadingItemShape
+                    )
+                    DropdownMenuItem(
+                        onClick = { newestFirst = false },
+                        text = { Text(stringResource(R.string.oldest_first)) },
+                        leadingIcon = {
+                            RadioButton(
+                                selected = !newestFirst,
+                                onClick = null
+                            )
+                        },
+                        shape = MenuDefaults.trailingItemShape
+                    )
+                }
             }
         }
     }

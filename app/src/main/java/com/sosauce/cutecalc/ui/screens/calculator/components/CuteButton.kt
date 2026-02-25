@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,40 +37,41 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.sosauce.cutecalc.R
+import com.sosauce.cutecalc.data.datastore.rememberIsLandscape
 import com.sosauce.cutecalc.data.datastore.rememberUseButtonsAnimation
 import com.sosauce.cutecalc.data.datastore.rememberVibration
 import com.sosauce.cutecalc.utils.BACKSPACE
-import com.sosauce.cutecalc.utils.thenIf
+import com.sosauce.cutecalc.utils.PARENTHESES
 
 @Composable
 fun RowScope.CuteButton(
     modifier: Modifier = Modifier,
     text: String,
-    backgroundColor: Color,
+    buttonType: ButtonType = ButtonType.OTHER,
     onClick: () -> Unit,
     onLongClick: (() -> Unit)? = null,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    roundButton: Boolean = true
+    rectangle: Boolean
 ) {
     val haptic = LocalHapticFeedback.current
+    LocalDensity.current
     val shouldVibrate by rememberVibration()
     val useButtonsAnimation by rememberUseButtonsAnimation()
     val isPressed by interactionSource.collectIsPressedAsState()
     val cornerRadius by animateIntAsState(
         targetValue = if (isPressed && useButtonsAnimation) 24 else 50
     )
-
-
-
+    val isLandscape = rememberIsLandscape()
+    val backgroundColor = when (buttonType) {
+        ButtonType.OPERATOR -> MaterialTheme.colorScheme.primary
+        ButtonType.OTHER -> MaterialTheme.colorScheme.surfaceContainer
+        ButtonType.ACTION -> MaterialTheme.colorScheme.tertiary
+        ButtonType.SPECIAL -> Color.Transparent
+    }
     Box(
         modifier = modifier
             .semantics { role = Role.Button }
-            .defaultMinSize(
-                minWidth = ButtonDefaults.MinWidth,
-                minHeight = ButtonDefaults.MinHeight
-            )
             .clip(RoundedCornerShape(cornerRadius))
-            .background(backgroundColor)
             .combinedClickable(
                 interactionSource = interactionSource,
                 indication = ripple(),
@@ -82,44 +84,54 @@ fun RowScope.CuteButton(
                     if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.Confirm)
                 }
             )
+            .defaultMinSize(
+                minWidth = ButtonDefaults.MinWidth,
+                minHeight = ButtonDefaults.MinHeight
+            )
             .weight(1f)
-            .aspectRatio(if (roundButton) 1f else 1.5f),
+            .background(backgroundColor)
+            .let {
+                if (!isLandscape && !rectangle) it.aspectRatio(1f) else it
+            },
         contentAlignment = Alignment.Center
     ) {
-        if (text == BACKSPACE) {
-            Icon(
-                painter = painterResource(R.drawable.backspace_filled),
-                contentDescription = stringResource(R.string.back),
-                tint = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
-                modifier = Modifier.size(48.dp)
-            )
-        } else {
-            Text(
-                text = text,
-                color = contentColorFor(backgroundColor),
-                style = MaterialTheme.typography.displaySmall
-            )
+
+        when (text) {
+            BACKSPACE -> {
+                Icon(
+                    painter = painterResource(R.drawable.backspace_filled),
+                    contentDescription = stringResource(R.string.back),
+                    tint = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
+                    modifier = Modifier.size(45.dp)
+                )
+            }
+
+            PARENTHESES -> {
+                Icon(
+                    painter = painterResource(R.drawable.parentheses),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
+                    modifier = Modifier.size(45.dp)
+                )
+            }
+
+            else -> {
+                Text(
+                    text = text,
+                    color = contentColorFor(backgroundColor),
+                    style = MaterialTheme.typography.displaySmallEmphasized
+                )
+            }
         }
     }
 
+}
 
-//    Button(
-//        onClick = {
-//            onClick()
-//            if (shouldVibrate) haptic.performHapticFeedback(HapticFeedbackType.Confirm)
-//        },
-//        colors = color,
-//        modifier = modifier,
-//        shape = RoundedCornerShape(cornerRadius),
-//        interactionSource = interactionSource,
-//        enabled = enabled
-//    ) {
-//        CuteText(
-//            text = text,
-//            color = textColor,
-//            fontSize = 35.sp
-//        )
-//    }
+enum class ButtonType {
+    OPERATOR,
+    SPECIAL,
+    ACTION,
+    OTHER
 }
 
 

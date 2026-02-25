@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+
 package com.sosauce.cutecalc.ui.screens.settings
 
 import androidx.compose.foundation.layout.Column
@@ -5,6 +7,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -14,14 +19,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastForEachIndexed
 import com.sosauce.cutecalc.R
 import com.sosauce.cutecalc.data.datastore.rememberDecimal
 import com.sosauce.cutecalc.data.datastore.rememberDecimalPrecision
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsDropdownMenu
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsSwitch
 import com.sosauce.cutecalc.ui.screens.settings.components.SettingsWithTitle
-import com.sosauce.cutecalc.ui.shared_components.CuteDropdownMenuItem
 import com.sosauce.cutecalc.ui.shared_components.CuteNavigationButton
 import com.sosauce.cutecalc.utils.formatNumber
 import com.sosauce.cutecalc.utils.selfAlignHorizontally
@@ -66,14 +70,19 @@ fun SettingsFormatting(onNavigateUp: () -> Unit) {
                     text = R.string.decimal_precision,
                     optionalDescription = R.string.decimal_precision_desc
                 ) {
-                    decimalPrecisionOptions.fastForEach { number ->
-                        CuteDropdownMenuItem(
+                    decimalPrecisionOptions.fastForEachIndexed { index, number ->
+                        DropdownMenuItem(
                             onClick = { decimalPrecision = number },
                             text = { Text(number.toString().formatNumber(shouldFormat)) },
+                            shape = when (index) {
+                                0 -> MenuDefaults.leadingItemShape
+                                decimalPrecisionOptions.lastIndex -> MenuDefaults.trailingItemShape
+                                else -> MenuDefaults.middleItemShape
+                            },
                             leadingIcon = {
                                 RadioButton(
+                                    onClick = null,
                                     selected = number == decimalPrecision,
-                                    onClick = null
                                 )
                             }
                         )
